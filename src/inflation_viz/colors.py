@@ -8,8 +8,8 @@ rule" every chart carries a legend and direct hover labels, so identity is
 never color-alone.
 
 Do not add a per-chart color scale anywhere else in the codebase — import
-DIVISION_COLORS (or the CSS custom properties in site/static/palette.css,
-generated from the same table) instead.
+DIVISION_COLORS instead (or its hand-kept mirror, web/src/lib/colors.ts's
+DIVISION_COLORS, on the frontend).
 """
 
 from __future__ import annotations

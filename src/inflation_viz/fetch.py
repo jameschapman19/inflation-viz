@@ -1,31 +1,19 @@
 """Registry-driven fetcher for ONS's timeseries JSON.
 
-Every series pulled here comes from whatever `SourceRegistry` it's given —
-in production that's `ons_catalog.discover_registry()`'s live result, not
-anything hardcoded — there is no series-specific fetch logic. Each
-series's `api_url` is called as-is; the
-response is the same JSON that powers the chart on the series' own
-www.ons.gov.uk page — append `/data` to the page URL
-(https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/{cdid}/{dataset}/data):
+Every series comes from whatever `SourceRegistry` it's given — in
+production, `ons_catalog.discover_registry()`'s live result — so there is
+no series-specific fetch logic. Each series's `api_url` is called as-is;
+the response is the same JSON that powers the chart on the series' own
+www.ons.gov.uk page (`.../timeseries/{cdid}/{dataset}/data`):
 
     {
       "months": [{"date": "2023 NOV", "value": "3.9"}, ...],
       "description": {"cdid": "D7G7", "releaseDate": "2024-01-17T09:30:00.000Z", ...}
     }
 
-Note this is *not* the old `api.ons.gov.uk` v0 API — that was fully
-retired in November 2024 and has no direct replacement (ONS's guidance is
-to resolve a series via the beta search API instead). The `www.ons.gov.uk/
-.../data` endpoint above is the one that's actually still live; the first
-version of this fetcher used the retired v0 host and 404'd in CI, which is
-how this got caught.
-
-Note for anyone running this: this pipeline's dev sandbox has ONS's domains
-blocked by network egress policy, so it cannot be exercised against live
-data here. It is written and tested against a fixture that mirrors the real
-API response shape (tests/fixtures/ons_timeseries_response.json) and is
-expected to run against live ONS data in CI, where GitHub-hosted runners
-have unrestricted internet access.
+Not the old `api.ons.gov.uk` v0 API, retired November 2024 with no direct
+replacement. Tested against a fixture (tests/fixtures/ons_timeseries_response.json)
+rather than live ONS data.
 """
 
 from __future__ import annotations

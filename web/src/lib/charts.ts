@@ -1,6 +1,7 @@
 import type { EChartsOption, SeriesOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, childColor, divisionColor, subdivisionColor } from "./colors";
 import type { ChildSeries } from "./data";
+import type { SeriesSource } from "./types";
 import {
   childWeightSeriesOf,
   divisionByCoicop,
@@ -315,108 +316,53 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
   };
 }
 
-export function divisionContributionChart(coicop: string, mode: ChartMode): EChartsOption {
+/** A single COICOP series as its own chart — "area" for a rate/contribution
+ * (continuously varying, % on the axis), "step" for a weight (only changes
+ * at ONS's Jan/Feb rebasing, plain number on the axis). Division and
+ * subdivision pages both use this; only the source lookup and color differ.
+ */
+function singleSeriesChart(
+  source: SeriesSource | undefined,
+  coicop: string,
+  color: string,
+  mode: ChartMode,
+  yAxisName: string,
+  variant: "area" | "step",
+): EChartsOption {
   const base = baseOption(mode);
-  const source = divisionByCoicop(coicop);
-  const color = divisionColor(coicop, mode);
-  const points = source ? seriesFor(source.unique_id) : [];
-
-  const series: SeriesOption[] = [
-    {
-      type: "line",
-      name: source?.division_name ?? coicop,
-      data: toTimeSeries(points),
-      showSymbol: false,
-      lineStyle: { width: 2, color },
-      itemStyle: { color },
-      areaStyle: { color, opacity: 0.85 },
-    },
-  ];
+  const name = source?.division_name ?? coicop;
+  const data = toTimeSeries(source ? seriesFor(source.unique_id) : []);
+  const line: SeriesOption =
+    variant === "area"
+      ? { type: "line", name, data, showSymbol: false, lineStyle: { width: 2, color }, itemStyle: { color }, areaStyle: { color, opacity: 0.85 } }
+      : { type: "line", name, data, step: "end", showSymbol: true, symbolSize: 6, lineStyle: { width: 2, color }, itemStyle: { color } };
 
   return {
     ...base,
     legend: { show: false },
-    yAxis: { ...base.yAxis, name: "Contribution to headline CPI (ppt)", nameGap: 32, nameLocation: "middle" },
-    series,
+    yAxis: {
+      ...base.yAxis,
+      name: yAxisName,
+      nameGap: 32,
+      nameLocation: "middle",
+      axisLabel: { color: MUTED_TEXT[mode], formatter: variant === "area" ? "{value}%" : "{value}" },
+    },
+    series: [line],
   };
+}
+
+export function divisionContributionChart(coicop: string, mode: ChartMode): EChartsOption {
+  return singleSeriesChart(divisionByCoicop(coicop), coicop, divisionColor(coicop, mode), mode, "Contribution to headline CPI (ppt)", "area");
 }
 
 export function divisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
-  const base = baseOption(mode);
-  const source = weightByCoicop(coicop);
-  const color = divisionColor(coicop, mode);
-  const points = source ? seriesFor(source.unique_id) : [];
-
-  const series: SeriesOption[] = [
-    {
-      type: "line",
-      name: source?.division_name ?? coicop,
-      data: toTimeSeries(points),
-      step: "end",
-      showSymbol: true,
-      symbolSize: 6,
-      lineStyle: { width: 2, color },
-      itemStyle: { color },
-    },
-  ];
-
-  return {
-    ...base,
-    legend: { show: false },
-    yAxis: { ...base.yAxis, name: "Basket weight (‰)", nameGap: 32, nameLocation: "middle", axisLabel: { color: MUTED_TEXT[mode] } },
-    series,
-  };
+  return singleSeriesChart(weightByCoicop(coicop), coicop, divisionColor(coicop, mode), mode, "Basket weight (‰)", "step");
 }
 
 export function subdivisionRateChart(coicop: string, mode: ChartMode): EChartsOption {
-  const base = baseOption(mode);
-  const source = subdivisionByCoicop(coicop);
-  const color = subdivisionColor(coicop, mode);
-  const points = source ? seriesFor(source.unique_id) : [];
-
-  const series: SeriesOption[] = [
-    {
-      type: "line",
-      name: source?.division_name ?? coicop,
-      data: toTimeSeries(points),
-      showSymbol: false,
-      lineStyle: { width: 2, color },
-      itemStyle: { color },
-      areaStyle: { color, opacity: 0.85 },
-    },
-  ];
-
-  return {
-    ...base,
-    legend: { show: false },
-    yAxis: { ...base.yAxis, name: "12-month rate", nameGap: 32, nameLocation: "middle" },
-    series,
-  };
+  return singleSeriesChart(subdivisionByCoicop(coicop), coicop, subdivisionColor(coicop, mode), mode, "12-month rate", "area");
 }
 
 export function subdivisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
-  const base = baseOption(mode);
-  const source = subdivisionWeightByCoicop(coicop);
-  const color = subdivisionColor(coicop, mode);
-  const points = source ? seriesFor(source.unique_id) : [];
-
-  const series: SeriesOption[] = [
-    {
-      type: "line",
-      name: source?.division_name ?? coicop,
-      data: toTimeSeries(points),
-      step: "end",
-      showSymbol: true,
-      symbolSize: 6,
-      lineStyle: { width: 2, color },
-      itemStyle: { color },
-    },
-  ];
-
-  return {
-    ...base,
-    legend: { show: false },
-    yAxis: { ...base.yAxis, name: "Basket weight (‰)", nameGap: 32, nameLocation: "middle", axisLabel: { color: MUTED_TEXT[mode] } },
-    series,
-  };
+  return singleSeriesChart(subdivisionWeightByCoicop(coicop), coicop, subdivisionColor(coicop, mode), mode, "Basket weight (‰)", "step");
 }

@@ -1,13 +1,11 @@
-"""Live ONS series discovery: the app's *only* source of which CDIDs to
-fetch. There is no hardcoded CDID anywhere in this pipeline — headline,
-per-division, and the full COICOP sub-division tree (to whatever depth ONS
-itself publishes) are all discovered fresh from ONS's own bulk mm23 dataset
-every time `refresh.py` runs, by parsing ONS's own series titles. If ONS
-adds or retires a series, the next refresh picks that up automatically;
-nothing here needs to be hand-edited to track it.
+"""Live ONS series discovery — the app's only source of which CDIDs to
+fetch. Headline, per-division, and the full COICOP sub-division tree (to
+whatever depth ONS itself publishes) are all discovered fresh from ONS's
+bulk mm23 dataset every refresh, by parsing ONS's own series titles. If
+ONS adds, retires, or renames a series, the next refresh picks it up with
+no code change.
 
-ONS publishes three title families relevant to this app, all for the same
-"CPI"/"CPIH" 2015=100 index:
+Three title families matter here, all for the "CPI"/"CPIH" 2015=100 index:
 
   "CPI ANNUAL RATE 01.1 : FOOD 2015=100"           -> a 12-month rate (%)
   "CPI WEIGHTS 01.1 : FOOD"                        -> a basket weight (‰)
@@ -15,23 +13,15 @@ ONS publishes three title families relevant to this app, all for the same
                                                     -> a ppt contribution to
                                                        the headline rate
 
-The first two carry the COICOP code directly in the title; the third
-(published only at division level, as far as ONS's catalog goes) does not
-carry a code at all — only the category's free-text name. It's resolved by
-joining that name against the names already recovered from the coded
-titles, normalised for case/punctuation. Where that join is ambiguous
-(more than one code sharing a normalised name), it's dropped rather than
-guessed — the project's standing rule ("only add a CDID with a
-directly-confirmed identity, never a guess") applies just as much to a
-name-based join as it did to the manual web-search process this replaces.
+The first two carry the COICOP code directly; the third (published only
+at division level) carries only a free-text category name, resolved by
+joining it against the names recovered from the coded titles, normalised
+for case/punctuation. An ambiguous join (more than one code sharing a
+normalised name) is dropped rather than guessed.
 
-Network access: this sandbox's egress policy blocks ons.gov.uk directly,
-so `discover_registry()` (and everything upstream of it in this module)
-can only run where ons.gov.uk is reachable — GitHub Actions' `refresh.yml`,
-the same place `fetch.py`'s per-series fetches already run. Everything
-below `discover_registry()` — parsing, classification, name-joining — is
-pure and covered by `tests/test_ons_catalog.py` against a local fixture,
-no network required.
+`discover_registry()` needs network access to ons.gov.uk; everything else
+here — parsing, classification, name-joining — is pure and covered by
+tests/test_ons_catalog.py against a local fixture.
 """
 
 from __future__ import annotations
@@ -277,50 +267,33 @@ def build_registry(catalog: Catalog, external: dict[str, ReferenceTableSource]) 
         is_division = "." not in code
         parent = None if is_division else _parent_coicop(code)
 
-        if is_division and entry.contribution_cdid is not None:
+        # A division's primary measure is its ppt contribution to headline
+        # CPI; a sub-division only has its own rate (ONS doesn't publish a
+        # contribution measure below division level).
+        primary_cdid = entry.contribution_cdid if is_division else entry.rate_cdid
+        if primary_cdid is not None:
             uid = f"GB.CP{code}"
-            divisions[uid] = _series_source(
+            (divisions if is_division else subdivisions)[uid] = _series_source(
                 unique_id=uid,
-                cdid=entry.contribution_cdid,
-                name=display_name,
-                coicop=code,
-                division_name=display_name,
-                unit="percentage_points",
-            )
-        elif not is_division and entry.rate_cdid is not None:
-            uid = f"GB.CP{code}"
-            subdivisions[uid] = _series_source(
-                unique_id=uid,
-                cdid=entry.rate_cdid,
+                cdid=primary_cdid,
                 name=display_name,
                 coicop=code,
                 parent_coicop=parent,
                 division_name=display_name,
-                unit="percent",
+                unit="percentage_points" if is_division else "percent",
             )
 
         if entry.weight_cdid is not None:
-            if is_division:
-                uid = f"GB.W{code}"
-                weights[uid] = _series_source(
-                    unique_id=uid,
-                    cdid=entry.weight_cdid,
-                    name=display_name,
-                    coicop=code,
-                    division_name=display_name,
-                    unit="per_mille",
-                )
-            else:
-                uid = f"GB.SW{code}"
-                subdivision_weights[uid] = _series_source(
-                    unique_id=uid,
-                    cdid=entry.weight_cdid,
-                    name=display_name,
-                    coicop=code,
-                    parent_coicop=parent,
-                    division_name=display_name,
-                    unit="per_mille",
-                )
+            weight_uid = f"GB.{'W' if is_division else 'SW'}{code}"
+            (weights if is_division else subdivision_weights)[weight_uid] = _series_source(
+                unique_id=weight_uid,
+                cdid=entry.weight_cdid,
+                name=display_name,
+                coicop=code,
+                parent_coicop=parent,
+                division_name=display_name,
+                unit="per_mille",
+            )
 
     return SourceRegistry(
         headline=headline,

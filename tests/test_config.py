@@ -51,12 +51,9 @@ def test_weight_series_are_distinct_from_contribution_series(registry: SourceReg
 
 
 def test_registry_discovers_sub_divisions_at_every_coicop_depth(registry: SourceRegistry) -> None:
-    """Coverage here mirrors whatever the (fixture) catalog actually
-    contains — unlike the old hand-maintained sources.yaml, there is no
-    fixed expected count to assert: in production this comes from
-    whatever ONS itself currently publishes. What's worth pinning down is
-    that the classification logic reaches every depth and handles ONS's
-    own combined/collapsed codes, using the tree the fixture models
+    """No fixed count to assert — in production, coverage is whatever ONS
+    currently publishes. This checks classification reaches every depth
+    and handles ONS's combined/collapsed codes, per the fixture's tree
     (01 -> 01.1 -> 01.1.1, plus the combined groups 08.2-3 and 05.3.1/2).
     """
     coicop_codes = {s.coicop for s in registry.subdivisions.values()}

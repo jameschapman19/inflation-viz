@@ -13,16 +13,25 @@ export function seriesFor(uniqueId: string): SeriesPoint[] {
   return series.filter((row) => row.unique_id === uniqueId).sort((a, b) => a.ds.localeCompare(b.ds));
 }
 
+export function latestPointFor(uniqueId: string): SeriesPoint | undefined {
+  const points = seriesFor(uniqueId);
+  return points[points.length - 1];
+}
+
 export function provenanceFor(uniqueId: string): ProvenanceRecord | undefined {
   return provenance.find((row) => row.unique_id === uniqueId);
 }
 
+function sortByCoicop<T extends { coicop: string | null }>(items: T[]): T[] {
+  return [...items].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+}
+
 export function divisionsSorted(): SeriesSource[] {
-  return [...registry.divisions].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+  return sortByCoicop(registry.divisions);
 }
 
 export function weightsSorted(): SeriesSource[] {
-  return [...registry.weights].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+  return sortByCoicop(registry.weights);
 }
 
 export function divisionByCoicop(coicop: string): SeriesSource | undefined {
@@ -38,11 +47,11 @@ export function weightByCoicop(coicop: string): SeriesSource | undefined {
 }
 
 export function subdivisionsSorted(): SeriesSource[] {
-  return [...registry.subdivisions].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+  return sortByCoicop(registry.subdivisions);
 }
 
 export function subdivisionWeightsSorted(): SeriesSource[] {
-  return [...registry.subdivisionWeights].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+  return sortByCoicop(registry.subdivisionWeights);
 }
 
 export function subdivisionByCoicop(coicop: string): SeriesSource | undefined {
@@ -74,14 +83,18 @@ export interface ChildSeries {
   uniqueId: string;
 }
 
+function toChildSeries(s: SeriesSource): ChildSeries {
+  return { coicop: s.coicop as string, name: s.division_name ?? s.name, uniqueId: s.unique_id };
+}
+
 /** The 12 divisions, as drillable children of the "all items" root — their
  * own ppt contribution to headline CPI (the series the top-level
  * contributors chart stacks).
  */
 export function topLevelContributionChildren(): ChildSeries[] {
   return divisionsSorted()
-    .filter((d): d is SeriesSource & { coicop: string } => Boolean(d.coicop))
-    .map((d) => ({ coicop: d.coicop, name: d.division_name ?? d.name, uniqueId: d.unique_id }));
+    .filter((d) => d.coicop !== null)
+    .map(toChildSeries);
 }
 
 /** The 12 divisions' own basket weights, as drillable children of the "all
@@ -90,8 +103,8 @@ export function topLevelContributionChildren(): ChildSeries[] {
  */
 export function topLevelWeightChildren(): ChildSeries[] {
   return weightsSorted()
-    .filter((w): w is SeriesSource & { coicop: string } => Boolean(w.coicop))
-    .map((w) => ({ coicop: w.coicop, name: w.division_name ?? w.name, uniqueId: w.unique_id }));
+    .filter((w) => w.coicop !== null)
+    .map(toChildSeries);
 }
 
 /** A division or subdivision's direct sub-categories' own 12-month rates —
@@ -100,21 +113,16 @@ export function topLevelWeightChildren(): ChildSeries[] {
  * never stacked.
  */
 export function childRateSeriesOf(parentCoicop: string): ChildSeries[] {
-  return subdivisionsUnder(parentCoicop).map((s) => ({
-    coicop: s.coicop as string,
-    name: s.division_name ?? s.name,
-    uniqueId: s.unique_id,
-  }));
+  return subdivisionsUnder(parentCoicop).map(toChildSeries);
 }
 
 /** A division or subdivision's direct sub-categories' own basket weights —
  * additive, so these stack validly.
  */
 export function childWeightSeriesOf(parentCoicop: string): ChildSeries[] {
-  return [...registry.subdivisionWeights]
+  return subdivisionWeightsSorted()
     .filter((w) => w.parent_coicop === parentCoicop)
-    .sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""))
-    .map((w) => ({ coicop: w.coicop as string, name: w.division_name ?? w.name, uniqueId: w.unique_id }));
+    .map(toChildSeries);
 }
 
 export interface HeadlineStat {
@@ -128,16 +136,14 @@ export interface HeadlineStat {
 export function headlineStats(): HeadlineStat[] {
   return registry.headline
     .map((source) => {
-      const points = seriesFor(source.unique_id);
-      if (points.length === 0) return null;
-      const latest = points[points.length - 1];
-      const prov = provenanceFor(source.unique_id);
+      const latest = latestPointFor(source.unique_id);
+      if (!latest) return null;
       return {
         name: source.name,
         value: latest.y,
         period: latest.ds,
         sourceUrl: source.source_url,
-        nextRelease: prov?.next_release_date ?? null,
+        nextRelease: provenanceFor(source.unique_id)?.next_release_date ?? null,
       };
     })
     .filter((s): s is HeadlineStat => s !== null);
@@ -158,9 +164,8 @@ export interface WeightRow {
 export function latestWeights(): WeightRow[] {
   return weightsSorted()
     .map((source) => {
-      const points = seriesFor(source.unique_id);
-      if (points.length === 0 || !source.coicop || !source.division_name) return null;
-      const latest = points[points.length - 1];
+      const latest = latestPointFor(source.unique_id);
+      if (!latest || !source.coicop || !source.division_name) return null;
       return {
         coicop: source.coicop,
         divisionName: source.division_name,

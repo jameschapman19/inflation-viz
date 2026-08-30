@@ -1,12 +1,12 @@
 import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Chart } from "@/components/Chart";
-import { childColor, subdivisionColor } from "@/lib/colors";
+import { ChartSection, StatTile, SubcategoryTable } from "@/components/DetailSections";
+import { subdivisionColor } from "@/lib/colors";
 import {
   childRateSeriesOf,
   childWeightSeriesOf,
-  seriesFor,
+  latestPointFor,
   subdivisionByCoicop,
   subdivisionsSorted,
   subdivisionsUnder,
@@ -33,10 +33,6 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
   const isParentTopLevelDivision = !parentCoicop.includes(".");
   const parentHref = isParentTopLevelDivision ? `/division/${parentCoicop}` : `/subdivision/${parentCoicop}`;
 
-  const ratePoints = seriesFor(subdivision.unique_id);
-  const latestRate = ratePoints[ratePoints.length - 1];
-  const weightPoints = weight ? seriesFor(weight.unique_id) : [];
-  const latestWeight = weightPoints[weightPoints.length - 1];
   const color = subdivisionColor(coicop);
   const children = subdivisionsUnder(coicop);
   const childRates = childRateSeriesOf(coicop);
@@ -58,99 +54,57 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
       </section>
 
       <div className="stat-row">
-        {latestRate && (
-          <div className="stat-tile">
-            <div className="stat-label">12-month rate</div>
-            <div className="stat-value">{latestRate.y.toFixed(1)}%</div>
-            <div className="stat-meta">
-              {latestRate.ds} · <a href={subdivision.source_url}>{subdivision.cdid}</a>
-            </div>
-          </div>
-        )}
-        {latestWeight && weight && (
-          <div className="stat-tile">
-            <div className="stat-label">Basket weight</div>
-            <div className="stat-value">{latestWeight.y.toFixed(1)}‰</div>
-            <div className="stat-meta">
-              {latestWeight.ds} · <a href={weight.source_url}>{weight.cdid}</a>
-            </div>
-          </div>
+        <StatTile
+          label="12-month rate"
+          point={latestPointFor(subdivision.unique_id)}
+          format={(y) => `${y.toFixed(1)}%`}
+          source={subdivision}
+        />
+        {weight && (
+          <StatTile
+            label="Basket weight"
+            point={latestPointFor(weight.unique_id)}
+            format={(y) => `${y.toFixed(1)}‰`}
+            source={weight}
+          />
         )}
       </div>
 
-      <section>
-        <h2>12-month rate</h2>
-        <div className="chart-section">
-          <Chart chart="subdivision-rate" coicop={coicop} height="360px" />
-        </div>
-      </section>
+      <ChartSection heading="12-month rate" chart="subdivision-rate" coicop={coicop} height="360px" />
 
       {weight && (
-        <section>
-          <h2>Basket weight over time</h2>
-          <div className="chart-section">
-            <Chart chart="subdivision-weight" coicop={coicop} height="320px" />
-          </div>
-        </section>
+        <ChartSection heading="Basket weight over time" chart="subdivision-weight" coicop={coicop} height="320px" />
       )}
 
       {childWeights.length > 0 && (
-        <section>
-          <h2>Basket weight by sub-category</h2>
-          <p className="lede">
-            {subdivision.division_name}&apos;s basket weight, broken down further — additive, so
-            this stacks validly (unlike rates, below).
-          </p>
-          <div className="chart-section">
-            <Chart chart="stacked-weight" entries={childWeights} drillBasePath="/subdivision" height="320px" />
-          </div>
-        </section>
+        <ChartSection
+          heading="Basket weight by sub-category"
+          lede={
+            <>
+              {subdivision.division_name}&apos;s basket weight, broken down further — additive, so
+              this stacks validly (unlike rates, below).
+            </>
+          }
+          chart="stacked-weight"
+          entries={childWeights}
+          drillBasePath="/subdivision"
+          height="320px"
+        />
       )}
 
       {childRates.length > 0 && (
-        <section>
-          <h2>Sub-category 12-month rates</h2>
-          <p className="lede">
-            Each sub-category&apos;s own rate of change, compared side by side rather than
-            stacked — see the division page for why.
-          </p>
-          <div className="chart-section">
-            <Chart chart="multiline-rate" entries={childRates} drillBasePath="/subdivision" height="320px" />
-          </div>
-        </section>
+        <ChartSection
+          heading="Sub-category 12-month rates"
+          lede="Each sub-category's own rate of change, compared side by side rather than stacked —
+            see the division page for why."
+          chart="multiline-rate"
+          entries={childRates}
+          drillBasePath="/subdivision"
+          height="320px"
+        />
       )}
 
-      {children.length > 0 && (
-        <section>
-          <h2>Sub-categories</h2>
-          <div className="legend-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Category</th>
-                  <th>Series</th>
-                </tr>
-              </thead>
-              <tbody>
-                {children.map((c, i) => (
-                  <tr key={c.unique_id}>
-                    <td>
-                      <span
-                        className="swatch"
-                        style={{ background: c.coicop ? childColor(c.coicop, i, children.length, "dark") : "#898781" }}
-                      />
-                      <Link href={`/subdivision/${c.coicop}`}>{c.division_name}</Link>
-                    </td>
-                    <td>
-                      <a href={c.source_url}>{c.cdid}</a>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
+      {children.length > 0 && <SubcategoryTable rows={children} showCoicopColumn={false} />}
 
       <nav className="division-pager">
         <Link href={parentHref}>&larr; Back to {parentCoicop}</Link>

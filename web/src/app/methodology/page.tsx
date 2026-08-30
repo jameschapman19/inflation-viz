@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { divisionColor, subdivisionColor } from "@/lib/colors";
 import {
@@ -8,201 +9,152 @@ import {
   subdivisionWeightsSorted,
   weightsSorted,
 } from "@/lib/data";
+import type { ReferenceTableSource, SeriesSource } from "@/lib/types";
 
 export const metadata = { title: "Methodology & sources — Inflation Radar (UK)" };
+
+function SourceTable<T extends { unique_id?: string; key?: string }>({
+  rows,
+  columns,
+}: {
+  rows: T[];
+  columns: { header: string; render: (row: T) => ReactNode }[];
+}) {
+  return (
+    <div className="sources-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            {columns.map((c) => (
+              <th key={c.header}>{c.header}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr key={row.unique_id ?? row.key ?? i}>
+              {columns.map((c) => (
+                <td key={c.header}>{c.render(row)}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+const CDID_COLUMN = {
+  header: "CDID",
+  render: (s: SeriesSource) => (
+    <a href={s.source_url}>{s.cdid}</a>
+  ),
+};
+const SOURCE_COLUMNS = [
+  { header: "Source", render: (s: SeriesSource) => s.source_name },
+  { header: "License", render: (s: SeriesSource) => s.license },
+  { header: "Cadence", render: (s: SeriesSource) => s.cadence },
+];
+
+function divisionName(s: SeriesSource, color: (coicop: string) => string, href: (coicop: string) => string) {
+  if (!s.coicop) return s.division_name ?? s.name;
+  return (
+    <>
+      <span className="swatch" style={{ background: color(s.coicop) }} />
+      <Link href={href(s.coicop)}>{s.division_name}</Link>
+    </>
+  );
+}
 
 export default function MethodologyPage() {
   const divisions = divisionsSorted();
   const weights = weightsSorted();
-  const subdivisions = subdivisionsSorted();
-  const subdivisionWeights = subdivisionWeightsSorted();
+  const subdivisionRows = [...subdivisionsSorted(), ...subdivisionWeightsSorted()].sort((a, b) =>
+    (a.coicop ?? "").localeCompare(b.coicop ?? ""),
+  );
 
   return (
     <>
       <section className="page-header">
         <h1>Methodology &amp; sources</h1>
         <p className="lede">
-          Every series behind this site, in one table. Nothing here is hand-edited — it&apos;s
-          generated straight from <code>sources.yaml</code>, the single registry every fetcher
-          reads from.
+          Every ONS series behind this site — headline, all 12 divisions, and their full
+          sub-category tree — is discovered live from ONS&apos;s own bulk dataset at refresh time,
+          not hand-typed; nothing here is stale by construction. <code>sources.yaml</code> now only
+          lists the handful of non-ONS reference sources below.
         </p>
       </section>
 
       <section>
         <h2>Headline rates</h2>
-        <div className="sources-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Series</th>
-                <th>CDID</th>
-                <th>Source</th>
-                <th>License</th>
-                <th>Cadence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {registry.headline.map((s) => (
-                <tr key={s.unique_id}>
-                  <td>{s.name}</td>
-                  <td>
-                    <a href={s.source_url}>{s.cdid}</a>
-                  </td>
-                  <td>{s.source_name}</td>
-                  <td>{s.license}</td>
-                  <td>{s.cadence}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <SourceTable
+          rows={registry.headline}
+          columns={[{ header: "Series", render: (s) => s.name }, CDID_COLUMN, ...SOURCE_COLUMNS]}
+        />
       </section>
 
       <section>
         <h2>COICOP division contribution series</h2>
-        <div className="sources-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Division</th>
-                <th>CDID</th>
-                <th>Source</th>
-                <th>License</th>
-                <th>Cadence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {divisions.map((s) => (
-                <tr key={s.unique_id}>
-                  <td>
-                    <span
-                      className="swatch"
-                      style={{ background: s.coicop ? divisionColor(s.coicop, "dark") : "#898781" }}
-                    />
-                    {s.coicop ? <Link href={`/division/${s.coicop}`}>{s.division_name}</Link> : s.division_name}
-                  </td>
-                  <td>
-                    <a href={s.source_url}>{s.cdid}</a>
-                  </td>
-                  <td>{s.source_name}</td>
-                  <td>{s.license}</td>
-                  <td>{s.cadence}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <SourceTable
+          rows={divisions}
+          columns={[
+            { header: "Division", render: (s) => divisionName(s, (c) => divisionColor(c, "dark"), (c) => `/division/${c}`) },
+            CDID_COLUMN,
+            ...SOURCE_COLUMNS,
+          ]}
+        />
       </section>
 
       <section>
         <h2>COICOP division basket weights</h2>
-        <div className="sources-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Division</th>
-                <th>CDID</th>
-                <th>Source</th>
-                <th>License</th>
-                <th>Cadence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weights.map((s) => (
-                <tr key={s.unique_id}>
-                  <td>
-                    <span
-                      className="swatch"
-                      style={{ background: s.coicop ? divisionColor(s.coicop, "dark") : "#898781" }}
-                    />
-                    {s.coicop ? <Link href={`/division/${s.coicop}`}>{s.division_name}</Link> : s.division_name}
-                  </td>
-                  <td>
-                    <a href={s.source_url}>{s.cdid}</a>
-                  </td>
-                  <td>{s.source_name}</td>
-                  <td>{s.license}</td>
-                  <td>{s.cadence}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <SourceTable
+          rows={weights}
+          columns={[
+            { header: "Division", render: (s) => divisionName(s, (c) => divisionColor(c, "dark"), (c) => `/division/${c}`) },
+            CDID_COLUMN,
+            ...SOURCE_COLUMNS,
+          ]}
+        />
       </section>
 
       <section>
         <h2>COICOP sub-division rates &amp; weights</h2>
         <p className="lede">
           Below the division level, ONS only publishes each category&apos;s own 12-month rate and
-          basket weight — not a contribution to headline CPI. Pilot scope: Transport&apos;s
-          07.1/07.2/07.3 groups plus 07.2.2, nested one level further under 07.2.
+          basket weight — not a contribution to headline CPI — to whatever depth it itself breaks
+          a division down into (a group, a class, sometimes a further subclass).
         </p>
-        <div className="sources-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Category</th>
-                <th>Metric</th>
-                <th>CDID</th>
-                <th>Source</th>
-                <th>License</th>
-                <th>Cadence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[...subdivisions, ...subdivisionWeights]
-                .sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""))
-                .map((s) => (
-                  <tr key={s.unique_id}>
-                    <td>
-                      <span
-                        className="swatch"
-                        style={{ background: s.coicop ? subdivisionColor(s.coicop, "dark") : "#898781" }}
-                      />
-                      {s.coicop ? <Link href={`/subdivision/${s.coicop}`}>{s.division_name}</Link> : s.division_name}{" "}
-                      <span className="muted">({s.coicop})</span>
-                    </td>
-                    <td>{s.unique_id.startsWith("GB.SW") ? "Basket weight" : "12-month rate"}</td>
-                    <td>
-                      <a href={s.source_url}>{s.cdid}</a>
-                    </td>
-                    <td>{s.source_name}</td>
-                    <td>{s.license}</td>
-                    <td>{s.cadence}</td>
-                  </tr>
-                ))}
-            </tbody>
-          </table>
-        </div>
+        <SourceTable
+          rows={subdivisionRows}
+          columns={[
+            {
+              header: "Category",
+              render: (s) => (
+                <>
+                  {divisionName(s, (c) => subdivisionColor(c, "dark"), (c) => `/subdivision/${c}`)}{" "}
+                  <span className="muted">({s.coicop})</span>
+                </>
+              ),
+            },
+            { header: "Metric", render: (s) => (s.unique_id.startsWith("GB.SW") ? "Basket weight" : "12-month rate") },
+            CDID_COLUMN,
+            ...SOURCE_COLUMNS,
+          ]}
+        />
       </section>
 
       <section>
         <h2>Not yet ingested</h2>
         <p className="muted">Reserved in the source registry for Phase 2 forecasting exogenous regressors.</p>
-        <div className="sources-table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Table</th>
-                <th>Source</th>
-                <th>License</th>
-                <th>Cadence</th>
-              </tr>
-            </thead>
-            <tbody>
-              {registry.external.map((t) => (
-                <tr key={t.key}>
-                  <td>
-                    <a href={t.source_url}>{t.name}</a>
-                  </td>
-                  <td>{t.source_name}</td>
-                  <td>{t.license}</td>
-                  <td>{t.cadence}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <SourceTable<ReferenceTableSource>
+          rows={registry.external}
+          columns={[
+            { header: "Table", render: (t) => <a href={t.source_url}>{t.name}</a> },
+            { header: "Source", render: (t) => t.source_name },
+            { header: "License", render: (t) => t.license },
+            { header: "Cadence", render: (t) => t.cadence },
+          ]}
+        />
       </section>
 
       <section>
