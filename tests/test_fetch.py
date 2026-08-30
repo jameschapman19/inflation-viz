@@ -10,6 +10,7 @@ from inflation_viz.config import SeriesSource
 from inflation_viz.fetch import fetch_series, parse_ons_response
 
 FIXTURE_PATH = Path(__file__).parent / "fixtures" / "ons_timeseries_response.json"
+WEIGHTS_FIXTURE_PATH = Path(__file__).parent / "fixtures" / "ons_weights_response.json"
 
 
 @pytest.fixture
@@ -38,6 +39,24 @@ def test_parse_ons_response_produces_expected_rows() -> None:
     assert str(df["ds"].to_list()[0]) == "2024-01-01"
 
 
+def test_parse_ons_response_falls_back_to_years_for_annual_series() -> None:
+    """The basket-weight CDIDs are annual — their "months" array is empty
+    and the observations live under "years" instead. Regression test for
+    the bug where this silently produced a zero-row series.
+    """
+    payload = json.loads(WEIGHTS_FIXTURE_PATH.read_text())
+    df = parse_ons_response("GB.W01", payload)
+
+    assert df.shape == (3, 3)
+    assert df["y"].to_list() == [104.5, 106.2, 107.8]
+    assert [str(d) for d in df["ds"].to_list()] == ["2024-01-01", "2025-01-01", "2026-01-01"]
+
+
+def test_parse_ons_response_raises_when_no_observations_present() -> None:
+    with pytest.raises(ValueError, match="no months, quarters, or years"):
+        parse_ons_response("GB.CPI", {"months": [], "quarters": [], "years": []})
+
+
 @responses.activate
 def test_fetch_series_returns_data_and_provenance(sample_source: SeriesSource) -> None:
     payload = json.loads(FIXTURE_PATH.read_text())
@@ -62,5 +81,5 @@ def test_fetch_series_returns_data_and_provenance(sample_source: SeriesSource) -
 def test_fetch_series_raises_loudly_on_malformed_payload(sample_source: SeriesSource) -> None:
     responses.add(responses.GET, sample_source.api_url, json={"unexpected": "shape"}, status=200)
 
-    with requests.Session() as session, pytest.raises(KeyError):
+    with requests.Session() as session, pytest.raises(ValueError, match="no months, quarters"):
         fetch_series(sample_source, session, fetched_at=datetime(2024, 4, 20, tzinfo=UTC))

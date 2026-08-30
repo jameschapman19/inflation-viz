@@ -53,10 +53,24 @@ _MONTH_ABBR = {
 }
 
 
+_QUARTER_START_MONTH = {"Q1": 1, "Q2": 4, "Q3": 7, "Q4": 10}
+
+
 def _parse_month(raw: str) -> date:
     """Parse ONS's "YYYY MON" month label into the first of that month."""
     year_str, mon_str = raw.split()
     return date(int(year_str), _MONTH_ABBR[mon_str.upper()], 1)
+
+
+def _parse_quarter(raw: str) -> date:
+    """Parse ONS's "YYYY QN" quarter label into that quarter's first month."""
+    year_str, q_str = raw.split()
+    return date(int(year_str), _QUARTER_START_MONTH[q_str.upper()], 1)
+
+
+def _parse_year(raw: str) -> date:
+    """Parse ONS's "YYYY" year label into 1 January of that year."""
+    return date(int(raw.strip()), 1, 1)
 
 
 def _parse_release_date(raw: str) -> datetime:
@@ -80,21 +94,39 @@ def _parse_next_release(raw: str) -> datetime | None:
 def parse_ons_response(unique_id: str, payload: dict[str, object]) -> pl.DataFrame:
     """Parse an ONS timeseries JSON payload into unique_id/ds/y rows.
 
-    Raises KeyError/ValueError on an unexpected shape — fail loudly rather
-    than silently skipping a series (a wrong CDID pulling a subtly wrong
-    series is exactly the failure mode this pipeline needs to surface).
+    ONS's response always carries "months", "quarters", and "years" arrays,
+    but only the one matching the series' actual publication frequency is
+    populated — the other two are empty lists. Most series here are
+    monthly, but the basket-weight CDIDs are annual (rebased each Jan/Feb
+    and held constant the rest of the year), so this tries each in order
+    and uses whichever one actually has rows.
+
+    Raises ValueError if none of them do — fail loudly rather than
+    silently returning an empty series (a wrong CDID pulling a subtly
+    wrong series is exactly the failure mode this pipeline needs to surface).
     """
-    months = payload["months"]
-    assert isinstance(months, list)
-    rows = [
-        {
-            "unique_id": unique_id,
-            "ds": _parse_month(str(m["date"])),
-            "y": float(str(m["value"])),
-        }
-        for m in months
-    ]
-    return pl.DataFrame(rows, schema={"unique_id": pl.Utf8, "ds": pl.Date, "y": pl.Float64})
+    for key, parse_date in (
+        ("months", _parse_month),
+        ("quarters", _parse_quarter),
+        ("years", _parse_year),
+    ):
+        observations = payload.get(key)
+        if not isinstance(observations, list) or not observations:
+            continue
+        rows = [
+            {
+                "unique_id": unique_id,
+                "ds": parse_date(str(obs["date"])),
+                "y": float(str(obs["value"])),
+            }
+            for obs in observations
+        ]
+        return pl.DataFrame(rows, schema={"unique_id": pl.Utf8, "ds": pl.Date, "y": pl.Float64})
+
+    raise ValueError(
+        f"{unique_id}: ONS response has no months, quarters, or years observations — "
+        "unexpected shape, check the CDID."
+    )
 
 
 def fetch_series(
@@ -127,10 +159,9 @@ def fetch_series(
 
 
 def fetch_all(registry: SourceRegistry, session: requests.Session | None = None) -> Path:
-    """Fetch every series in the registry and write a new vintage snapshot.
-
-    Returns the new vintage directory so a caller (e.g. refresh.py) can
-    attach the basket weights snapshot to the same vintage.
+    """Fetch every series in the registry (headline, divisions, and basket
+    weights alike) and write a new vintage snapshot. Returns the new vintage
+    directory.
     """
     owns_session = session is None
     session = session or requests.Session()

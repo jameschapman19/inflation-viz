@@ -1,4 +1,4 @@
-name: Refresh data and deploy
+name: Refresh data
 
 on:
   schedule:
@@ -6,8 +6,6 @@ on:
     # current without needing to know the exact release calendar.
     - cron: "0 8 * * *"
   workflow_dispatch:
-  push:
-    branches: [main]
 
 permissions:
   contents: write
@@ -28,19 +26,13 @@ jobs:
       - name: Install dependencies
         run: uv sync --all-extras --dev
 
-      - name: Fetch latest data and build site
-        run: uv run python -m inflation_viz.refresh --out public
+      - name: Fetch latest data and export it for the web app
+        run: uv run python -m inflation_viz.refresh
 
       - name: Commit updated data
         run: |
           git config user.name "inflation-viz-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add data/
+          git add data/ web/src/data/
           git diff --cached --quiet || git commit -m "data: refresh vintage $(date -u +%Y-%m-%dT%H%M%SZ)"
           git push
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public

@@ -1,0 +1,262 @@
+[
+  {
+    "unique_id": "GB.CPI",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23",
+    "cdid": "D7G7",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CPIH",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23",
+    "cdid": "L55O",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP01",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wuma/mm23",
+    "cdid": "WUMA",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP02",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23",
+    "cdid": "WUMB",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP03",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumc/mm23",
+    "cdid": "WUMC",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP04",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23",
+    "cdid": "WUMD",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP05",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23",
+    "cdid": "WUMP",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP06",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumq/mm23",
+    "cdid": "WUMQ",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP07",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumw/mm23",
+    "cdid": "WUMW",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP08",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumx/mm23",
+    "cdid": "WUMX",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP09",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wunc/mm23",
+    "cdid": "WUNC",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP10",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wund/mm23",
+    "cdid": "WUND",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP11",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23",
+    "cdid": "WUNE",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.CP12",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23",
+    "cdid": "WUNG",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W01",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzr/mm23",
+    "cdid": "CHZR",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W02",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzs/mm23",
+    "cdid": "CHZS",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W03",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzt/mm23",
+    "cdid": "CHZT",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W04",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzu/mm23",
+    "cdid": "CHZU",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W05",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzv/mm23",
+    "cdid": "CHZV",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W06",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzw/mm23",
+    "cdid": "CHZW",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W07",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzx/mm23",
+    "cdid": "CHZX",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W08",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzy/mm23",
+    "cdid": "CHZY",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W09",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzz/mm23",
+    "cdid": "CHZZ",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W10",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuu/mm23",
+    "cdid": "CJUU",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W11",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuv/mm23",
+    "cdid": "CJUV",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  },
+  {
+    "unique_id": "GB.W12",
+    "source_name": "Office for National Statistics",
+    "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuw/mm23",
+    "cdid": "CJUW",
+    "license": "Open Government Licence v3.0",
+    "release_date": "2026-08-18",
+    "fetched_at": "2026-08-30T17:50:55.372704+00:00",
+    "next_release_date": "2026-09-16"
+  }
+]
