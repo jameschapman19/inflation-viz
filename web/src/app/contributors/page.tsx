@@ -1,4 +1,5 @@
-import { PlotlyChart } from "@/components/PlotlyChart";
+import Link from "next/link";
+import { Chart } from "@/components/Chart";
 import { divisionColor } from "@/lib/colors";
 import { divisionsSorted } from "@/lib/data";
 
@@ -19,9 +20,10 @@ export default function ContributorsPage() {
       </section>
 
       <section className="chart-section">
-        <PlotlyChart chart="contributors" />
+        <Chart chart="contributors" />
       </section>
 
+      <p className="muted">Click a division&apos;s band on the chart, or a name below, to see it on its own.</p>
       <section className="legend-table">
         <table>
           <thead>
@@ -38,7 +40,11 @@ export default function ContributorsPage() {
                     className="swatch"
                     style={{ background: d.coicop ? divisionColor(d.coicop, "dark") : "#898781" }}
                   />
-                  {d.division_name}
+                  {d.coicop ? (
+                    <Link href={`/division/${d.coicop}`}>{d.division_name}</Link>
+                  ) : (
+                    d.division_name
+                  )}
                 </td>
                 <td>
                   <a href={d.source_url}>{d.cdid}</a>

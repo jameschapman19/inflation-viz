@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { divisionColor } from "@/lib/colors";
 import { divisionsSorted, meta, registry, weightsSorted } from "@/lib/data";
 
@@ -69,7 +70,7 @@ export default function MethodologyPage() {
                       className="swatch"
                       style={{ background: s.coicop ? divisionColor(s.coicop, "dark") : "#898781" }}
                     />
-                    {s.division_name}
+                    {s.coicop ? <Link href={`/division/${s.coicop}`}>{s.division_name}</Link> : s.division_name}
                   </td>
                   <td>
                     <a href={s.source_url}>{s.cdid}</a>
@@ -105,7 +106,7 @@ export default function MethodologyPage() {
                       className="swatch"
                       style={{ background: s.coicop ? divisionColor(s.coicop, "dark") : "#898781" }}
                     />
-                    {s.division_name}
+                    {s.coicop ? <Link href={`/division/${s.coicop}`}>{s.division_name}</Link> : s.division_name}
                   </td>
                   <td>
                     <a href={s.source_url}>{s.cdid}</a>

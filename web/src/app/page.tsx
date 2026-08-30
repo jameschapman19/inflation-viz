@@ -1,4 +1,4 @@
-import { PlotlyChart } from "@/components/PlotlyChart";
+import { Chart } from "@/components/Chart";
 import { headlineStats } from "@/lib/data";
 
 export default function HomePage() {
@@ -26,7 +26,7 @@ export default function HomePage() {
       </section>
 
       <section className="chart-section">
-        <PlotlyChart chart="headline" />
+        <Chart chart="headline" />
       </section>
     </>
   );

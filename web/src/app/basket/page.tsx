@@ -1,4 +1,5 @@
-import { PlotlyChart } from "@/components/PlotlyChart";
+import Link from "next/link";
+import { Chart } from "@/components/Chart";
 import { divisionColor } from "@/lib/colors";
 import { latestWeights } from "@/lib/data";
 
@@ -18,8 +19,11 @@ export default function BasketPage() {
       </section>
 
       <section className="chart-section">
-        <PlotlyChart chart="basket" />
+        <Chart chart="basket" />
       </section>
+      <p className="muted" style={{ marginTop: -14 }}>
+        Click a segment to see that division on its own.
+      </p>
 
       <section className="legend-table">
         <table>
@@ -36,7 +40,7 @@ export default function BasketPage() {
               <tr key={w.coicop}>
                 <td>
                   <span className="swatch" style={{ background: divisionColor(w.coicop, "dark") }} />
-                  {w.divisionName}
+                  <Link href={`/division/${w.coicop}`}>{w.divisionName}</Link>
                 </td>
                 <td>{w.coicop}</td>
                 <td>{w.weightPerMille.toFixed(1)}</td>

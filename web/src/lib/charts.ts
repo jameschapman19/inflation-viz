@@ -1,110 +1,194 @@
-import type { Data, Layout } from "plotly.js";
+import type { EChartsOption, SeriesOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, divisionColor } from "./colors";
-import { divisionsSorted, latestWeights, registry, seriesFor } from "./data";
+import { divisionByCoicop, divisionsSorted, latestWeights, registry, seriesFor, weightByCoicop } from "./data";
 
 export type ChartMode = "light" | "dark";
 
-function baseLayout(mode: ChartMode): Partial<Layout> {
+const FONT_FAMILY = "system-ui, -apple-system, 'Segoe UI', sans-serif";
+
+function baseOption(mode: ChartMode): EChartsOption {
   const textColor = mode === "dark" ? "#ffffff" : "#0b0b0b";
+  const muted = MUTED_TEXT[mode];
+  const grid = GRIDLINE[mode];
   return {
-    paper_bgcolor: CHART_SURFACE[mode],
-    plot_bgcolor: CHART_SURFACE[mode],
-    font: { family: "system-ui, -apple-system, 'Segoe UI', sans-serif", color: textColor },
-    hovermode: "x unified",
-    hoverlabel: {
-      bgcolor: mode === "dark" ? "#202020" : "#ffffff",
-      bordercolor: GRIDLINE[mode],
-      font: { color: textColor },
+    backgroundColor: CHART_SURFACE[mode],
+    textStyle: { fontFamily: FONT_FAMILY, color: textColor },
+    tooltip: {
+      trigger: "axis",
+      backgroundColor: mode === "dark" ? "#202020" : "#ffffff",
+      borderColor: grid,
+      textStyle: { color: textColor, fontFamily: FONT_FAMILY },
+      axisPointer: { type: "cross", label: { backgroundColor: mode === "dark" ? "#202020" : "#ffffff" } },
     },
-    legend: { orientation: "h", yanchor: "bottom", y: 1.02, xanchor: "left", x: 0 },
-    margin: { l: 48, r: 24, t: 16, b: 40 },
-    xaxis: { gridcolor: GRIDLINE[mode], linecolor: MUTED_TEXT[mode], tickfont: { color: MUTED_TEXT[mode] } },
-    yaxis: {
-      gridcolor: GRIDLINE[mode],
-      linecolor: MUTED_TEXT[mode],
-      tickfont: { color: MUTED_TEXT[mode] },
-      ticksuffix: "%",
+    legend: {
+      top: 0,
+      left: 0,
+      icon: "circle",
+      itemWidth: 8,
+      itemHeight: 8,
+      textStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 12 },
+    },
+    grid: { left: 48, right: 24, top: 40, bottom: 32, containLabel: true },
+    xAxis: {
+      type: "time",
+      axisLine: { lineStyle: { color: muted } },
+      axisLabel: { color: muted },
+      splitLine: { show: false },
+    },
+    yAxis: {
+      type: "value",
+      axisLabel: { color: muted, formatter: "{value}%" },
+      axisLine: { show: false },
+      splitLine: { lineStyle: { color: grid } },
     },
   };
 }
 
-export function headlineChart(mode: ChartMode): { data: Data[]; layout: Partial<Layout> } {
-  const layout = baseLayout(mode);
-  const data: Data[] = registry.headline.map((source) => {
-    const points = seriesFor(source.unique_id);
-    return {
-      x: points.map((p) => p.ds),
-      y: points.map((p) => p.y),
-      name: source.name,
-      mode: "lines",
-      type: "scatter",
-      line: { width: 2, color: source.unique_id === "GB.CPI" ? HEADLINE_COLOR[mode] : "#898781" },
-      hovertemplate: `${source.name}: %{y:.1f}%<extra></extra>`,
-    };
-  });
-  return { data, layout: { ...layout, yaxis: { ...layout.yaxis, title: { text: "12-month rate" } } } };
+function toTimeSeries(points: { ds: string; y: number }[]): [string, number][] {
+  return points.map((p) => [p.ds, p.y]);
 }
 
-export function contributorsChart(mode: ChartMode): { data: Data[]; layout: Partial<Layout> } {
-  const layout = baseLayout(mode);
+export function headlineChart(mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
+  const series: SeriesOption[] = registry.headline.map((source) => ({
+    type: "line",
+    name: source.name,
+    data: toTimeSeries(seriesFor(source.unique_id)),
+    showSymbol: false,
+    lineStyle: { width: 2, color: source.unique_id === "GB.CPI" ? HEADLINE_COLOR[mode] : "#898781" },
+    itemStyle: { color: source.unique_id === "GB.CPI" ? HEADLINE_COLOR[mode] : "#898781" },
+  }));
+  return { ...base, series };
+}
+
+export function contributorsChart(mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
   const divisions = divisionsSorted();
-  const data: Data[] = divisions.map((source) => {
-    const points = seriesFor(source.unique_id);
+
+  const series: SeriesOption[] = divisions.map((source) => {
     const color = source.coicop ? divisionColor(source.coicop, mode) : "#898781";
     return {
-      x: points.map((p) => p.ds),
-      y: points.map((p) => p.y),
+      type: "line",
       name: source.division_name ?? source.name,
-      mode: "lines",
-      type: "scatter",
-      stackgroup: "contributions",
-      line: { width: 0.5, color },
-      fillcolor: color,
-      hovertemplate: `${source.division_name}: %{y:.2f}ppt<extra></extra>`,
+      data: toTimeSeries(seriesFor(source.unique_id)),
+      stack: "contributions",
+      showSymbol: false,
+      lineStyle: { width: 0.5, color },
+      itemStyle: { color },
+      areaStyle: { color, opacity: 1 },
+      emphasis: { focus: "series" },
     };
   });
 
   const headline = registry.headline.find((s) => s.unique_id === "GB.CPI");
   if (headline) {
-    const points = seriesFor("GB.CPI");
-    data.push({
-      x: points.map((p) => p.ds),
-      y: points.map((p) => p.y),
+    series.push({
+      type: "line",
       name: headline.name,
-      mode: "lines",
-      type: "scatter",
-      line: { width: 2.5, color: HEADLINE_COLOR[mode], dash: "dot" },
-      hovertemplate: "Headline CPI: %{y:.1f}%<extra></extra>",
+      data: toTimeSeries(seriesFor("GB.CPI")),
+      showSymbol: false,
+      lineStyle: { width: 2.5, color: HEADLINE_COLOR[mode], type: "dotted" },
+      itemStyle: { color: HEADLINE_COLOR[mode] },
+      z: 10,
     });
   }
 
-  return {
-    data,
-    layout: { ...layout, yaxis: { ...layout.yaxis, title: { text: "Percentage points" } } },
-  };
+  return { ...base, series };
 }
 
-export function basketTreemap(mode: ChartMode): { data: Data[]; layout: Partial<Layout> } {
-  const layout = baseLayout(mode);
+export function basketTreemap(mode: ChartMode): EChartsOption {
+  const textColor = mode === "dark" ? "#ffffff" : "#0b0b0b";
   const weights = latestWeights();
   const weightByCoicop = new Map(weights.map((w) => [w.coicop, w.weightPerMille]));
   const divisions = divisionsSorted();
 
-  const labels = divisions.map((d) => d.division_name ?? d.name);
-  const values = divisions.map((d) => (d.coicop ? (weightByCoicop.get(d.coicop) ?? 0) : 0));
-  const colors = divisions.map((d) => (d.coicop ? divisionColor(d.coicop, mode) : "#898781"));
+  const data = divisions.map((d) => ({
+    name: d.division_name ?? d.name,
+    value: d.coicop ? (weightByCoicop.get(d.coicop) ?? 0) : 0,
+    itemStyle: { color: d.coicop ? divisionColor(d.coicop, mode) : "#898781" },
+  }));
 
-  const data: Data[] = [
+  return {
+    backgroundColor: CHART_SURFACE[mode],
+    textStyle: { fontFamily: FONT_FAMILY, color: textColor },
+    tooltip: {
+      backgroundColor: mode === "dark" ? "#202020" : "#ffffff",
+      borderColor: GRIDLINE[mode],
+      textStyle: { color: mode === "dark" ? "#ffffff" : "#0b0b0b", fontFamily: FONT_FAMILY },
+      formatter: (params) => {
+        const p = params as { name: string; value: number; data: { value: number } };
+        return `${p.name}: ${p.value.toFixed(1)} per mille`;
+      },
+    },
+    series: [
+      {
+        type: "treemap",
+        roam: false,
+        nodeClick: false,
+        breadcrumb: { show: false },
+        upperLabel: { show: false },
+        label: {
+          show: true,
+          color: "#ffffff",
+          fontFamily: FONT_FAMILY,
+          formatter: "{b}",
+        },
+        itemStyle: { borderColor: CHART_SURFACE[mode], borderWidth: 2, gapWidth: 2 },
+        data,
+      },
+    ],
+  };
+}
+
+export function divisionContributionChart(coicop: string, mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
+  const source = divisionByCoicop(coicop);
+  const color = divisionColor(coicop, mode);
+  const points = source ? seriesFor(source.unique_id) : [];
+
+  const series: SeriesOption[] = [
     {
-      type: "treemap",
-      labels,
-      parents: labels.map(() => ""),
-      values,
-      marker: { colors, line: { color: CHART_SURFACE[mode], width: 2 } },
-      textinfo: "label+percent root",
-      hovertemplate: "%{label}: %{value:.1f} per mille (%{percentRoot})<extra></extra>",
-    } as Data,
+      type: "line",
+      name: source?.division_name ?? coicop,
+      data: toTimeSeries(points),
+      showSymbol: false,
+      lineStyle: { width: 2, color },
+      itemStyle: { color },
+      areaStyle: { color, opacity: 0.85 },
+    },
   ];
 
-  return { data, layout: { ...layout, margin: { l: 4, r: 4, t: 4, b: 4 } } };
+  return {
+    ...base,
+    legend: { show: false },
+    yAxis: { ...base.yAxis, name: "Contribution to headline CPI (ppt)", nameGap: 32, nameLocation: "middle" },
+    series,
+  };
+}
+
+export function divisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
+  const source = weightByCoicop(coicop);
+  const color = divisionColor(coicop, mode);
+  const points = source ? seriesFor(source.unique_id) : [];
+
+  const series: SeriesOption[] = [
+    {
+      type: "line",
+      name: source?.division_name ?? coicop,
+      data: toTimeSeries(points),
+      step: "end",
+      showSymbol: true,
+      symbolSize: 6,
+      lineStyle: { width: 2, color },
+      itemStyle: { color },
+    },
+  ];
+
+  return {
+    ...base,
+    legend: { show: false },
+    yAxis: { ...base.yAxis, name: "Basket weight (‰)", nameGap: 32, nameLocation: "middle", axisLabel: { color: MUTED_TEXT[mode] } },
+    series,
+  };
 }

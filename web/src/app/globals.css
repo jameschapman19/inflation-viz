@@ -260,6 +260,27 @@ h2 {
   margin-bottom: 4px;
 }
 
+.division-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 14px 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+}
+.division-pager a:not(:hover) {
+  text-decoration: none;
+}
+.division-pager a:nth-child(2) {
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .site-footer {
   max-width: 1080px;
   margin: 24px auto 0;

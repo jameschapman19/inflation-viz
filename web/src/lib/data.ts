@@ -25,6 +25,18 @@ export function weightsSorted(): SeriesSource[] {
   return [...registry.weights].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
 }
 
+export function divisionByCoicop(coicop: string): SeriesSource | undefined {
+  return registry.divisions.find((d) => d.coicop === coicop);
+}
+
+export function divisionCoicopByName(name: string): string | undefined {
+  return registry.divisions.find((d) => d.division_name === name)?.coicop ?? undefined;
+}
+
+export function weightByCoicop(coicop: string): SeriesSource | undefined {
+  return registry.weights.find((w) => w.coicop === coicop);
+}
+
 export interface HeadlineStat {
   name: string;
   value: number;
