@@ -1,1 +1,1 @@
-"""Static site generation for Inflation Maps (UK)."""
+"""Static site generation for Inflation Radar (UK)."""

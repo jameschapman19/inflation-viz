@@ -1,4 +1,4 @@
-# sources.yaml — canonical source registry for Inflation Maps (UK)
+# sources.yaml — canonical source registry for Inflation Radar (UK)
 #
 # Every fetcher in src/inflation_viz reads this file; no series or CDID is
 # hardcoded anywhere else in the pipeline. This file also drives the

@@ -2,7 +2,7 @@
 
 An open, radically source-transparent view of UK inflation: CPI/CPIH broken
 into its 12 COICOP components, with every number one click from its ONS
-source. This is Phase 1 of Inflation Maps — the public, open layer. The
+source. This is Phase 1 of Inflation Radar — the public, open layer. The
 reconciled forecasting product lives in the private `inflation-forecast`
 repository; this repo never contains forecasting code or weighting logic,
 only historical data and its visualization.

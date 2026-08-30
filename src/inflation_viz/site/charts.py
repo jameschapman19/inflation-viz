@@ -88,7 +88,7 @@ def contributors_chart(series: pl.DataFrame, registry: SourceRegistry) -> go.Fig
 
 
 def basket_treemap(weights: pl.DataFrame, registry: SourceRegistry) -> go.Figure:
-    """Treemap of the COICOP division weights — the "map" in Inflation Maps."""
+    """Treemap of the COICOP division weights, sized by basket share."""
     divisions = registry.divisions_sorted()
     weight_by_coicop = dict(
         zip(weights["coicop"].to_list(), weights["weight_per_mille"].to_list(), strict=True)
