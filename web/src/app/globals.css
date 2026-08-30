@@ -101,6 +101,28 @@ code {
   background: var(--nav-track-bg);
   border-radius: 999px;
   padding: 3px;
+  /* On a narrow viewport the nav drops to its own row below the brand
+     (via .site-header's own wrap) — scroll that row horizontally rather
+     than letting a two-word label ("Basket explorer") wrap inside its
+     own pill, which broke the pill's shape and pushed later items past
+     the header's rounded edge. */
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  /* Soft-fade the scrollable edges so a cut-off item (e.g. "Methodology"
+     on a narrow phone) reads as "more to scroll to", not a hard clip. */
+  mask-image: linear-gradient(to right, transparent, black 14px, black calc(100% - 14px), transparent);
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    black 14px,
+    black calc(100% - 14px),
+    transparent
+  );
+}
+.site-header nav::-webkit-scrollbar {
+  display: none;
 }
 .site-header nav a {
   padding: 7px 14px;
@@ -109,6 +131,8 @@ code {
   color: var(--text-secondary);
   font-size: 0.88rem;
   font-weight: 500;
+  white-space: nowrap;
+  flex: none;
   transition:
     background 0.15s ease,
     color 0.15s ease;
