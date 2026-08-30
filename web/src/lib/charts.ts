@@ -32,13 +32,22 @@ function baseOption(mode: ChartMode): EChartsOption {
       textStyle: { color: textColor, fontFamily: FONT_FAMILY },
       axisPointer: { type: "cross", label: { backgroundColor: mode === "dark" ? "#202020" : "#ffffff" } },
     },
+    // "scroll" keeps the legend to a single row (paging with </> controls
+    // once it overflows) instead of wrapping onto a second line — a
+    // wrapped legend's height varies with how many children a chart has,
+    // which pushed a second row into the fixed grid.top below on charts
+    // with 8+ series (e.g. Food's 9-way sub-category breakdown).
     legend: {
+      type: "scroll",
       top: 0,
       left: 0,
       icon: "circle",
       itemWidth: 8,
       itemHeight: 8,
       textStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 12 },
+      pageIconColor: muted,
+      pageIconInactiveColor: grid,
+      pageTextStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 11 },
     },
     grid: { left: 48, right: 24, top: 40, bottom: 32, containLabel: true },
     xAxis: {
@@ -274,6 +283,7 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
     series: [
       {
         type: "treemap",
+        name: "All items",
         roam: false,
         // Show only the top level to start — a node with children zooms
         // into them in place on click (one level deeper each time,
@@ -283,6 +293,7 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
         nodeClick: "zoomToNode",
         breadcrumb: {
           show: true,
+          left: "left",
           top: 0,
           itemStyle: {
             color: CHART_SURFACE[mode],
@@ -298,7 +309,15 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
           formatter: "{b}",
         },
         itemStyle: { borderColor: CHART_SURFACE[mode], borderWidth: 2, gapWidth: 2 },
-        levels: [{}, {}, { itemStyle: { gapWidth: 1 } }, { itemStyle: { gapWidth: 1 } }],
+        // level 0 is the invisible root itself — without this it draws its
+        // own "All items" header strip in addition to the breadcrumb below,
+        // duplicating the same label two different ways.
+        levels: [
+          { upperLabel: { show: false } },
+          {},
+          { itemStyle: { gapWidth: 1 } },
+          { itemStyle: { gapWidth: 1 } },
+        ],
         data,
       },
     ],
