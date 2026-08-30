@@ -60,15 +60,15 @@ def test_weight_series_are_distinct_from_contribution_series() -> None:
 
 def test_registry_has_group_level_subdivisions_for_every_division_except_education() -> None:
     """Coverage: every COICOP group ONS publishes a CPI rate+weight for,
-    across all 12 divisions, plus Transport's 07.2.2 class as a
-    go-one-level-deeper example — see sources.yaml's `subdivisions:` header
-    comment for why Education (10.x) and 04.2 are deliberately absent
-    rather than guessed.
+    across all 12 divisions, plus two go-one-level-deeper examples
+    (Transport's 07.2.2 class, and Food's full 01.1.1..01.1.9 class
+    breakdown) — see sources.yaml's `subdivisions:` header comment for why
+    Education (10.x) and 04.2 are deliberately absent rather than guessed.
     """
     registry = load_registry()
     coicop_codes = {s.coicop for s in registry.subdivisions.values()}
     assert coicop_codes == {s.coicop for s in registry.subdivision_weights.values()}
-    assert len(coicop_codes) == 38
+    assert len(coicop_codes) == 47
     # every division except Education (10) and (deliberately) housing's
     # CPIH-only 04.2 has at least one sub-division
     top_level_with_subdivisions = {c.split(".")[0] for c in coicop_codes if c}
@@ -85,7 +85,9 @@ def test_registry_has_group_level_subdivisions_for_every_division_except_educati
         "11",
         "12",
     }
-    assert "07.2.2" in coicop_codes  # the one class-level entry, nested under 07.2
+    assert "07.2.2" in coicop_codes  # the class-level entry nested under 07.2
+    food_classes = {f"01.1.{i}" for i in range(1, 10)}
+    assert food_classes <= coicop_codes  # Food's full class-level breakdown
 
 
 def test_subdivisions_sorted_is_coicop_order() -> None:
