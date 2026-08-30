@@ -1,6 +1,9 @@
-"""Loads sources.yaml — the single source registry every fetcher and the
-methodology page reads from. Nothing about which series to pull, or how to
-attribute it, is hardcoded outside this file's callers.
+"""Registry types + the one thing still read from a local file: `external`,
+the handful of non-ONS-timeseries reference sources (Ofgem, DESNZ fuel
+prices) that have no CDID-based API to discover. Every ONS series —
+headline, divisions, and the full COICOP sub-division tree — is discovered
+live at refresh time by `ons_catalog.py`; nothing about *those* is read
+from here. See `sources.yaml`'s header comment.
 """
 
 from __future__ import annotations
@@ -47,58 +50,46 @@ class ReferenceTableSource:
     notes: str
 
 
-def _build_series_source(unique_id: str, entry: dict[str, Any]) -> SeriesSource:
-    return SeriesSource(
-        unique_id=unique_id,
-        name=entry.get("name") or entry["division_name"],
-        cdid=entry["cdid"],
-        dataset=entry["dataset"],
-        source_name=entry["source_name"],
-        source_url=entry["source_url"],
-        api_url=entry["api_url"],
-        license=entry["license"],
-        cadence=entry["cadence"],
-        unit=entry["unit"],
-        division_name=entry.get("division_name"),
-        coicop=entry.get("coicop"),
-        parent_coicop=entry.get("parent_coicop"),
-    )
+def load_external(path: Path = SOURCES_PATH) -> dict[str, ReferenceTableSource]:
+    raw: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
+    return {
+        key: ReferenceTableSource(
+            key=key,
+            name=entry["name"],
+            source_name=entry["source_name"],
+            source_url=entry["source_url"],
+            license=entry["license"],
+            cadence=entry["cadence"],
+            notes=entry.get("notes", ""),
+        )
+        for key, entry in raw.get("external", {}).items()
+    }
 
 
 class SourceRegistry:
-    """Typed view over sources.yaml."""
+    """A fully-assembled set of series — some live-discovered from ONS
+    (headline/divisions/weights/subdivisions/subdivision_weights, built by
+    `ons_catalog.discover_registry()`), some read from `sources.yaml`
+    (`external`). Construction is intentionally dumb: this class just holds
+    whatever dicts it's given.
+    """
 
-    def __init__(self, raw: dict[str, Any]) -> None:
-        self._raw = raw
-        self.headline: dict[str, SeriesSource] = {
-            uid: _build_series_source(uid, entry) for uid, entry in raw.get("headline", {}).items()
-        }
-        self.divisions: dict[str, SeriesSource] = {
-            uid: _build_series_source(uid, entry) for uid, entry in raw.get("divisions", {}).items()
-        }
-        self.weights: dict[str, SeriesSource] = {
-            uid: _build_series_source(uid, entry) for uid, entry in raw.get("weights", {}).items()
-        }
-        self.subdivisions: dict[str, SeriesSource] = {
-            uid: _build_series_source(uid, entry)
-            for uid, entry in raw.get("subdivisions", {}).items()
-        }
-        self.subdivision_weights: dict[str, SeriesSource] = {
-            uid: _build_series_source(uid, entry)
-            for uid, entry in raw.get("subdivision_weights", {}).items()
-        }
-        self.external: dict[str, ReferenceTableSource] = {
-            key: ReferenceTableSource(
-                key=key,
-                name=entry["name"],
-                source_name=entry["source_name"],
-                source_url=entry["source_url"],
-                license=entry["license"],
-                cadence=entry["cadence"],
-                notes=entry.get("notes", ""),
-            )
-            for key, entry in raw.get("external", {}).items()
-        }
+    def __init__(
+        self,
+        *,
+        headline: dict[str, SeriesSource],
+        divisions: dict[str, SeriesSource],
+        weights: dict[str, SeriesSource],
+        subdivisions: dict[str, SeriesSource],
+        subdivision_weights: dict[str, SeriesSource],
+        external: dict[str, ReferenceTableSource],
+    ) -> None:
+        self.headline = headline
+        self.divisions = divisions
+        self.weights = weights
+        self.subdivisions = subdivisions
+        self.subdivision_weights = subdivision_weights
+        self.external = external
 
     @property
     def all_series(self) -> dict[str, SeriesSource]:
@@ -126,8 +117,3 @@ class SourceRegistry:
     def subdivision_weights_sorted(self) -> list[SeriesSource]:
         """Sub-division weight series ordered by COICOP code."""
         return sorted(self.subdivision_weights.values(), key=lambda s: s.coicop or "")
-
-
-def load_registry(path: Path = SOURCES_PATH) -> SourceRegistry:
-    raw = yaml.safe_load(path.read_text(encoding="utf-8"))
-    return SourceRegistry(raw)

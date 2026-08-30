@@ -1,9 +1,8 @@
 from inflation_viz.colors import DIVISION_COLORS, division_color
-from inflation_viz.config import load_registry
+from inflation_viz.config import SourceRegistry
 
 
-def test_every_division_has_a_color() -> None:
-    registry = load_registry()
+def test_every_division_has_a_color(registry: SourceRegistry) -> None:
     for uid in registry.divisions:
         assert uid in DIVISION_COLORS, f"{uid} missing from the shared color config"
 

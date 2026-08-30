@@ -4,13 +4,23 @@ from pathlib import Path
 import polars as pl
 import pytest
 
-from inflation_viz.config import SourceRegistry, load_registry
+from inflation_viz.config import SourceRegistry, load_external
+from inflation_viz.ons_catalog import build_catalog, build_registry, parse_bulk_csv
 from inflation_viz.storage import ProvenanceRecord, write_vintage
+
+FIXTURES_DIR = Path(__file__).parent / "fixtures"
 
 
 @pytest.fixture
 def registry() -> SourceRegistry:
-    return load_registry()
+    """A SourceRegistry built the exact way `refresh.py` builds one in
+    production — `parse_bulk_csv` -> `build_catalog` -> `build_registry` —
+    just fed a small local fixture CSV instead of a live ONS download, so
+    the whole test suite stays network-free.
+    """
+    csv_text = (FIXTURES_DIR / "ons_bulk_mm23_sample.csv").read_text(encoding="utf-8")
+    catalog = build_catalog(parse_bulk_csv(csv_text))
+    return build_registry(catalog, external=load_external())
 
 
 @pytest.fixture

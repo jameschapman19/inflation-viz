@@ -1,7 +1,9 @@
-"""sources.yaml-driven fetcher for ONS's timeseries JSON.
+"""Registry-driven fetcher for ONS's timeseries JSON.
 
-Every series pulled here comes from `sources.yaml` — there is no
-series-specific fetch logic. Each series's `api_url` is called as-is; the
+Every series pulled here comes from whatever `SourceRegistry` it's given —
+in production that's `ons_catalog.discover_registry()`'s live result, not
+anything hardcoded — there is no series-specific fetch logic. Each
+series's `api_url` is called as-is; the
 response is the same JSON that powers the chart on the series' own
 www.ons.gov.uk page — append `/data` to the page URL
 (https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/{cdid}/{dataset}/data):
@@ -34,7 +36,8 @@ from pathlib import Path
 import polars as pl
 import requests
 
-from inflation_viz.config import SeriesSource, SourceRegistry, load_registry
+from inflation_viz.config import SeriesSource, SourceRegistry
+from inflation_viz.ons_catalog import discover_registry
 from inflation_viz.storage import ProvenanceRecord, write_vintage
 
 _MONTH_ABBR = {
@@ -183,7 +186,7 @@ def fetch_all(registry: SourceRegistry, session: requests.Session | None = None)
 
 
 def main() -> None:
-    registry = load_registry()
+    registry = discover_registry()
     fetch_all(registry)
 
 

@@ -1,5 +1,6 @@
-"""Exports `data/latest` + `sources.yaml` to JSON the Next.js app
-(`web/src/data/`) reads at build time.
+"""Exports `data/latest` + the current `SourceRegistry` (live-discovered by
+`ons_catalog.py`, plus `sources.yaml`'s `external` entries) to JSON the
+Next.js app (`web/src/data/`) reads at build time.
 
 This is the boundary between the Python data pipeline and the frontend:
 the pipeline never renders HTML, and the frontend never talks to ONS or
@@ -18,7 +19,8 @@ from typing import Any
 
 import polars as pl
 
-from inflation_viz.config import REPO_ROOT, SourceRegistry, load_registry
+from inflation_viz.config import REPO_ROOT, SourceRegistry
+from inflation_viz.ons_catalog import discover_registry
 from inflation_viz.storage import (
     DATA_DIR,
     list_vintages,
@@ -56,7 +58,7 @@ def export_web_data(
     out_dir: Path = DEFAULT_OUT_DIR,
     registry: SourceRegistry | None = None,
 ) -> None:
-    registry = registry or load_registry()
+    registry = registry or discover_registry()
     out_dir.mkdir(parents=True, exist_ok=True)
 
     series: pl.DataFrame = read_latest_series(data_dir)
