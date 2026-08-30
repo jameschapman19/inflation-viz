@@ -250,7 +250,9 @@ interface TreemapNode {
  */
 function buildTreemapNode(coicop: string, name: string, uniqueId: string, color: string, mode: ChartMode): TreemapNode {
   const points = seriesFor(uniqueId);
-  const value = points.length > 0 ? points[points.length - 1].y : 0;
+  // Rounded here (not at render time) so the plain "{c}‰" built-in label
+  // token shows a clean one-decimal figure without a custom formatter.
+  const value = points.length > 0 ? Math.round(points[points.length - 1].y * 10) / 10 : 0;
   const kids = childWeightSeriesOf(coicop);
   const node: TreemapNode = { name, value, coicop, itemStyle: { color } };
   if (kids.length > 0) {
@@ -321,33 +323,37 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
         },
         upperLabel: {
           show: true,
-          height: 24,
+          height: 26,
           color: "#ffffff",
           fontFamily: FONT_FAMILY,
-          textBorderColor: "rgba(0, 0, 0, 0.5)",
-          textBorderWidth: 2,
+          fontWeight: 600,
+          fontSize: 13,
+          textShadowColor: "rgba(0, 0, 0, 0.45)",
+          textShadowBlur: 6,
           // Needs its own plain formatter — left unset, it falls back to
-          // `label`'s rich-text formatter below, whose {name|...} tokens
-          // only resolve under `label.rich`, printing literally here.
+          // `label`'s formatter below and prints its "{b}\n{c}‰" content
+          // as a two-line header, not the single-line strip this is.
           formatter: "{b}",
         },
         label: {
           show: true,
+          position: ["50%", "50%"],
+          align: "center",
+          verticalAlign: "middle",
           color: "#ffffff",
           fontFamily: FONT_FAMILY,
-          // A visible per-mille figure on every tile, not just on hover —
-          // and a dark text outline so it stays legible regardless of how
-          // light or saturated the tile underneath it is.
-          textBorderColor: "rgba(0, 0, 0, 0.5)",
-          textBorderWidth: 2,
-          formatter: (params) => {
-            const p = params as { name: string; value: number };
-            return `{name|${p.name}}\n{value|${p.value.toFixed(1)}‰}`;
-          },
-          rich: {
-            name: { fontSize: 13, fontWeight: 600, lineHeight: 18 },
-            value: { fontSize: 11, opacity: 0.9 },
-          },
+          fontSize: 14,
+          fontWeight: 600,
+          lineHeight: 20,
+          // A soft shadow (not a hard outline) keeps this legible against
+          // any tile color without the chunky "stroked text" look.
+          textShadowColor: "rgba(0, 0, 0, 0.45)",
+          textShadowBlur: 6,
+          // Built-in tokens ({b} name, {c} value — value is pre-rounded in
+          // buildTreemapNode) instead of a custom rich-text formatter: a
+          // richer per-line style map didn't reliably apply here, and a
+          // plain centered two-line label reads cleaner anyway.
+          formatter: "{b}\n{c}‰",
         },
         itemStyle: { borderColor: CHART_SURFACE[mode], borderWidth: 2, gapWidth: 2 },
         // level 0 is the invisible root itself — without this it draws its
