@@ -196,26 +196,15 @@ function multiLineChildrenChart(
   };
 }
 
+/** The stack's own top edge already *is* the total (these are ONS's
+ * published components, not reconstructed) — an extra headline overlay
+ * line here reads as a second, competing total rather than a useful
+ * cross-check, especially where a division's contribution isn't
+ * discovered yet. The Headline page is the place for the CPI/CPIH trend
+ * on its own.
+ */
 export function contributorsChart(mode: ChartMode): EChartsOption {
-  const option = stackedChildrenChart(topLevelContributionChildren(), mode, "Percentage points", "{value}%");
-
-  const headline = registry.headline.find((s) => s.unique_id === "GB.CPI");
-  if (headline && Array.isArray(option.series)) {
-    option.series = [
-      ...option.series,
-      {
-        type: "line",
-        name: headline.name,
-        data: toTimeSeries(seriesFor("GB.CPI")),
-        showSymbol: false,
-        lineStyle: { width: 2.5, color: HEADLINE_COLOR[mode], type: "dotted" },
-        itemStyle: { color: HEADLINE_COLOR[mode] },
-        z: 10,
-      },
-    ];
-  }
-
-  return option;
+  return stackedChildrenChart(topLevelContributionChildren(), mode, "Percentage points", "{value}%");
 }
 
 /** Stacked basket-weight-over-time chart for any set of children — the 12

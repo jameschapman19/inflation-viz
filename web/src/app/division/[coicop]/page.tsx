@@ -9,7 +9,7 @@ import {
   divisionByCoicop,
   divisionsSorted,
   latestPointFor,
-  subdivisionsUnderDivision,
+  subdivisionsUnder,
   weightByCoicop,
 } from "@/lib/data";
 
@@ -32,7 +32,7 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
   if (!division) notFound();
 
   const color = divisionColor(coicop);
-  const subdivisions = subdivisionsUnderDivision(coicop);
+  const subdivisions = subdivisionsUnder(coicop);
   const childRates = childRateSeriesOf(coicop);
   const childWeights = childWeightSeriesOf(coicop);
 

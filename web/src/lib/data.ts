@@ -70,13 +70,6 @@ export function subdivisionsUnder(parentCoicop: string): SeriesSource[] {
   return subdivisionsSorted().filter((s) => s.parent_coicop === parentCoicop);
 }
 
-/** All sub-divisions anywhere below the given 2-digit division, regardless
- * of depth — e.g. "07" also picks up 07.2.2, nested under the 07.2 group.
- */
-export function subdivisionsUnderDivision(coicop: string): SeriesSource[] {
-  return subdivisionsSorted().filter((s) => (s.coicop ?? "").startsWith(`${coicop}.`));
-}
-
 export interface ChildSeries {
   coicop: string;
   name: string;
