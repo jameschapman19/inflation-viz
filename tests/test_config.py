@@ -58,15 +58,34 @@ def test_weight_series_are_distinct_from_contribution_series() -> None:
         assert uid.startswith("GB.W")
 
 
-def test_registry_has_transport_subdivision_pilot() -> None:
-    """Pilot scope: Transport's group-level 07.1/07.2/07.3 plus 07.2.2, the
-    one class nested under 07.2 — see sources.yaml's `subdivisions:` header
-    comment for why only these four are here and not the full COICOP tree.
+def test_registry_has_group_level_subdivisions_for_every_division_except_education() -> None:
+    """Coverage: every COICOP group ONS publishes a CPI rate+weight for,
+    across all 12 divisions, plus Transport's 07.2.2 class as a
+    go-one-level-deeper example — see sources.yaml's `subdivisions:` header
+    comment for why Education (10.x) and 04.2 are deliberately absent
+    rather than guessed.
     """
     registry = load_registry()
     coicop_codes = {s.coicop for s in registry.subdivisions.values()}
-    assert coicop_codes == {"07.1", "07.2", "07.2.2", "07.3"}
     assert coicop_codes == {s.coicop for s in registry.subdivision_weights.values()}
+    assert len(coicop_codes) == 38
+    # every division except Education (10) and (deliberately) housing's
+    # CPIH-only 04.2 has at least one sub-division
+    top_level_with_subdivisions = {c.split(".")[0] for c in coicop_codes if c}
+    assert top_level_with_subdivisions == {
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "11",
+        "12",
+    }
+    assert "07.2.2" in coicop_codes  # the one class-level entry, nested under 07.2
 
 
 def test_subdivisions_sorted_is_coicop_order() -> None:

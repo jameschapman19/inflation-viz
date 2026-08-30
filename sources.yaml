@@ -382,14 +382,282 @@ weights:
 # index ourselves, for the same point-in-time-integrity reason the top-level
 # divisions use ONS's own contribution series.
 #
-# Pilot scope: Transport (07), one level of group (07.1/07.2/07.3) plus one
-# class nested under 07.2 (07.2.2), each cross-checked against multiple ONS
-# search results before being added — a CDID guessed wrong here would
-# silently mislabel a real chart, so only entries with a directly-found ONS
-# series page went in. `parent_coicop` is the immediate parent in the COICOP
-# tree (used to derive the sub-division's color and its breadcrumb).
+# Coverage: every COICOP group (3-digit) ONS actually publishes a CPI rate
+# and weight for, across all 12 divisions, plus one class nested a level
+# further under Transport (07.2.2, "Fuels and lubricants") as a worked
+# example of going deeper than the group level. Each CDID here was
+# cross-checked against multiple ONS search results before being added — a
+# CDID guessed wrong would silently mislabel a real chart, so only entries
+# with a directly-found ONS series page went in. Two things are
+# deliberately absent rather than guessed:
+#   - Education (10.x): ONS publishes the group-level INDEX and WEIGHT, but
+#     no ANNUAL RATE CDID for either of the two published groups
+#     ("10.1/2/5" and 10.4) could be confirmed — so education stays at the
+#     division level (WUND/CJUU) rather than including an unverified rate.
+#   - 04.2 "Imputed rentals for housing": not part of CPI's own basket at
+#     all (only CPIH's) — that's the actual CPI/CPIH methodological split,
+#     not an oversight.
+# `parent_coicop` is the immediate parent in the COICOP tree (used to
+# derive the sub-division's color and its breadcrumb). "08.2-3" is ONS's
+# own combined series for Communication's 08.2 (equipment) + 08.3
+# (services) groups, published as one series since equipment's weight
+# is now too small to break out — the hyphen (not ONS's own "08.2/3") is
+# just to keep it a valid URL path segment.
 # ---------------------------------------------------------------------------
 subdivisions:
+  GB.CP01.1:
+    coicop: "01.1"
+    parent_coicop: "01"
+    division_name: "Food"
+    metric: annual_rate
+    cdid: D7GK
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gk/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gk/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP01.2:
+    coicop: "01.2"
+    parent_coicop: "01"
+    division_name: "Non-alcoholic beverages"
+    metric: annual_rate
+    cdid: D7GL
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gl/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gl/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP02.1:
+    coicop: "02.1"
+    parent_coicop: "02"
+    division_name: "Alcoholic beverages"
+    metric: annual_rate
+    cdid: D7GM
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gm/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gm/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP02.2:
+    coicop: "02.2"
+    parent_coicop: "02"
+    division_name: "Tobacco"
+    metric: annual_rate
+    cdid: D7GN
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gn/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gn/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP03.1:
+    coicop: "03.1"
+    parent_coicop: "03"
+    division_name: "Clothing"
+    metric: annual_rate
+    cdid: D7GO
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7go/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7go/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP03.2:
+    coicop: "03.2"
+    parent_coicop: "03"
+    division_name: "Footwear including repairs"
+    metric: annual_rate
+    cdid: D7GP
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gp/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gp/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP04.1:
+    coicop: "04.1"
+    parent_coicop: "04"
+    division_name: "Actual rentals for housing"
+    metric: annual_rate
+    cdid: D7GQ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gq/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gq/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP04.3:
+    coicop: "04.3"
+    parent_coicop: "04"
+    division_name: "Regular maintenance and repair of the dwelling"
+    metric: annual_rate
+    cdid: D7GR
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gr/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gr/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP04.4:
+    coicop: "04.4"
+    parent_coicop: "04"
+    division_name: "Water supply and miscellaneous services relating to the dwelling"
+    metric: annual_rate
+    cdid: D7GS
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gs/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gs/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.1:
+    coicop: "05.1"
+    parent_coicop: "05"
+    division_name: "Furniture, furnishings and carpets"
+    metric: annual_rate
+    cdid: D7GU
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gu/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gu/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.2:
+    coicop: "05.2"
+    parent_coicop: "05"
+    division_name: "Household textiles"
+    metric: annual_rate
+    cdid: D7GV
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gv/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gv/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.3:
+    coicop: "05.3"
+    parent_coicop: "05"
+    division_name: "Major household appliances including fittings and repairs"
+    metric: annual_rate
+    cdid: D7GW
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gw/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gw/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.4:
+    coicop: "05.4"
+    parent_coicop: "05"
+    division_name: "Glassware, tableware and household utensils"
+    metric: annual_rate
+    cdid: D7GX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gx/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gx/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.5:
+    coicop: "05.5"
+    parent_coicop: "05"
+    division_name: "Tools and equipment for house and garden"
+    metric: annual_rate
+    cdid: D7GY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gy/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP05.6:
+    coicop: "05.6"
+    parent_coicop: "05"
+    division_name: "Goods and services for routine household maintenance"
+    metric: annual_rate
+    cdid: D7GZ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gz/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7gz/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP06.1:
+    coicop: "06.1"
+    parent_coicop: "06"
+    division_name: "Medical products, appliances and equipment"
+    metric: annual_rate
+    cdid: D7NO
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7no/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7no/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP06.2:
+    coicop: "06.2"
+    parent_coicop: "06"
+    division_name: "Out-patient services"
+    metric: annual_rate
+    cdid: D7NR
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7nr/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7nr/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP06.3:
+    coicop: "06.3"
+    parent_coicop: "06"
+    division_name: "Hospital services"
+    metric: annual_rate
+    cdid: D7NU
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7nu/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7nu/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+
   GB.CP07.1:
     coicop: "07.1"
     parent_coicop: "07"
@@ -446,11 +714,488 @@ subdivisions:
     cadence: monthly
     unit: percent
 
+  GB.CP08.1:
+    coicop: "08.1"
+    parent_coicop: "08"
+    division_name: "Postal services"
+    metric: annual_rate
+    cdid: D7H5
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h5/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h5/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP08.2-3:
+    coicop: "08.2-3"
+    parent_coicop: "08"
+    division_name: "Telephone and telefax equipment and services"
+    metric: annual_rate
+    cdid: D7IY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7iy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7iy/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.1:
+    coicop: "09.1"
+    parent_coicop: "09"
+    division_name: "Audio-visual equipment and related products"
+    metric: annual_rate
+    cdid: D7H6
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h6/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h6/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.2:
+    coicop: "09.2"
+    parent_coicop: "09"
+    division_name: "Other major durables for recreation and culture"
+    metric: annual_rate
+    cdid: D7H7
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h7/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h7/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.3:
+    coicop: "09.3"
+    parent_coicop: "09"
+    division_name: "Other recreational items, gardens and pets"
+    metric: annual_rate
+    cdid: D7H8
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h8/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h8/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.4:
+    coicop: "09.4"
+    parent_coicop: "09"
+    division_name: "Recreational and cultural services"
+    metric: annual_rate
+    cdid: D7H9
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h9/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h9/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.5:
+    coicop: "09.5"
+    parent_coicop: "09"
+    division_name: "Books, newspapers and stationery"
+    metric: annual_rate
+    cdid: D7O3
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o3/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o3/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP09.6:
+    coicop: "09.6"
+    parent_coicop: "09"
+    division_name: "Package holidays"
+    metric: annual_rate
+    cdid: D7O7
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o7/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o7/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP11.1:
+    coicop: "11.1"
+    parent_coicop: "11"
+    division_name: "Catering services"
+    metric: annual_rate
+    cdid: D7HA
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7ha/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7ha/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP11.2:
+    coicop: "11.2"
+    parent_coicop: "11"
+    division_name: "Accommodation services"
+    metric: annual_rate
+    cdid: D7HB
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hb/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hb/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.1:
+    coicop: "12.1"
+    parent_coicop: "12"
+    division_name: "Personal care"
+    metric: annual_rate
+    cdid: D7HC
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hc/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hc/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.3:
+    coicop: "12.3"
+    parent_coicop: "12"
+    division_name: "Personal effects n.e.c."
+    metric: annual_rate
+    cdid: D7O8
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o8/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7o8/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.4:
+    coicop: "12.4"
+    parent_coicop: "12"
+    division_name: "Social protection"
+    metric: annual_rate
+    cdid: D7HE
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7he/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7he/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.5:
+    coicop: "12.5"
+    parent_coicop: "12"
+    division_name: "Insurance"
+    metric: annual_rate
+    cdid: D7HF
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hf/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hf/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.6:
+    coicop: "12.6"
+    parent_coicop: "12"
+    division_name: "Financial services n.e.c."
+    metric: annual_rate
+    cdid: D7HG
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hg/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7hg/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP12.7:
+    coicop: "12.7"
+    parent_coicop: "12"
+    division_name: "Other services n.e.c."
+    metric: annual_rate
+    cdid: D7OB
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7ob/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7ob/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
 # ---------------------------------------------------------------------------
-# COICOP sub-division basket weights — same pilot scope as `subdivisions:`
+# COICOP sub-division basket weights — same coverage as `subdivisions:`
 # above, one weight CDID per entry there.
 # ---------------------------------------------------------------------------
 subdivision_weights:
+  GB.SW01.1:
+    coicop: "01.1"
+    parent_coicop: "01"
+    division_name: "Food"
+    metric: basket_weight
+    cdid: CJUX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjux/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjux/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW01.2:
+    coicop: "01.2"
+    parent_coicop: "01"
+    division_name: "Non-alcoholic beverages"
+    metric: basket_weight
+    cdid: CJUY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuy/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW02.1:
+    coicop: "02.1"
+    parent_coicop: "02"
+    division_name: "Alcoholic beverages"
+    metric: basket_weight
+    cdid: CJUZ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuz/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuz/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW02.2:
+    coicop: "02.2"
+    parent_coicop: "02"
+    division_name: "Tobacco"
+    metric: basket_weight
+    cdid: CJWP
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjwp/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjwp/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW03.1:
+    coicop: "03.1"
+    parent_coicop: "03"
+    division_name: "Clothing"
+    metric: basket_weight
+    cdid: CJVA
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjva/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjva/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW03.2:
+    coicop: "03.2"
+    parent_coicop: "03"
+    division_name: "Footwear including repairs"
+    metric: basket_weight
+    cdid: CJVB
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvb/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvb/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW04.1:
+    coicop: "04.1"
+    parent_coicop: "04"
+    division_name: "Actual rentals for housing"
+    metric: basket_weight
+    cdid: CJVC
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvc/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvc/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW04.3:
+    coicop: "04.3"
+    parent_coicop: "04"
+    division_name: "Regular maintenance and repair of the dwelling"
+    metric: basket_weight
+    cdid: CJVD
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvd/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvd/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW04.4:
+    coicop: "04.4"
+    parent_coicop: "04"
+    division_name: "Water supply and miscellaneous services relating to the dwelling"
+    metric: basket_weight
+    cdid: CJVE
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjve/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjve/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.1:
+    coicop: "05.1"
+    parent_coicop: "05"
+    division_name: "Furniture, furnishings and carpets"
+    metric: basket_weight
+    cdid: CJVG
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvg/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvg/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.2:
+    coicop: "05.2"
+    parent_coicop: "05"
+    division_name: "Household textiles"
+    metric: basket_weight
+    cdid: CJVH
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvh/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvh/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.3:
+    coicop: "05.3"
+    parent_coicop: "05"
+    division_name: "Major household appliances including fittings and repairs"
+    metric: basket_weight
+    cdid: CJVI
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvi/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvi/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.4:
+    coicop: "05.4"
+    parent_coicop: "05"
+    division_name: "Glassware, tableware and household utensils"
+    metric: basket_weight
+    cdid: CJVJ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvj/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvj/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.5:
+    coicop: "05.5"
+    parent_coicop: "05"
+    division_name: "Tools and equipment for house and garden"
+    metric: basket_weight
+    cdid: CJVK
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvk/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvk/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW05.6:
+    coicop: "05.6"
+    parent_coicop: "05"
+    division_name: "Goods and services for routine household maintenance"
+    metric: basket_weight
+    cdid: CJVL
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvl/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvl/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW06.1:
+    coicop: "06.1"
+    parent_coicop: "06"
+    division_name: "Medical products, appliances and equipment"
+    metric: basket_weight
+    cdid: JKWO
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/jkwo/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/jkwo/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW06.2:
+    coicop: "06.2"
+    parent_coicop: "06"
+    division_name: "Out-patient services"
+    metric: basket_weight
+    cdid: ICVJ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvj/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvj/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW06.3:
+    coicop: "06.3"
+    parent_coicop: "06"
+    division_name: "Hospital services"
+    metric: basket_weight
+    cdid: ICVM
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvm/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvm/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+
   GB.SW07.1:
     coicop: "07.1"
     parent_coicop: "07"
@@ -503,6 +1248,230 @@ subdivision_weights:
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23"
     api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW08.1:
+    coicop: "08.1"
+    parent_coicop: "08"
+    division_name: "Postal services"
+    metric: basket_weight
+    cdid: CJVP
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvp/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvp/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW08.2-3:
+    coicop: "08.2-3"
+    parent_coicop: "08"
+    division_name: "Telephone and telefax equipment and services"
+    metric: basket_weight
+    cdid: CJYB
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjyb/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjyb/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.1:
+    coicop: "09.1"
+    parent_coicop: "09"
+    division_name: "Audio-visual equipment and related products"
+    metric: basket_weight
+    cdid: CJVQ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvq/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvq/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.2:
+    coicop: "09.2"
+    parent_coicop: "09"
+    division_name: "Other major durables for recreation and culture"
+    metric: basket_weight
+    cdid: CJVR
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvr/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvr/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.3:
+    coicop: "09.3"
+    parent_coicop: "09"
+    division_name: "Other recreational items, gardens and pets"
+    metric: basket_weight
+    cdid: CJVS
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvs/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvs/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.4:
+    coicop: "09.4"
+    parent_coicop: "09"
+    division_name: "Recreational and cultural services"
+    metric: basket_weight
+    cdid: CJVT
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvt/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvt/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.5:
+    coicop: "09.5"
+    parent_coicop: "09"
+    division_name: "Books, newspapers and stationery"
+    metric: basket_weight
+    cdid: ICVT
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvt/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvt/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW09.6:
+    coicop: "09.6"
+    parent_coicop: "09"
+    division_name: "Package holidays"
+    metric: basket_weight
+    cdid: ICVX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvx/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvx/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW11.1:
+    coicop: "11.1"
+    parent_coicop: "11"
+    division_name: "Catering services"
+    metric: basket_weight
+    cdid: CJVU
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvu/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvu/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW11.2:
+    coicop: "11.2"
+    parent_coicop: "11"
+    division_name: "Accommodation services"
+    metric: basket_weight
+    cdid: CJVV
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvv/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvv/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.1:
+    coicop: "12.1"
+    parent_coicop: "12"
+    division_name: "Personal care"
+    metric: basket_weight
+    cdid: CJVW
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvw/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvw/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.3:
+    coicop: "12.3"
+    parent_coicop: "12"
+    division_name: "Personal effects n.e.c."
+    metric: basket_weight
+    cdid: CJVX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvx/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvx/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.4:
+    coicop: "12.4"
+    parent_coicop: "12"
+    division_name: "Social protection"
+    metric: basket_weight
+    cdid: CJVY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvy/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.5:
+    coicop: "12.5"
+    parent_coicop: "12"
+    division_name: "Insurance"
+    metric: basket_weight
+    cdid: CJVZ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvz/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvz/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.6:
+    coicop: "12.6"
+    parent_coicop: "12"
+    division_name: "Financial services n.e.c."
+    metric: basket_weight
+    cdid: CJWA
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjwa/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjwa/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW12.7:
+    coicop: "12.7"
+    parent_coicop: "12"
+    division_name: "Other services n.e.c."
+    metric: basket_weight
+    cdid: ICVY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/icvy/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: per_mille
