@@ -1,0 +1,37 @@
+name: Discover COICOP series
+
+# One-off/occasional developer tool, not part of the regular data
+# pipeline — run manually from the Actions tab whenever sources.yaml's
+# COICOP depth needs auditing against ONS's own published series list.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Discover COICOP-coded series from ONS's bulk dataset
+        run: uv run python -m inflation_viz.discover_coicop
+
+      - name: Commit reference data
+        run: |
+          git config user.name "inflation-viz-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/ons_coicop_reference.json
+          git diff --cached --quiet || git commit -m "data: refresh ONS COICOP reference $(date -u +%Y-%m-%dT%H%M%SZ)"
+          git push
