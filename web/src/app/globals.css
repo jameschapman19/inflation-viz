@@ -10,6 +10,9 @@
   --border: rgba(255, 255, 255, 0.1);
   --accent: #3987e5;
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.28);
+  --header-bg: rgba(26, 26, 25, 0.72);
+  --nav-track-bg: rgba(0, 0, 0, 0.25);
+  --nav-hover-bg: rgba(255, 255, 255, 0.06);
 }
 
 * {
@@ -65,7 +68,7 @@ code {
   max-width: 1080px;
   margin: 16px auto 0;
   padding: 10px 18px;
-  background: rgba(26, 26, 25, 0.72);
+  background: var(--header-bg);
   backdrop-filter: blur(10px);
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -95,7 +98,7 @@ code {
 .site-header nav {
   display: flex;
   gap: 2px;
-  background: rgba(0, 0, 0, 0.25);
+  background: var(--nav-track-bg);
   border-radius: 999px;
   padding: 3px;
 }
@@ -112,7 +115,7 @@ code {
 }
 .site-header nav a:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--nav-hover-bg);
 }
 .site-header nav a.active {
   color: var(--text-primary);
@@ -306,6 +309,9 @@ h2 {
     --muted: #898781;
     --gridline: #e1e0d9;
     --border: rgba(11, 11, 11, 0.1);
+    --header-bg: rgba(255, 255, 255, 0.72);
+    --nav-track-bg: rgba(11, 11, 11, 0.05);
+    --nav-hover-bg: rgba(11, 11, 11, 0.045);
     --shadow:
       0 1px 2px rgba(11, 11, 11, 0.06),
       0 8px 24px rgba(11, 11, 11, 0.06);
