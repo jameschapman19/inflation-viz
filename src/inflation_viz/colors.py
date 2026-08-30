@@ -46,7 +46,10 @@ HEADLINE_COLOR = DivisionColor(light="#0b0b0b", dark="#ffffff")
 # Chart chrome, from the data-viz skill's reference palette.
 CHART_SURFACE = DivisionColor(light="#fcfcfb", dark="#1a1a19")
 GRIDLINE = DivisionColor(light="#e1e0d9", dark="#2c2c2a")
-MUTED_TEXT = DivisionColor(light="#898781", dark="#898781")
+# The same gray clears WCAG AA against the near-black dark surface
+# (~5.9:1) but not the near-white light one (~3.5:1) — darkened for
+# light mode only, to ~5.1:1 against CHART_SURFACE.light.
+MUTED_TEXT = DivisionColor(light="#6b6a63", dark="#898781")
 
 
 def division_color(unique_id: str, *, dark: bool = False) -> str:

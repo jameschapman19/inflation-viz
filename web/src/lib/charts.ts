@@ -268,16 +268,29 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
     buildTreemapNode(d.coicop as string, d.division_name ?? d.name, d.unique_id, divisionColor(d.coicop as string, mode), mode),
   );
 
+  const accent = mode === "dark" ? "#6fa8ec" : "#2a78d6";
+
   return {
     backgroundColor: CHART_SURFACE[mode],
     textStyle: { fontFamily: FONT_FAMILY, color: textColor },
     tooltip: {
+      // enterable + a real <a> in the formatter: hovering any node — leaf
+      // or a zoomed-in parent — offers a link to that node's own page,
+      // without adding a second permanent click target on the tile
+      // itself (which stays devoted to zooming, in vs. out).
+      enterable: true,
+      confine: true,
       backgroundColor: mode === "dark" ? "#202020" : "#ffffff",
       borderColor: GRIDLINE[mode],
       textStyle: { color: textColor, fontFamily: FONT_FAMILY },
       formatter: (params) => {
-        const p = params as { name: string; value: number };
-        return `${p.name}: ${p.value.toFixed(1)} per mille`;
+        const p = params as { name: string; value: number; data?: TreemapNode };
+        const coicop = p.data?.coicop;
+        const href = coicop ? `/${coicop.includes(".") ? "subdivision" : "division"}/${coicop}` : null;
+        const link = href
+          ? `<div style="margin-top:4px"><a href="${href}" style="color:${accent};font-weight:600;">View page &rarr;</a></div>`
+          : "";
+        return `<div>${p.name}<br/><b>${p.value.toFixed(1)}‰</b> of the basket</div>${link}`;
       },
     },
     series: [
@@ -288,25 +301,53 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
         // Show only the top level to start — a node with children zooms
         // into them in place on click (one level deeper each time,
         // matching leafDepth); a leaf has nothing to zoom into, so the
-        // click handler navigates instead — see Chart.tsx.
+        // click handler navigates instead — see Chart.tsx. The
+        // breadcrumb (styled as plain text, not a boxed chip) is the way
+        // back out — it's the only such control, so it stays even though
+        // it's minimal at the root.
         leafDepth: 1,
         nodeClick: "zoomToNode",
         breadcrumb: {
           show: true,
           left: "left",
           top: 0,
+          height: 20,
           itemStyle: {
-            color: CHART_SURFACE[mode],
-            borderColor: GRIDLINE[mode],
-            textStyle: { color: muted, fontFamily: FONT_FAMILY },
+            color: "transparent",
+            borderWidth: 0,
+            textStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 12 },
           },
+          emphasis: { itemStyle: { textStyle: { color: accent } } },
         },
-        upperLabel: { show: true, height: 24, color: "#ffffff", fontFamily: FONT_FAMILY },
+        upperLabel: {
+          show: true,
+          height: 24,
+          color: "#ffffff",
+          fontFamily: FONT_FAMILY,
+          textBorderColor: "rgba(0, 0, 0, 0.5)",
+          textBorderWidth: 2,
+          // Needs its own plain formatter — left unset, it falls back to
+          // `label`'s rich-text formatter below, whose {name|...} tokens
+          // only resolve under `label.rich`, printing literally here.
+          formatter: "{b}",
+        },
         label: {
           show: true,
           color: "#ffffff",
           fontFamily: FONT_FAMILY,
-          formatter: "{b}",
+          // A visible per-mille figure on every tile, not just on hover —
+          // and a dark text outline so it stays legible regardless of how
+          // light or saturated the tile underneath it is.
+          textBorderColor: "rgba(0, 0, 0, 0.5)",
+          textBorderWidth: 2,
+          formatter: (params) => {
+            const p = params as { name: string; value: number };
+            return `{name|${p.name}}\n{value|${p.value.toFixed(1)}‰}`;
+          },
+          rich: {
+            name: { fontSize: 13, fontWeight: 600, lineHeight: 18 },
+            value: { fontSize: 11, opacity: 0.9 },
+          },
         },
         itemStyle: { borderColor: CHART_SURFACE[mode], borderWidth: 2, gapWidth: 2 },
         // level 0 is the invisible root itself — without this it draws its

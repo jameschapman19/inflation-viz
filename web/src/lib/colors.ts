@@ -41,7 +41,10 @@ export const HEADLINE_COLOR: DivisionColor = { light: "#0b0b0b", dark: "#ffffff"
 // Chart chrome, from the data-viz skill's reference palette.
 export const CHART_SURFACE: DivisionColor = { light: "#fcfcfb", dark: "#1a1a19" };
 export const GRIDLINE: DivisionColor = { light: "#e1e0d9", dark: "#2c2c2a" };
-export const MUTED_TEXT: DivisionColor = { light: "#898781", dark: "#898781" };
+// The same gray reads fine on the near-black dark surface (~5.9:1) but
+// falls short of WCAG AA (~3.5:1) on the near-white light one — darkened
+// for light mode only, to ~5.1:1 against CHART_SURFACE.light.
+export const MUTED_TEXT: DivisionColor = { light: "#6b6a63", dark: "#898781" };
 
 export function divisionColor(coicop: string, mode: "light" | "dark" = "light"): string {
   const key = `GB.CP${coicop}`;
