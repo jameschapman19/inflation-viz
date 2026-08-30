@@ -3,7 +3,6 @@ from pathlib import Path
 from inflation_viz.config import load_external
 from inflation_viz.ons_catalog import (
     CatalogEntry,
-    _build_name_index,
     _normalize_name,
     _parent_coicop,
     _titleize,
@@ -72,34 +71,31 @@ def test_build_catalog_resolves_ons_combined_series() -> None:
     assert catalog[("CPI", "05.3.1/2")].weight_cdid == "FX24"
 
 
-def test_build_catalog_joins_contribution_titles_by_normalized_name() -> None:
+def test_build_catalog_resolves_contribution_titles_via_the_verified_name_table() -> None:
     """The contribution family ("CPI: Contribution to all items annual
-    rate: Food & non-alcoholic beverages") carries no COICOP code at all —
-    it's joined onto "01" purely by matching its category name (modulo
-    case/punctuation/"&" vs "and") against the coded rate/weight titles.
+    rate: Food & non-alcoholic beverages") carries no COICOP code at all,
+    and — unlike the fixture's other title families — its category name
+    genuinely doesn't match the rate/weight titles' own naming for the
+    same division (04's rate/weight name says "Housing, water and fuels";
+    its contribution name says "Housing & household services"). It's
+    resolved via the verified `_CONTRIBUTION_NAMES_BY_CODE` table instead.
     """
     catalog = _fixture_catalog()
     assert catalog[("CPI", "01")].contribution_cdid == "WUMA"
-    assert catalog[("CPI", "09")].contribution_cdid == "CD09"  # "Recreation & culture"
+    assert catalog[("CPI", "04")].contribution_cdid == "CD04"
+    assert catalog[("CPI", "12")].contribution_cdid == "CD12"
+
+
+def test_build_catalog_drops_an_unrecognized_contribution_name_rather_than_guessing() -> None:
+    catalog = _fixture_catalog()
+    all_contribution_cdids = {e.contribution_cdid for e in catalog.values() if e.contribution_cdid}
+    assert "FXCU" not in all_contribution_cdids
 
 
 def test_normalize_name_makes_ampersand_and_case_insensitive() -> None:
     assert _normalize_name("FOOD AND NON-ALCOHOLIC BEVERAGES") == _normalize_name(
         "Food & non-alcoholic beverages"
     )
-
-
-def test_normalize_name_ambiguous_join_is_dropped_not_guessed() -> None:
-    """Two different codes sharing a normalised name must never let a
-    contribution title guess which one it belongs to — the whole point of
-    a name-based join is that an ambiguous one is worse than a missing one.
-    """
-    catalog: dict[tuple[str, str], CatalogEntry] = {
-        ("CPI", "06"): CatalogEntry(name="OTHER", rate_cdid="AAAA"),
-        ("CPI", "12.9"): CatalogEntry(name="OTHER", rate_cdid="BBBB"),
-    }
-    index = _build_name_index(catalog)
-    assert ("CPI", _normalize_name("OTHER")) not in index
 
 
 def test_titleize_matches_the_projects_established_sentence_case() -> None:

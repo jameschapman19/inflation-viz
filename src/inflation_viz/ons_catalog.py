@@ -13,11 +13,16 @@ Three title families matter here, all for the "CPI"/"CPIH" 2015=100 index:
                                                     -> a ppt contribution to
                                                        the headline rate
 
-The first two carry the COICOP code directly; the third (published only
-at division level) carries only a free-text category name, resolved by
-joining it against the names recovered from the coded titles, normalised
-for case/punctuation. An ambiguous join (more than one code sharing a
-normalised name) is dropped rather than guessed.
+The first two carry the COICOP code directly. The third (published only
+at the 12 divisions) carries no code at all, and its category names turn
+out *not* to be a punctuation/case variant of the other two families'
+names — e.g. WUMD is "Housing & household services" here vs "Housing,
+water and fuels" in its own WEIGHTS title, for the same division. Since
+that ruled out joining it dynamically, `_CONTRIBUTION_CODE_BY_NAME`
+resolves it via an explicit table of the 12 divisions' own contribution
+names, each confirmed directly against its ONS timeseries page — the same
+evidentiary bar as any other series here, just verified once for a
+closed, decades-stable set instead of rediscovered every refresh.
 
 `discover_registry()` needs network access to ons.gov.uk; everything else
 here — parsing, classification, name-joining — is pure and covered by
@@ -60,6 +65,28 @@ _CONTRIBUTION_RE = re.compile(
     r"^CPI(H)?:\s*Contribution to all items annual rate:\s*(.+)$",
     re.IGNORECASE,
 )
+
+# Each name below is the exact category label ONS uses on the CPI
+# "Contribution to all items annual rate" series for that division —
+# confirmed against the series' own ons.gov.uk/.../timeseries/{cdid} page
+# (01=WUMA, 02=WUMB, 03=WUMC, 04=WUMD, 05=WUMP, 06=WUMQ, 07=WUMW, 08=WUMX,
+# 09=WUNC, 10=WUND, 11=WUNE, 12=WUNG). CPIH publishes a parallel set of
+# these under different CDIDs (e.g. L5H8) with unconfirmed naming, so only
+# CPI's is resolved — nothing downstream uses a CPIH division anyway.
+_CONTRIBUTION_NAMES_BY_CODE = {
+    "01": "Food & non-alcoholic beverages",
+    "02": "Alcohol & tobacco",
+    "03": "Clothing & footwear",
+    "04": "Housing & household services",
+    "05": "Furniture & household goods",
+    "06": "Health",
+    "07": "Transport",
+    "08": "Communication",
+    "09": "Recreation & culture",
+    "10": "Education",
+    "11": "Restaurants & hotels",
+    "12": "Misc goods & services",
+}
 
 
 def _find_bulk_csv_url(session: requests.Session) -> str:
@@ -117,13 +144,17 @@ def _titleize(raw: str) -> str:
 
 
 def _normalize_name(raw: str) -> str:
-    """Case/punctuation-insensitive key for joining a contribution title's
-    free-text category name back to the code carried by that same
-    category's rate/weight titles (e.g. "FOOD AND NON-ALCOHOLIC BEVERAGES"
-    and "Food & non-alcoholic beverages" must compare equal).
+    """Case/punctuation-insensitive key, so a contribution title's name
+    matches `_CONTRIBUTION_NAMES_BY_CODE` regardless of "&" vs "and" or
+    stray punctuation.
     """
     text = raw.lower().replace("&", " and ")
     return " ".join(re.sub(r"[^a-z0-9]+", " ", text).split())
+
+
+_CONTRIBUTION_CODE_BY_NAME = {
+    _normalize_name(name): code for code, name in _CONTRIBUTION_NAMES_BY_CODE.items()
+}
 
 
 def _parent_coicop(code: str) -> str | None:
@@ -149,36 +180,15 @@ class CatalogEntry:
 Catalog = dict[tuple[str, str], CatalogEntry]
 
 
-def _build_name_index(catalog: Catalog) -> dict[tuple[str, str], str]:
-    """(index_type, normalised name) -> code, built from every coded rate
-    title. A name that maps to more than one code is ambiguous and is
-    dropped rather than guessed at.
-    """
-    index: dict[tuple[str, str], str] = {}
-    ambiguous: set[tuple[str, str]] = set()
-    for (index_type, code), entry in catalog.items():
-        if entry.rate_cdid is None:
-            continue
-        key = (index_type, _normalize_name(entry.name))
-        if key in index and index[key] != code:
-            ambiguous.add(key)
-        else:
-            index[key] = code
-    for key in ambiguous:
-        index.pop(key, None)
-    return index
-
-
 def build_catalog(titles_by_cdid: dict[str, str]) -> Catalog:
-    """Classifies every CDID's title into the COICOP code (and CPI/CPIH
-    index) it belongs to, joining the code-free "contribution" titles onto
-    that code via their category name. Ground truth throughout: every
-    code+CDID pairing comes directly from an ONS-published title string,
-    nothing here is inferred beyond that one name join (and that join is
-    dropped rather than guessed wherever it isn't unambiguous).
+    """Classifies every CDID's title into the COICOP code it belongs to.
+    Ground truth throughout: every rate/weight code+CDID pairing comes
+    directly from an ONS-published title string; every contribution
+    code+CDID pairing comes from matching its title's category name
+    against `_CONTRIBUTION_NAMES_BY_CODE` (see its comment) — an
+    unrecognised name is dropped rather than guessed.
     """
     catalog: Catalog = {}
-    contribution_titles: list[tuple[str, str, str]] = []
 
     for cdid, title in titles_by_cdid.items():
         rate_weight_match = _RATE_WEIGHT_RE.match(title)
@@ -195,16 +205,13 @@ def build_catalog(titles_by_cdid: dict[str, str]) -> Catalog:
         contribution_match = _CONTRIBUTION_RE.match(title)
         if contribution_match is not None:
             is_cpih, name = contribution_match.groups()
-            index_type = "CPIH" if is_cpih else "CPI"
-            contribution_titles.append((index_type, name.strip(), cdid))
-
-    name_index = _build_name_index(catalog)
-    for index_type, name, cdid in contribution_titles:
-        code = name_index.get((index_type, _normalize_name(name)))
-        if code is None:
-            continue
-        entry = catalog.setdefault((index_type, code), CatalogEntry(name=name))
-        entry.contribution_cdid = cdid
+            if is_cpih:
+                continue
+            code = _CONTRIBUTION_CODE_BY_NAME.get(_normalize_name(name))
+            if code is None:
+                continue
+            entry = catalog.setdefault(("CPI", code), CatalogEntry(name=name.strip()))
+            entry.contribution_cdid = cdid
 
     return catalog
 
