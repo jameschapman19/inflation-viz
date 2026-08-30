@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Inflation Maps (UK){% endblock %}</title>
+  <link rel="stylesheet" href="{{ asset_prefix }}static/site.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="{{ asset_prefix }}index.html">Inflation Maps <span class="brand-region">UK</span></a>
+    <nav>
+      <a href="{{ asset_prefix }}index.html">Headline</a>
+      <a href="{{ asset_prefix }}contributors.html">Contributors</a>
+      <a href="{{ asset_prefix }}basket.html">Basket explorer</a>
+      <a href="{{ asset_prefix }}methodology.html">Methodology &amp; sources</a>
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="site-footer">
+    <p>
+      Built entirely from official, openly-licensed statistics. Every figure on this
+      site links to its source — see <a href="{{ asset_prefix }}methodology.html">Methodology &amp; sources</a>.
+    </p>
+    <p class="muted">Contains public sector information licensed under the
+      <a href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/">Open Government Licence v3.0</a>.
+      Site generated {{ generated_at }}.
+    </p>
+  </footer>
+</body>
+</html>

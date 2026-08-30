@@ -1,0 +1,14 @@
+{
+  "months": [
+    { "date": "2024 JAN", "value": "4.0" },
+    { "date": "2024 FEB", "value": "3.4" },
+    { "date": "2024 MAR", "value": "3.2" }
+  ],
+  "description": {
+    "cdid": "D7G7",
+    "title": "CPI ANNUAL RATE 00: ALL ITEMS 2015=100",
+    "unit": "%",
+    "releaseDate": "2024-04-17T09:30:00.000Z",
+    "nextRelease": "22 May 2024"
+  }
+}

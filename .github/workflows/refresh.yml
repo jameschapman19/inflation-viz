@@ -1,0 +1,46 @@
+name: Refresh data and deploy
+
+on:
+  schedule:
+    # Daily — ONS itself only republishes monthly, but this keeps the site
+    # current without needing to know the exact release calendar.
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v3
+        with:
+          enable-cache: true
+
+      - name: Install dependencies
+        run: uv sync --all-extras --dev
+
+      - name: Fetch latest data and build site
+        run: uv run python -m inflation_viz.refresh --out public
+
+      - name: Commit updated data
+        run: |
+          git config user.name "inflation-viz-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/
+          git diff --cached --quiet || git commit -m "data: refresh vintage $(date -u +%Y-%m-%dT%H%M%SZ)"
+          git push
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public

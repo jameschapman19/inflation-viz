@@ -1,0 +1,242 @@
+# sources.yaml — canonical source registry for Inflation Maps (UK)
+#
+# Every fetcher in src/inflation_viz reads this file; no series or CDID is
+# hardcoded anywhere else in the pipeline. This file also drives the
+# methodology/sources page — the "view source" link behind every chart.
+#
+# CDIDs were resolved via the ONS series search (ons.gov.uk) and each entry's
+# `source_url` is the human-readable ONS page for that series; `api_url` is
+# the machine-readable JSON endpoint the fetcher calls.
+
+license_defaults:
+  ons_ogl: &ons_ogl "Open Government Licence v3.0"
+
+# ---------------------------------------------------------------------------
+# Headline rates
+# ---------------------------------------------------------------------------
+headline:
+  GB.CPI:
+    name: "CPI: All items 12-month rate"
+    cdid: D7G7
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/d7g7/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CPIH:
+    name: "CPIH: All items 12-month rate"
+    cdid: L55O
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/l55o/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+# ---------------------------------------------------------------------------
+# Per-division "contribution to annual rate" series (12 COICOP divisions)
+#
+# These are ONS's own vintage-weighted contribution series — ppt contribution
+# of each division to the headline CPI 12-month rate. We consume them as
+# published rather than reconstructing them from index + weight, per the
+# point-in-time integrity discussion in the build spec (§4).
+# ---------------------------------------------------------------------------
+divisions:
+  GB.CP01:
+    coicop: "01"
+    division_name: "Food and non-alcoholic beverages"
+    metric: contribution_to_annual_rate
+    cdid: WUMA
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wuma/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wuma/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP02:
+    coicop: "02"
+    division_name: "Alcoholic beverages and tobacco"
+    metric: contribution_to_annual_rate
+    cdid: WUMB
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumb/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP03:
+    coicop: "03"
+    division_name: "Clothing and footwear"
+    metric: contribution_to_annual_rate
+    cdid: WUMC
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumc/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumc/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP04:
+    coicop: "04"
+    division_name: "Housing, water, electricity, gas and other fuels"
+    metric: contribution_to_annual_rate
+    cdid: WUMD
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumd/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP05:
+    coicop: "05"
+    division_name: "Furniture, household equipment and maintenance"
+    metric: contribution_to_annual_rate
+    cdid: WUMP
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wump/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP06:
+    coicop: "06"
+    division_name: "Health"
+    metric: contribution_to_annual_rate
+    cdid: WUMQ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumq/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumq/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP07:
+    coicop: "07"
+    division_name: "Transport"
+    metric: contribution_to_annual_rate
+    cdid: WUMW
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumw/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumw/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP08:
+    coicop: "08"
+    division_name: "Communication"
+    metric: contribution_to_annual_rate
+    cdid: WUMX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumx/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wumx/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP09:
+    coicop: "09"
+    division_name: "Recreation and culture"
+    metric: contribution_to_annual_rate
+    cdid: WUNC
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wunc/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wunc/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP10:
+    coicop: "10"
+    division_name: "Education"
+    metric: contribution_to_annual_rate
+    cdid: WUND
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wund/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wund/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP11:
+    coicop: "11"
+    division_name: "Restaurants and hotels"
+    metric: contribution_to_annual_rate
+    cdid: WUNE
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wune/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+  GB.CP12:
+    coicop: "12"
+    division_name: "Miscellaneous goods and services"
+    metric: contribution_to_annual_rate
+    cdid: WUNG
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23"
+    api_url: "https://api.ons.gov.uk/timeseries/wung/dataset/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percentage_points
+
+# ---------------------------------------------------------------------------
+# Reference tables (not CDID timeseries — downloadable workbooks, refreshed
+# on their own cadence)
+# ---------------------------------------------------------------------------
+reference_tables:
+  basket_weights:
+    name: "CPI and CPIH basket weights (COICOP division level)"
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceinflation"
+    license: *ons_ogl
+    cadence: annual
+    notes: >
+      Published as a downloadable table, refreshed each Jan/Feb when the
+      basket is updated. The fetcher resolves the current download link
+      from the dataset page rather than a fixed CDID — see
+      src/inflation_viz/weights.py.
+
+# ---------------------------------------------------------------------------
+# Out of scope for v1 ingestion — recorded here so the schema anticipates
+# them (Phase 2 exogenous regressors: Ofgem price cap, fuel prices) without
+# requiring a registry rewrite when they're built.
+# ---------------------------------------------------------------------------
+external:
+  ofgem_price_cap:
+    name: "Ofgem energy price cap level and effective dates"
+    source_name: "Ofgem"
+    source_url: "https://www.ofgem.gov.uk/energy-price-cap"
+    license: "Check Ofgem terms of use"
+    cadence: per_cap_period
+    notes: "Not ingested in v1. Reserved for inflation-forecast's housing/energy exogenous regressor."
+
+  fuel_prices:
+    name: "Weekly road fuel prices"
+    source_name: "Department for Energy Security and Net Zero (DESNZ)"
+    source_url: "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
+    license: *ons_ogl
+    cadence: weekly
+    notes: "Not ingested in v1. Reserved for inflation-forecast's transport exogenous regressor."

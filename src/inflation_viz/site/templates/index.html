@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Headline inflation — Inflation Maps (UK){% endblock %}
+{% block content %}
+<section class="hero">
+  <h1>UK inflation, traced to its source</h1>
+  <p class="lede">Every number on this site is one click from the ONS series that produced it.</p>
+
+  <div class="stat-row">
+    {% for stat in headline_stats %}
+    <div class="stat-tile">
+      <div class="stat-label">{{ stat.name }}</div>
+      <div class="stat-value">{{ "%.1f"|format(stat.value) }}%</div>
+      <div class="stat-meta">
+        {{ stat.period }} &middot;
+        <a href="{{ stat.source_url }}">source</a>
+        {% if stat.next_release %} &middot; next release {{ stat.next_release }}{% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="chart-section">
+  {{ headline_chart_html | safe }}
+</section>
+{% endblock %}
