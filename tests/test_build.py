@@ -77,7 +77,7 @@ def test_division_colors_are_consistent_across_pages(
     basket_html = (out_dir / "basket.html").read_text()
 
     for uid in registry.divisions:
-        color = division_color(uid)
+        color = division_color(uid, dark=True)
         assert color in contributors_html
         assert color in methodology_html
         assert color in basket_html

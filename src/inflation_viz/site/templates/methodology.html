@@ -47,16 +47,17 @@
 </section>
 
 <section>
-  <h2>Reference tables</h2>
+  <h2>COICOP division basket weights</h2>
   <table class="sources-table">
-    <thead><tr><th>Table</th><th>Source</th><th>License</th><th>Cadence</th></tr></thead>
+    <thead><tr><th>Division</th><th>CDID</th><th>Source</th><th>License</th><th>Cadence</th></tr></thead>
     <tbody>
-      {% for t in reference_tables %}
+      {% for w in weights %}
       <tr>
-        <td><a href="{{ t.source_url }}">{{ t.name }}</a></td>
-        <td>{{ t.source_name }}</td>
-        <td>{{ t.license }}</td>
-        <td>{{ t.cadence }}</td>
+        <td><span class="swatch" style="background:{{ w.color }}"></span>{{ w.division_name }}</td>
+        <td><a href="{{ w.source_url }}">{{ w.cdid }}</a></td>
+        <td>{{ w.source_name }}</td>
+        <td>{{ w.license }}</td>
+        <td>{{ w.cadence }}</td>
       </tr>
       {% endfor %}
     </tbody>

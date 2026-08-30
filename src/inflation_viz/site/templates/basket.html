@@ -14,17 +14,17 @@
 </section>
 <section class="legend-table">
   <table>
-    <thead><tr><th>Division</th><th>COICOP</th><th>Weight (‰)</th></tr></thead>
+    <thead><tr><th>Division</th><th>COICOP</th><th>Weight (‰)</th><th>Series</th></tr></thead>
     <tbody>
       {% for row in weight_rows %}
       <tr>
         <td><span class="swatch" style="background:{{ row.color }}"></span>{{ row.division_name }}</td>
         <td>{{ row.coicop }}</td>
         <td>{{ "%.1f"|format(row.weight_per_mille) }}</td>
+        <td><a href="{{ row.source_url }}">{{ row.cdid }}</a></td>
       </tr>
       {% endfor %}
     </tbody>
   </table>
-  <p class="muted"><a href="{{ weights_source_url }}">Source: {{ weights_source_name }}</a></p>
 </section>
 {% endblock %}

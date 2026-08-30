@@ -5,7 +5,7 @@ import polars as pl
 import pytest
 
 from inflation_viz.config import SourceRegistry, load_registry
-from inflation_viz.storage import ProvenanceRecord, write_vintage, write_weights
+from inflation_viz.storage import ProvenanceRecord, write_vintage
 
 
 @pytest.fixture
@@ -39,17 +39,8 @@ def synthetic_data_dir(tmp_path: Path, registry: SourceRegistry) -> Path:
         for uid, source in registry.all_series.items()
     ]
 
-    vintage_path = write_vintage(
+    write_vintage(
         series, provenance, fetched_at=datetime(2024, 3, 2, tzinfo=UTC), data_dir=tmp_path
     )
-
-    weights = pl.DataFrame(
-        {
-            "coicop": [d.coicop for d in registry.divisions_sorted()],
-            "division_name": [d.division_name for d in registry.divisions_sorted()],
-            "weight_per_mille": [100.0 for _ in registry.divisions_sorted()],
-        }
-    )
-    write_weights(weights, vintage_path, data_dir=tmp_path)
 
     return tmp_path

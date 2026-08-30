@@ -74,17 +74,8 @@ class SourceRegistry:
         self.divisions: dict[str, SeriesSource] = {
             uid: _build_series_source(uid, entry) for uid, entry in raw.get("divisions", {}).items()
         }
-        self.reference_tables: dict[str, ReferenceTableSource] = {
-            key: ReferenceTableSource(
-                key=key,
-                name=entry["name"],
-                source_name=entry["source_name"],
-                source_url=entry["source_url"],
-                license=entry["license"],
-                cadence=entry["cadence"],
-                notes=entry.get("notes", ""),
-            )
-            for key, entry in raw.get("reference_tables", {}).items()
+        self.weights: dict[str, SeriesSource] = {
+            uid: _build_series_source(uid, entry) for uid, entry in raw.get("weights", {}).items()
         }
         self.external: dict[str, ReferenceTableSource] = {
             key: ReferenceTableSource(
@@ -101,12 +92,16 @@ class SourceRegistry:
 
     @property
     def all_series(self) -> dict[str, SeriesSource]:
-        """Headline + division series, keyed by unique_id."""
-        return {**self.headline, **self.divisions}
+        """Headline + division + weight series, keyed by unique_id."""
+        return {**self.headline, **self.divisions, **self.weights}
 
     def divisions_sorted(self) -> list[SeriesSource]:
         """Divisions ordered by COICOP code (01..12) — the fixed stacking/legend order."""
         return sorted(self.divisions.values(), key=lambda s: s.coicop or "")
+
+    def weights_sorted(self) -> list[SeriesSource]:
+        """Weight series ordered by COICOP code (01..12)."""
+        return sorted(self.weights.values(), key=lambda s: s.coicop or "")
 
 
 def load_registry(path: Path = SOURCES_PATH) -> SourceRegistry:

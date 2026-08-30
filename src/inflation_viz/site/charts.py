@@ -13,18 +13,23 @@ from inflation_viz.colors import CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_
 from inflation_viz.config import SourceRegistry
 
 _LAYOUT_DEFAULTS: dict[str, object] = {
-    "paper_bgcolor": CHART_SURFACE.light,
-    "plot_bgcolor": CHART_SURFACE.light,
-    "font": {"family": "system-ui, -apple-system, 'Segoe UI', sans-serif", "color": "#0b0b0b"},
+    "paper_bgcolor": CHART_SURFACE.dark,
+    "plot_bgcolor": CHART_SURFACE.dark,
+    "font": {"family": "system-ui, -apple-system, 'Segoe UI', sans-serif", "color": "#ffffff"},
     "hovermode": "x unified",
+    "hoverlabel": {
+        "bgcolor": "#202020",
+        "bordercolor": GRIDLINE.dark,
+        "font": {"color": "#ffffff"},
+    },
     "legend": {"orientation": "h", "yanchor": "bottom", "y": 1.02, "xanchor": "left", "x": 0},
     "margin": {"l": 48, "r": 24, "t": 48, "b": 40},
 }
 
 _AXIS_DEFAULTS: dict[str, object] = {
-    "gridcolor": GRIDLINE.light,
-    "linecolor": MUTED_TEXT.light,
-    "tickfont": {"color": MUTED_TEXT.light},
+    "gridcolor": GRIDLINE.dark,
+    "linecolor": MUTED_TEXT.dark,
+    "tickfont": {"color": MUTED_TEXT.dark},
 }
 
 
@@ -46,7 +51,7 @@ def headline_chart(series: pl.DataFrame, registry: SourceRegistry) -> go.Figure:
                 y=s["y"].to_list(),
                 name=source.name,
                 mode="lines",
-                line={"width": 2, "color": HEADLINE_COLOR.light if uid == "GB.CPI" else "#898781"},
+                line={"width": 2, "color": HEADLINE_COLOR.dark if uid == "GB.CPI" else "#898781"},
                 hovertemplate=f"{source.name}: %{{y:.1f}}%<extra></extra>",
             )
         )
@@ -65,8 +70,8 @@ def contributors_chart(series: pl.DataFrame, registry: SourceRegistry) -> go.Fig
                 name=source.division_name,
                 mode="lines",
                 stackgroup="contributions",
-                line={"width": 0.5, "color": division_color(source.unique_id)},
-                fillcolor=division_color(source.unique_id),
+                line={"width": 0.5, "color": division_color(source.unique_id, dark=True)},
+                fillcolor=division_color(source.unique_id, dark=True),
                 hovertemplate=f"{source.division_name}: %{{y:.2f}}ppt<extra></extra>",
             )
         )
@@ -78,7 +83,7 @@ def contributors_chart(series: pl.DataFrame, registry: SourceRegistry) -> go.Fig
                 y=headline["y"].to_list(),
                 name=registry.headline["GB.CPI"].name,
                 mode="lines",
-                line={"width": 2.5, "color": HEADLINE_COLOR.light, "dash": "dot"},
+                line={"width": 2.5, "color": HEADLINE_COLOR.dark, "dash": "dot"},
                 hovertemplate="Headline CPI: %{y:.1f}%<extra></extra>",
             )
         )
@@ -96,14 +101,14 @@ def basket_treemap(weights: pl.DataFrame, registry: SourceRegistry) -> go.Figure
 
     labels = [d.division_name for d in divisions]
     values = [weight_by_coicop.get(d.coicop, 0.0) for d in divisions]
-    colors = [division_color(d.unique_id) for d in divisions]
+    colors = [division_color(d.unique_id, dark=True) for d in divisions]
 
     fig = go.Figure(
         go.Treemap(
             labels=labels,
             parents=[""] * len(labels),
             values=values,
-            marker={"colors": colors, "line": {"color": CHART_SURFACE.light, "width": 2}},
+            marker={"colors": colors, "line": {"color": CHART_SURFACE.dark, "width": 2}},
             textinfo="label+percent root",
             hovertemplate="%{label}: %{value:.1f} per mille (%{percentRoot})<extra></extra>",
         )

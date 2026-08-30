@@ -9,7 +9,6 @@ from inflation_viz.storage import (
     read_latest_provenance,
     read_latest_series,
     write_vintage,
-    write_weights,
 )
 
 
@@ -66,21 +65,6 @@ def test_provenance_round_trips(tmp_path: Path) -> None:
     provenance = read_latest_provenance(tmp_path)
     assert provenance["cdid"].to_list() == ["D7G7"]
     assert provenance["license"].to_list() == ["Open Government Licence v3.0"]
-
-
-def test_write_weights_attaches_to_vintage_and_latest(tmp_path: Path) -> None:
-    fetched_at = datetime(2024, 3, 20, 10, 0, tzinfo=UTC)
-    vintage_path = write_vintage(
-        _sample_series(), _sample_provenance(), fetched_at=fetched_at, data_dir=tmp_path
-    )
-    weights = pl.DataFrame(
-        {"coicop": ["01"], "division_name": ["Food"], "weight_per_mille": [104.5]}
-    )
-    write_weights(weights, vintage_path, data_dir=tmp_path)
-
-    assert (vintage_path / "weights.parquet").exists()
-    assert (tmp_path / "latest" / "weights.parquet").exists()
-    assert pl.read_parquet(tmp_path / "latest" / "weights.parquet")["coicop"].to_list() == ["01"]
 
 
 def test_list_vintages_empty_when_no_data(tmp_path: Path) -> None:

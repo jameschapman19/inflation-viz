@@ -35,9 +35,27 @@ def test_divisions_sorted_is_coicop_order() -> None:
     assert ordered == sorted(ordered)
 
 
-def test_basket_weights_reference_table_present() -> None:
+def test_registry_has_twelve_basket_weight_series() -> None:
     registry = load_registry()
-    assert "basket_weights" in registry.reference_tables
+    assert len(registry.weights) == 12
+    coicop_codes = {s.coicop for s in registry.weights.values()}
+    assert coicop_codes == {f"{i:02d}" for i in range(1, 13)}
+
+
+def test_weights_sorted_is_coicop_order() -> None:
+    registry = load_registry()
+    ordered = [s.coicop or "" for s in registry.weights_sorted()]
+    assert ordered == sorted(ordered)
+
+
+def test_weight_series_are_distinct_from_contribution_series() -> None:
+    """Weight CDIDs (e.g. CHZR) must not collide with the contribution
+    series' unique_ids (GB.CP01) — they're deliberately namespaced GB.W01.
+    """
+    registry = load_registry()
+    assert set(registry.weights).isdisjoint(registry.divisions)
+    for uid in registry.weights:
+        assert uid.startswith("GB.W")
 
 
 def test_external_placeholders_present() -> None:

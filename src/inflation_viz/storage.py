@@ -98,13 +98,6 @@ def write_vintage(
     return vintage_path
 
 
-def write_weights(weights: pl.DataFrame, vintage_path: Path, *, data_dir: Path = DATA_DIR) -> None:
-    """Attach a basket-weights snapshot to an existing vintage and refresh `latest`."""
-    weights.write_parquet(vintage_path / "weights.parquet")
-    latest_path = data_dir / "latest"
-    weights.write_parquet(latest_path / "weights.parquet")
-
-
 def read_latest_series(data_dir: Path = DATA_DIR) -> pl.DataFrame:
     return pl.read_parquet(data_dir / "latest" / "series.parquet")
 

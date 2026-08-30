@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from inflation_viz.config import SourceRegistry
+from inflation_viz.site.build import _latest_weights
 from inflation_viz.site.charts import basket_treemap, contributors_chart, headline_chart
 from inflation_viz.storage import read_latest_provenance, read_latest_series
 
@@ -24,9 +25,8 @@ def test_contributors_chart_has_one_trace_per_division_plus_headline(
 def test_basket_treemap_has_twelve_segments(
     synthetic_data_dir: Path, registry: SourceRegistry
 ) -> None:
-    import polars as pl
-
-    weights = pl.read_parquet(synthetic_data_dir / "latest" / "weights.parquet")
+    series = read_latest_series(synthetic_data_dir)
+    weights = _latest_weights(series, registry)
     fig = basket_treemap(weights, registry)
     assert len(fig.data[0].labels) == 12
 

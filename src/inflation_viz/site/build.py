@@ -69,6 +69,31 @@ def _headline_stats(
     return stats
 
 
+def _latest_weights(series: pl.DataFrame, registry: SourceRegistry) -> pl.DataFrame:
+    """Each division's most recent basket-weight observation, keyed by COICOP.
+
+    Weight series live in the same fetched `series` frame as everything
+    else (registry.weights, unique_ids GB.W01..GB.W12) — no separate
+    scrape or file needed.
+    """
+    weight_ids = list(registry.weights.keys())
+    uid_to_coicop = {uid: s.coicop for uid, s in registry.weights.items()}
+    empty = pl.DataFrame(schema={"coicop": pl.Utf8, "weight_per_mille": pl.Float64})
+    if not weight_ids:
+        return empty
+
+    weight_series = series.filter(pl.col("unique_id").is_in(weight_ids))
+    if weight_series.is_empty():
+        return empty
+
+    return (
+        weight_series.with_columns(pl.col("unique_id").replace(uid_to_coicop).alias("coicop"))
+        .sort("ds")
+        .group_by("coicop")
+        .agg(pl.col("y").last().alias("weight_per_mille"))
+    )
+
+
 def build_site(
     *,
     data_dir: Path = DATA_DIR,
@@ -78,18 +103,7 @@ def build_site(
     registry = registry or load_registry()
     series = read_latest_series(data_dir)
     provenance = read_latest_provenance(data_dir)
-
-    weights_path = data_dir / "latest" / "weights.parquet"
-    empty_weights_schema = {
-        "coicop": pl.Utf8,
-        "division_name": pl.Utf8,
-        "weight_per_mille": pl.Float64,
-    }
-    weights = (
-        pl.read_parquet(weights_path)
-        if weights_path.exists()
-        else pl.DataFrame(schema=empty_weights_schema)
-    )
+    weights = _latest_weights(series, registry)
 
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "static").mkdir(exist_ok=True)
@@ -109,6 +123,7 @@ def build_site(
     headline_fig = headline_chart(series, registry)
     index_html = env.get_template("index.html").render(
         **common_ctx,
+        active_page="index",
         headline_stats=_headline_stats(series, provenance, registry),
         headline_chart_html=_figure_to_html(headline_fig, div_id="headline-chart"),
     )
@@ -118,13 +133,14 @@ def build_site(
     contributors_fig = contributors_chart(series, registry)
     contributors_html = env.get_template("contributors.html").render(
         **common_ctx,
+        active_page="contributors",
         contributors_chart_html=_figure_to_html(contributors_fig, div_id="contributors-chart"),
         divisions=[
             {
                 "division_name": d.division_name,
                 "cdid": d.cdid,
                 "source_url": d.source_url,
-                "color": division_color(d.unique_id),
+                "color": division_color(d.unique_id, dark=True),
             }
             for d in registry.divisions_sorted()
         ],
@@ -133,30 +149,33 @@ def build_site(
 
     # --- basket ---
     basket_fig = basket_treemap(weights, registry)
-    weights_source = registry.reference_tables.get("basket_weights")
     weight_by_coicop = dict(
         zip(weights["coicop"].to_list(), weights["weight_per_mille"].to_list(), strict=True)
     )
+    weight_source_by_coicop = {w.coicop: w for w in registry.weights_sorted()}
     basket_html = env.get_template("basket.html").render(
         **common_ctx,
+        active_page="basket",
         basket_chart_html=_figure_to_html(basket_fig, div_id="basket-chart"),
         weight_rows=[
             {
                 "division_name": d.division_name,
                 "coicop": d.coicop,
                 "weight_per_mille": weight_by_coicop.get(d.coicop, 0.0),
-                "color": division_color(d.unique_id),
+                "color": division_color(d.unique_id, dark=True),
+                "cdid": weight_source_by_coicop[d.coicop].cdid,
+                "source_url": weight_source_by_coicop[d.coicop].source_url,
             }
             for d in registry.divisions_sorted()
+            if d.coicop in weight_source_by_coicop
         ],
-        weights_source_url=weights_source.source_url if weights_source else "",
-        weights_source_name=weights_source.source_name if weights_source else "",
     )
     (out_dir / "basket.html").write_text(basket_html, encoding="utf-8")
 
     # --- methodology ---
     methodology_html = env.get_template("methodology.html").render(
         **common_ctx,
+        active_page="methodology",
         headline=list(registry.headline.values()),
         divisions=[
             {
@@ -166,11 +185,22 @@ def build_site(
                 "source_name": d.source_name,
                 "license": d.license,
                 "cadence": d.cadence,
-                "color": division_color(d.unique_id),
+                "color": division_color(d.unique_id, dark=True),
             }
             for d in registry.divisions_sorted()
         ],
-        reference_tables=list(registry.reference_tables.values()),
+        weights=[
+            {
+                "division_name": w.division_name,
+                "cdid": w.cdid,
+                "source_url": w.source_url,
+                "source_name": w.source_name,
+                "license": w.license,
+                "cadence": w.cadence,
+                "color": division_color(f"GB.CP{w.coicop}", dark=True),
+            }
+            for w in registry.weights_sorted()
+        ],
         external=list(registry.external.values()),
         latest_vintage=latest_vintage,
     )

@@ -8,12 +8,15 @@
 </head>
 <body>
   <header class="site-header">
-    <a class="brand" href="{{ asset_prefix }}index.html">Inflation Radar <span class="brand-region">UK</span></a>
+    <a class="brand" href="{{ asset_prefix }}index.html">
+      <span class="brand-mark"></span>
+      Inflation Radar <span class="brand-region">UK</span>
+    </a>
     <nav>
-      <a href="{{ asset_prefix }}index.html">Headline</a>
-      <a href="{{ asset_prefix }}contributors.html">Contributors</a>
-      <a href="{{ asset_prefix }}basket.html">Basket explorer</a>
-      <a href="{{ asset_prefix }}methodology.html">Methodology &amp; sources</a>
+      <a href="{{ asset_prefix }}index.html" class="{{ 'active' if active_page == 'index' }}">Headline</a>
+      <a href="{{ asset_prefix }}contributors.html" class="{{ 'active' if active_page == 'contributors' }}">Contributors</a>
+      <a href="{{ asset_prefix }}basket.html" class="{{ 'active' if active_page == 'basket' }}">Basket explorer</a>
+      <a href="{{ asset_prefix }}methodology.html" class="{{ 'active' if active_page == 'methodology' }}">Methodology</a>
     </nav>
   </header>
   <main>

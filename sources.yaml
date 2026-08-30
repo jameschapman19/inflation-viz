@@ -203,21 +203,171 @@ divisions:
     unit: percentage_points
 
 # ---------------------------------------------------------------------------
-# Reference tables (not CDID timeseries — downloadable workbooks, refreshed
-# on their own cadence)
+# Current live basket weights (COICOP division level, per mille)
+#
+# ONS publishes each division's weight as its own stable CDID in mm23 (same
+# dataset, same endpoint as everything else above) rather than only as a
+# downloadable workbook — so these are fetched exactly like the contribution
+# series, not scraped. The weight itself only changes once a year (each
+# Jan/Feb basket update) but is republished monthly; the site takes the
+# latest observation.
 # ---------------------------------------------------------------------------
-reference_tables:
-  basket_weights:
-    name: "CPI and CPIH basket weights (COICOP division level)"
+weights:
+  GB.W01:
+    coicop: "01"
+    division_name: "Food and non-alcoholic beverages"
+    metric: basket_weight
+    cdid: CHZR
+    dataset: mm23
     source_name: "Office for National Statistics"
-    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceinflation"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzr/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzr/mm23/data"
     license: *ons_ogl
-    cadence: annual
-    notes: >
-      Published as a downloadable table, refreshed each Jan/Feb when the
-      basket is updated. The fetcher resolves the current download link
-      from the dataset page rather than a fixed CDID — see
-      src/inflation_viz/weights.py.
+    cadence: monthly
+    unit: per_mille
+
+  GB.W02:
+    coicop: "02"
+    division_name: "Alcoholic beverages and tobacco"
+    metric: basket_weight
+    cdid: CHZS
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzs/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzs/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W03:
+    coicop: "03"
+    division_name: "Clothing and footwear"
+    metric: basket_weight
+    cdid: CHZT
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzt/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzt/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W04:
+    coicop: "04"
+    division_name: "Housing, water, electricity, gas and other fuels"
+    metric: basket_weight
+    cdid: CHZU
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzu/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzu/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W05:
+    coicop: "05"
+    division_name: "Furniture, household equipment and maintenance"
+    metric: basket_weight
+    cdid: CHZV
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzv/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzv/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W06:
+    coicop: "06"
+    division_name: "Health"
+    metric: basket_weight
+    cdid: CHZW
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzw/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzw/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W07:
+    coicop: "07"
+    division_name: "Transport"
+    metric: basket_weight
+    cdid: CHZX
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzx/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzx/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W08:
+    coicop: "08"
+    division_name: "Communication"
+    metric: basket_weight
+    cdid: CHZY
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzy/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzy/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W09:
+    coicop: "09"
+    division_name: "Recreation and culture"
+    metric: basket_weight
+    cdid: CHZZ
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzz/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/chzz/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W10:
+    coicop: "10"
+    division_name: "Education"
+    metric: basket_weight
+    cdid: CJUU
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuu/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuu/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W11:
+    coicop: "11"
+    division_name: "Restaurants and hotels"
+    metric: basket_weight
+    cdid: CJUV
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuv/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuv/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.W12:
+    coicop: "12"
+    division_name: "Miscellaneous goods and services"
+    metric: basket_weight
+    cdid: CJUW
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuw/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjuw/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
 
 # ---------------------------------------------------------------------------
 # Out of scope for v1 ingestion — recorded here so the schema anticipates
