@@ -1,14 +1,22 @@
-"""sources.yaml-driven fetcher for the ONS timeseries API.
+"""sources.yaml-driven fetcher for ONS's timeseries JSON.
 
 Every series pulled here comes from `sources.yaml` — there is no
 series-specific fetch logic. Each series's `api_url` is called as-is; the
-response shape is ONS's standard timeseries JSON
-(https://api.ons.gov.uk/timeseries/{cdid}/dataset/{dataset}/data):
+response is the same JSON that powers the chart on the series' own
+www.ons.gov.uk page — append `/data` to the page URL
+(https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/{cdid}/{dataset}/data):
 
     {
       "months": [{"date": "2023 NOV", "value": "3.9"}, ...],
       "description": {"cdid": "D7G7", "releaseDate": "2024-01-17T09:30:00.000Z", ...}
     }
+
+Note this is *not* the old `api.ons.gov.uk` v0 API — that was fully
+retired in November 2024 and has no direct replacement (ONS's guidance is
+to resolve a series via the beta search API instead). The `www.ons.gov.uk/
+.../data` endpoint above is the one that's actually still live; the first
+version of this fetcher used the retired v0 host and 404'd in CI, which is
+how this got caught.
 
 Note for anyone running this: this pipeline's dev sandbox has ONS's domains
 blocked by network egress policy, so it cannot be exercised against live

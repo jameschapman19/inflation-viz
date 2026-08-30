@@ -44,3 +44,16 @@ def test_external_placeholders_present() -> None:
     registry = load_registry()
     assert "ofgem_price_cap" in registry.external
     assert "fuel_prices" in registry.external
+
+
+def test_series_api_urls_use_the_live_ons_endpoint_not_the_retired_v0_api() -> None:
+    """ONS's old `api.ons.gov.uk` v0 timeseries API was fully retired in
+    November 2024 with no direct replacement — a fetch against it 404s.
+    The endpoint that's actually still live is the series' own
+    www.ons.gov.uk page with `/data` appended (the JSON that powers the
+    page's own chart). Guards against regressing to the dead host.
+    """
+    registry = load_registry()
+    for source in registry.all_series.values():
+        assert "api.ons.gov.uk" not in source.api_url
+        assert source.api_url == f"{source.source_url}/data"

@@ -21,7 +21,7 @@ def sample_source() -> SeriesSource:
         dataset="mm23",
         source_name="Office for National Statistics",
         source_url="https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23",
-        api_url="https://api.ons.gov.uk/timeseries/d7g7/dataset/mm23/data",
+        api_url="https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data",
         license="Open Government Licence v3.0",
         cadence="monthly",
         unit="percent",

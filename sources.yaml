@@ -21,7 +21,7 @@ headline:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/d7g7/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7g7/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percent
@@ -32,7 +32,7 @@ headline:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/l55o/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/l55o/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percent
@@ -54,7 +54,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wuma/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wuma/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wuma/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -67,7 +67,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumb/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -80,7 +80,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumc/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumc/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumc/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -93,7 +93,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumd/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -106,7 +106,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wump/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -119,7 +119,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumq/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumq/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumq/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -132,7 +132,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumw/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumw/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumw/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -145,7 +145,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumx/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wumx/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumx/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -158,7 +158,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wunc/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wunc/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wunc/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -171,7 +171,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wund/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wund/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wund/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -184,7 +184,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wune/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
@@ -197,7 +197,7 @@ divisions:
     dataset: mm23
     source_name: "Office for National Statistics"
     source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23"
-    api_url: "https://api.ons.gov.uk/timeseries/wung/dataset/mm23/data"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23/data"
     license: *ons_ogl
     cadence: monthly
     unit: percentage_points
