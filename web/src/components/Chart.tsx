@@ -17,7 +17,7 @@ import {
   subdivisionWeightChart,
 } from "@/lib/charts";
 import type { ChildSeries } from "@/lib/data";
-import { divisionCoicopByName, seriesFor, topLevelContributionChildren } from "@/lib/data";
+import { seriesFor, topLevelContributionChildren } from "@/lib/data";
 
 // ECharts renders to a canvas sized off the container, so it's kept out of
 // the server-rendered bundle — this also means reading the browser's
@@ -149,9 +149,13 @@ export function Chart({
         chart === "basket"
           ? {
               click: (event: ECElementEvent) => {
-                const name = typeof event.name === "string" && event.name ? event.name : undefined;
-                const target = name && divisionCoicopByName(name);
-                if (target) router.push(`/division/${target}`);
+                // A node with children zooms into them in place (ECharts'
+                // own nodeClick: "zoomToNode" handles that automatically);
+                // a leaf has nowhere deeper to go, so navigate to its page.
+                const data = event.data as { coicop?: string; children?: unknown[] } | undefined;
+                if (!data?.coicop || (data.children && data.children.length > 0)) return;
+                const basePath = data.coicop.includes(".") ? "/subdivision" : "/division";
+                router.push(`${basePath}/${data.coicop}`);
               },
             }
           : chart === "multiline-rate" && drillBasePath
