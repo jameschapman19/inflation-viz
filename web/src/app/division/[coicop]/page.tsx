@@ -2,8 +2,14 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Chart } from "@/components/Chart";
-import { divisionColor } from "@/lib/colors";
-import { divisionByCoicop, divisionsSorted, seriesFor, weightByCoicop } from "@/lib/data";
+import { divisionColor, subdivisionColor } from "@/lib/colors";
+import {
+  divisionByCoicop,
+  divisionsSorted,
+  seriesFor,
+  subdivisionsUnderDivision,
+  weightByCoicop,
+} from "@/lib/data";
 
 export function generateStaticParams() {
   return divisionsSorted()
@@ -28,6 +34,7 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
   const weightPoints = weight ? seriesFor(weight.unique_id) : [];
   const latestWeight = weightPoints[weightPoints.length - 1];
   const color = divisionColor(coicop);
+  const subdivisions = subdivisionsUnderDivision(coicop);
 
   return (
     <>
@@ -76,6 +83,45 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
           <h2>Basket weight over time</h2>
           <div className="chart-section">
             <Chart chart="division-weight" coicop={coicop} height="320px" />
+          </div>
+        </section>
+      )}
+
+      {subdivisions.length > 0 && (
+        <section>
+          <h2>Sub-categories</h2>
+          <p className="lede">
+            Drill further in — ONS publishes these below the division level as each
+            category&apos;s own 12-month rate and basket weight, not as a contribution to headline
+            CPI (that measure only exists at the division level shown above).
+          </p>
+          <div className="legend-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>COICOP</th>
+                  <th>Series</th>
+                </tr>
+              </thead>
+              <tbody>
+                {subdivisions.map((s) => (
+                  <tr key={s.unique_id}>
+                    <td>
+                      <span
+                        className="swatch"
+                        style={{ background: s.coicop ? subdivisionColor(s.coicop, "dark") : "#898781" }}
+                      />
+                      <Link href={`/subdivision/${s.coicop}`}>{s.division_name}</Link>
+                    </td>
+                    <td>{s.coicop}</td>
+                    <td>
+                      <a href={s.source_url}>{s.cdid}</a>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
       )}

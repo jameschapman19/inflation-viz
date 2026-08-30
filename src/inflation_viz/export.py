@@ -44,6 +44,8 @@ def _registry_payload(registry: SourceRegistry) -> dict[str, Any]:
         "headline": [asdict(s) for s in registry.headline.values()],
         "divisions": [asdict(s) for s in registry.divisions_sorted()],
         "weights": [asdict(s) for s in registry.weights_sorted()],
+        "subdivisions": [asdict(s) for s in registry.subdivisions_sorted()],
+        "subdivisionWeights": [asdict(s) for s in registry.subdivision_weights_sorted()],
         "external": [asdict(s) for s in registry.external.values()],
     }
 

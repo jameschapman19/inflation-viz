@@ -1,12 +1,21 @@
 import Link from "next/link";
-import { divisionColor } from "@/lib/colors";
-import { divisionsSorted, meta, registry, weightsSorted } from "@/lib/data";
+import { divisionColor, subdivisionColor } from "@/lib/colors";
+import {
+  divisionsSorted,
+  meta,
+  registry,
+  subdivisionsSorted,
+  subdivisionWeightsSorted,
+  weightsSorted,
+} from "@/lib/data";
 
 export const metadata = { title: "Methodology & sources — Inflation Radar (UK)" };
 
 export default function MethodologyPage() {
   const divisions = divisionsSorted();
   const weights = weightsSorted();
+  const subdivisions = subdivisionsSorted();
+  const subdivisionWeights = subdivisionWeightsSorted();
 
   return (
     <>
@@ -116,6 +125,52 @@ export default function MethodologyPage() {
                   <td>{s.cadence}</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2>COICOP sub-division rates &amp; weights</h2>
+        <p className="lede">
+          Below the division level, ONS only publishes each category&apos;s own 12-month rate and
+          basket weight — not a contribution to headline CPI. Pilot scope: Transport&apos;s
+          07.1/07.2/07.3 groups plus 07.2.2, nested one level further under 07.2.
+        </p>
+        <div className="sources-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Category</th>
+                <th>Metric</th>
+                <th>CDID</th>
+                <th>Source</th>
+                <th>License</th>
+                <th>Cadence</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...subdivisions, ...subdivisionWeights]
+                .sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""))
+                .map((s) => (
+                  <tr key={s.unique_id}>
+                    <td>
+                      <span
+                        className="swatch"
+                        style={{ background: s.coicop ? subdivisionColor(s.coicop, "dark") : "#898781" }}
+                      />
+                      {s.coicop ? <Link href={`/subdivision/${s.coicop}`}>{s.division_name}</Link> : s.division_name}{" "}
+                      <span className="muted">({s.coicop})</span>
+                    </td>
+                    <td>{s.unique_id.startsWith("GB.SW") ? "Basket weight" : "12-month rate"}</td>
+                    <td>
+                      <a href={s.source_url}>{s.cdid}</a>
+                    </td>
+                    <td>{s.source_name}</td>
+                    <td>{s.license}</td>
+                    <td>{s.cadence}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

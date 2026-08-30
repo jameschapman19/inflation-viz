@@ -49,3 +49,14 @@ export function divisionColor(coicop: string, mode: "light" | "dark" = "light"):
   if (!c) throw new Error(`No color for COICOP division ${coicop}`);
   return mode === "dark" ? c.dark : c.light;
 }
+
+/**
+ * A sub-division (e.g. "07.2.2") isn't in the validated 12-hue palette —
+ * it inherits its top-level division's color instead, so Transport's
+ * sub-categories read visually as Transport rather than needing their own
+ * adjacency-checked hues.
+ */
+export function subdivisionColor(coicop: string, mode: "light" | "dark" = "light"): string {
+  const topLevel = coicop.split(".")[0];
+  return divisionColor(topLevel, mode);
+}

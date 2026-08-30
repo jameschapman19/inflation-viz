@@ -12,7 +12,8 @@
       "cadence": "monthly",
       "unit": "percent",
       "division_name": null,
-      "coicop": null
+      "coicop": null,
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CPIH",
@@ -26,7 +27,8 @@
       "cadence": "monthly",
       "unit": "percent",
       "division_name": null,
-      "coicop": null
+      "coicop": null,
+      "parent_coicop": null
     }
   ],
   "divisions": [
@@ -42,7 +44,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Food and non-alcoholic beverages",
-      "coicop": "01"
+      "coicop": "01",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP02",
@@ -56,7 +59,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Alcoholic beverages and tobacco",
-      "coicop": "02"
+      "coicop": "02",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP03",
@@ -70,7 +74,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Clothing and footwear",
-      "coicop": "03"
+      "coicop": "03",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP04",
@@ -84,7 +89,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Housing, water, electricity, gas and other fuels",
-      "coicop": "04"
+      "coicop": "04",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP05",
@@ -98,7 +104,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Furniture, household equipment and maintenance",
-      "coicop": "05"
+      "coicop": "05",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP06",
@@ -112,7 +119,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Health",
-      "coicop": "06"
+      "coicop": "06",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP07",
@@ -126,7 +134,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Transport",
-      "coicop": "07"
+      "coicop": "07",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP08",
@@ -140,7 +149,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Communication",
-      "coicop": "08"
+      "coicop": "08",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP09",
@@ -154,7 +164,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Recreation and culture",
-      "coicop": "09"
+      "coicop": "09",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP10",
@@ -168,7 +179,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Education",
-      "coicop": "10"
+      "coicop": "10",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP11",
@@ -182,7 +194,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Restaurants and hotels",
-      "coicop": "11"
+      "coicop": "11",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.CP12",
@@ -196,7 +209,8 @@
       "cadence": "monthly",
       "unit": "percentage_points",
       "division_name": "Miscellaneous goods and services",
-      "coicop": "12"
+      "coicop": "12",
+      "parent_coicop": null
     }
   ],
   "weights": [
@@ -212,7 +226,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Food and non-alcoholic beverages",
-      "coicop": "01"
+      "coicop": "01",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W02",
@@ -226,7 +241,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Alcoholic beverages and tobacco",
-      "coicop": "02"
+      "coicop": "02",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W03",
@@ -240,7 +256,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Clothing and footwear",
-      "coicop": "03"
+      "coicop": "03",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W04",
@@ -254,7 +271,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Housing, water, electricity, gas and other fuels",
-      "coicop": "04"
+      "coicop": "04",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W05",
@@ -268,7 +286,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Furniture, household equipment and maintenance",
-      "coicop": "05"
+      "coicop": "05",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W06",
@@ -282,7 +301,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Health",
-      "coicop": "06"
+      "coicop": "06",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W07",
@@ -296,7 +316,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Transport",
-      "coicop": "07"
+      "coicop": "07",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W08",
@@ -310,7 +331,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Communication",
-      "coicop": "08"
+      "coicop": "08",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W09",
@@ -324,7 +346,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Recreation and culture",
-      "coicop": "09"
+      "coicop": "09",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W10",
@@ -338,7 +361,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Education",
-      "coicop": "10"
+      "coicop": "10",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W11",
@@ -352,7 +376,8 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Restaurants and hotels",
-      "coicop": "11"
+      "coicop": "11",
+      "parent_coicop": null
     },
     {
       "unique_id": "GB.W12",
@@ -366,7 +391,132 @@
       "cadence": "monthly",
       "unit": "per_mille",
       "division_name": "Miscellaneous goods and services",
-      "coicop": "12"
+      "coicop": "12",
+      "parent_coicop": null
+    }
+  ],
+  "subdivisions": [
+    {
+      "unique_id": "GB.CP07.1",
+      "name": "Purchase of vehicles",
+      "cdid": "D7H2",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h2/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h2/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": "Purchase of vehicles",
+      "coicop": "07.1",
+      "parent_coicop": "07"
+    },
+    {
+      "unique_id": "GB.CP07.2",
+      "name": "Operation of personal transport equipment",
+      "cdid": "D7H3",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h3/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h3/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": "Operation of personal transport equipment",
+      "coicop": "07.2",
+      "parent_coicop": "07"
+    },
+    {
+      "unique_id": "GB.CP07.2.2",
+      "name": "Fuels and lubricants",
+      "cdid": "D7IO",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7io/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7io/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": "Fuels and lubricants",
+      "coicop": "07.2.2",
+      "parent_coicop": "07.2"
+    },
+    {
+      "unique_id": "GB.CP07.3",
+      "name": "Transport services",
+      "cdid": "D7H4",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h4/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h4/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": "Transport services",
+      "coicop": "07.3",
+      "parent_coicop": "07"
+    }
+  ],
+  "subdivisionWeights": [
+    {
+      "unique_id": "GB.SW07.1",
+      "name": "Purchase of vehicles",
+      "cdid": "CJVM",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvm/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvm/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "per_mille",
+      "division_name": "Purchase of vehicles",
+      "coicop": "07.1",
+      "parent_coicop": "07"
+    },
+    {
+      "unique_id": "GB.SW07.2",
+      "name": "Operation of personal transport equipment",
+      "cdid": "CJVN",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvn/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvn/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "per_mille",
+      "division_name": "Operation of personal transport equipment",
+      "coicop": "07.2",
+      "parent_coicop": "07"
+    },
+    {
+      "unique_id": "GB.SW07.2.2",
+      "name": "Fuels and lubricants",
+      "cdid": "CJXR",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjxr/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjxr/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "per_mille",
+      "division_name": "Fuels and lubricants",
+      "coicop": "07.2.2",
+      "parent_coicop": "07.2"
+    },
+    {
+      "unique_id": "GB.SW07.3",
+      "name": "Transport services",
+      "cdid": "CJVO",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "per_mille",
+      "division_name": "Transport services",
+      "coicop": "07.3",
+      "parent_coicop": "07"
     }
   ],
   "external": [

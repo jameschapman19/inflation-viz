@@ -58,6 +58,41 @@ def test_weight_series_are_distinct_from_contribution_series() -> None:
         assert uid.startswith("GB.W")
 
 
+def test_registry_has_transport_subdivision_pilot() -> None:
+    """Pilot scope: Transport's group-level 07.1/07.2/07.3 plus 07.2.2, the
+    one class nested under 07.2 — see sources.yaml's `subdivisions:` header
+    comment for why only these four are here and not the full COICOP tree.
+    """
+    registry = load_registry()
+    coicop_codes = {s.coicop for s in registry.subdivisions.values()}
+    assert coicop_codes == {"07.1", "07.2", "07.2.2", "07.3"}
+    assert coicop_codes == {s.coicop for s in registry.subdivision_weights.values()}
+
+
+def test_subdivisions_sorted_is_coicop_order() -> None:
+    registry = load_registry()
+    ordered = [s.coicop or "" for s in registry.subdivisions_sorted()]
+    assert ordered == sorted(ordered)
+
+
+def test_subdivision_parent_coicop_matches_the_coicop_tree() -> None:
+    registry = load_registry()
+    for source in registry.subdivisions.values():
+        assert source.parent_coicop is not None
+        assert (source.coicop or "").startswith(source.parent_coicop)
+    # 07.2.2 nests under the group 07.2, not directly under the division 07
+    assert registry.subdivisions["GB.CP07.2.2"].parent_coicop == "07.2"
+    assert registry.subdivisions["GB.CP07.1"].parent_coicop == "07"
+
+
+def test_subdivision_series_are_distinct_from_division_and_weight_series() -> None:
+    registry = load_registry()
+    assert set(registry.subdivisions).isdisjoint(registry.divisions)
+    assert set(registry.subdivision_weights).isdisjoint(registry.weights)
+    for uid in registry.subdivision_weights:
+        assert uid.startswith("GB.SW")
+
+
 def test_external_placeholders_present() -> None:
     registry = load_registry()
     assert "ofgem_price_cap" in registry.external

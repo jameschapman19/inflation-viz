@@ -370,6 +370,144 @@ weights:
     unit: per_mille
 
 # ---------------------------------------------------------------------------
+# COICOP sub-division rates (below the 2-digit division level)
+#
+# ONS's own "contribution to annual rate" series (the `divisions:` section
+# above) only exists at the 2-digit division level — there is no published
+# ppt-contribution series for a group or class. Below that level ONS
+# publishes INDEX, ANNUAL RATE, and WEIGHT series instead, so `metric` here
+# is the sub-division's own 12-month rate of change (not its contribution to
+# headline CPI) — a different thing, labelled as such throughout the site.
+# We consume the published rate as-is rather than deriving it from the
+# index ourselves, for the same point-in-time-integrity reason the top-level
+# divisions use ONS's own contribution series.
+#
+# Pilot scope: Transport (07), one level of group (07.1/07.2/07.3) plus one
+# class nested under 07.2 (07.2.2), each cross-checked against multiple ONS
+# search results before being added — a CDID guessed wrong here would
+# silently mislabel a real chart, so only entries with a directly-found ONS
+# series page went in. `parent_coicop` is the immediate parent in the COICOP
+# tree (used to derive the sub-division's color and its breadcrumb).
+# ---------------------------------------------------------------------------
+subdivisions:
+  GB.CP07.1:
+    coicop: "07.1"
+    parent_coicop: "07"
+    division_name: "Purchase of vehicles"
+    metric: annual_rate
+    cdid: D7H2
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h2/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h2/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP07.2:
+    coicop: "07.2"
+    parent_coicop: "07"
+    division_name: "Operation of personal transport equipment"
+    metric: annual_rate
+    cdid: D7H3
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h3/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h3/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP07.2.2:
+    coicop: "07.2.2"
+    parent_coicop: "07.2"
+    division_name: "Fuels and lubricants"
+    metric: annual_rate
+    cdid: D7IO
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7io/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7io/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  GB.CP07.3:
+    coicop: "07.3"
+    parent_coicop: "07"
+    division_name: "Transport services"
+    metric: annual_rate
+    cdid: D7H4
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h4/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/d7h4/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+# ---------------------------------------------------------------------------
+# COICOP sub-division basket weights — same pilot scope as `subdivisions:`
+# above, one weight CDID per entry there.
+# ---------------------------------------------------------------------------
+subdivision_weights:
+  GB.SW07.1:
+    coicop: "07.1"
+    parent_coicop: "07"
+    division_name: "Purchase of vehicles"
+    metric: basket_weight
+    cdid: CJVM
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvm/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvm/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW07.2:
+    coicop: "07.2"
+    parent_coicop: "07"
+    division_name: "Operation of personal transport equipment"
+    metric: basket_weight
+    cdid: CJVN
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvn/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvn/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW07.2.2:
+    coicop: "07.2.2"
+    parent_coicop: "07.2"
+    division_name: "Fuels and lubricants"
+    metric: basket_weight
+    cdid: CJXR
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjxr/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjxr/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+  GB.SW07.3:
+    coicop: "07.3"
+    parent_coicop: "07"
+    division_name: "Transport services"
+    metric: basket_weight
+    cdid: CJVO
+    dataset: mm23
+    source_name: "Office for National Statistics"
+    source_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23"
+    api_url: "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/cjvo/mm23/data"
+    license: *ons_ogl
+    cadence: monthly
+    unit: per_mille
+
+# ---------------------------------------------------------------------------
 # Out of scope for v1 ingestion — recorded here so the schema anticipates
 # them (Phase 2 exogenous regressors: Ofgem price cap, fuel prices) without
 # requiring a registry rewrite when they're built.

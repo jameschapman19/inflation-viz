@@ -11,6 +11,8 @@ import {
   divisionContributionChart,
   divisionWeightChart,
   headlineChart,
+  subdivisionRateChart,
+  subdivisionWeightChart,
 } from "@/lib/charts";
 import { divisionCoicopByName, divisionsSorted, seriesFor } from "@/lib/data";
 
@@ -27,6 +29,8 @@ const BUILDERS: Record<string, Builder> = {
   basket: (mode) => basketTreemap(mode),
   "division-contribution": (mode, coicop) => divisionContributionChart(coicop ?? "", mode),
   "division-weight": (mode, coicop) => divisionWeightChart(coicop ?? "", mode),
+  "subdivision-rate": (mode, coicop) => subdivisionRateChart(coicop ?? "", mode),
+  "subdivision-weight": (mode, coicop) => subdivisionWeightChart(coicop ?? "", mode),
 };
 
 // Charts where clicking a division's series/segment should drill into its

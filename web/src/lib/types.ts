@@ -11,6 +11,7 @@ export interface SeriesSource {
   unit: string;
   division_name: string | null;
   coicop: string | null;
+  parent_coicop: string | null;
 }
 
 export interface ReferenceTableSource {
@@ -27,6 +28,8 @@ export interface Registry {
   headline: SeriesSource[];
   divisions: SeriesSource[];
   weights: SeriesSource[];
+  subdivisions: SeriesSource[];
+  subdivisionWeights: SeriesSource[];
   external: ReferenceTableSource[];
 }
 

@@ -38,8 +38,12 @@ def test_exported_registry_json_lists_every_group(
     assert len(payload["headline"]) == len(registry.headline)
     assert len(payload["divisions"]) == 12
     assert len(payload["weights"]) == 12
+    assert len(payload["subdivisions"]) == len(registry.subdivisions)
+    assert len(payload["subdivisionWeights"]) == len(registry.subdivision_weights)
     exported_cdids = {d["cdid"] for d in payload["divisions"]}
     assert exported_cdids == {s.cdid for s in registry.divisions.values()}
+    exported_sub_coicops = {d["coicop"] for d in payload["subdivisions"]}
+    assert exported_sub_coicops == {s.coicop for s in registry.subdivisions.values()}
 
 
 def test_exported_meta_json_has_generated_at_and_vintage(

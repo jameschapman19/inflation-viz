@@ -1,6 +1,15 @@
 import type { EChartsOption, SeriesOption } from "echarts";
-import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, divisionColor } from "./colors";
-import { divisionByCoicop, divisionsSorted, latestWeights, registry, seriesFor, weightByCoicop } from "./data";
+import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, divisionColor, subdivisionColor } from "./colors";
+import {
+  divisionByCoicop,
+  divisionsSorted,
+  latestWeights,
+  registry,
+  seriesFor,
+  subdivisionByCoicop,
+  subdivisionWeightByCoicop,
+  weightByCoicop,
+} from "./data";
 
 export type ChartMode = "light" | "dark";
 
@@ -170,6 +179,59 @@ export function divisionWeightChart(coicop: string, mode: ChartMode): EChartsOpt
   const base = baseOption(mode);
   const source = weightByCoicop(coicop);
   const color = divisionColor(coicop, mode);
+  const points = source ? seriesFor(source.unique_id) : [];
+
+  const series: SeriesOption[] = [
+    {
+      type: "line",
+      name: source?.division_name ?? coicop,
+      data: toTimeSeries(points),
+      step: "end",
+      showSymbol: true,
+      symbolSize: 6,
+      lineStyle: { width: 2, color },
+      itemStyle: { color },
+    },
+  ];
+
+  return {
+    ...base,
+    legend: { show: false },
+    yAxis: { ...base.yAxis, name: "Basket weight (‰)", nameGap: 32, nameLocation: "middle", axisLabel: { color: MUTED_TEXT[mode] } },
+    series,
+  };
+}
+
+export function subdivisionRateChart(coicop: string, mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
+  const source = subdivisionByCoicop(coicop);
+  const color = subdivisionColor(coicop, mode);
+  const points = source ? seriesFor(source.unique_id) : [];
+
+  const series: SeriesOption[] = [
+    {
+      type: "line",
+      name: source?.division_name ?? coicop,
+      data: toTimeSeries(points),
+      showSymbol: false,
+      lineStyle: { width: 2, color },
+      itemStyle: { color },
+      areaStyle: { color, opacity: 0.85 },
+    },
+  ];
+
+  return {
+    ...base,
+    legend: { show: false },
+    yAxis: { ...base.yAxis, name: "12-month rate", nameGap: 32, nameLocation: "middle" },
+    series,
+  };
+}
+
+export function subdivisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
+  const base = baseOption(mode);
+  const source = subdivisionWeightByCoicop(coicop);
+  const color = subdivisionColor(coicop, mode);
   const points = source ? seriesFor(source.unique_id) : [];
 
   const series: SeriesOption[] = [
