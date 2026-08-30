@@ -18,6 +18,7 @@ rather than live ONS data.
 
 from __future__ import annotations
 
+import time
 from datetime import UTC, date, datetime
 from pathlib import Path
 
@@ -25,6 +26,7 @@ import polars as pl
 import requests
 
 from inflation_viz.config import SeriesSource, SourceRegistry
+from inflation_viz.http import new_session
 from inflation_viz.ons_catalog import discover_registry
 from inflation_viz.storage import ProvenanceRecord, write_vintage
 
@@ -149,13 +151,23 @@ def fetch_series(
     return series_df, provenance
 
 
-def fetch_all(registry: SourceRegistry, session: requests.Session | None = None) -> Path:
+def fetch_all(
+    registry: SourceRegistry,
+    session: requests.Session | None = None,
+    *,
+    request_delay_seconds: float = 0.3,
+) -> Path:
     """Fetch every series in the registry (headline, divisions, and basket
     weights alike) and write a new vintage snapshot. Returns the new vintage
     directory.
+
+    Live discovery means this can now be a few hundred sequential requests
+    in one run — `request_delay_seconds` paces them to stay under ONS's
+    rate limit (a 429 mid-run still retries with backoff, see `http.py`,
+    but pacing avoids triggering it in the first place).
     """
     owns_session = session is None
-    session = session or requests.Session()
+    session = session or new_session()
     fetched_at = datetime.now(UTC)
 
     frames: list[pl.DataFrame] = []
@@ -165,6 +177,7 @@ def fetch_all(registry: SourceRegistry, session: requests.Session | None = None)
             series_df, prov = fetch_series(source, session, fetched_at=fetched_at)
             frames.append(series_df)
             provenance.append(prov)
+            time.sleep(request_delay_seconds)
     finally:
         if owns_session:
             session.close()

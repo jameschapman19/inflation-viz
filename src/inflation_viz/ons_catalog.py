@@ -34,6 +34,7 @@ from dataclasses import dataclass
 import requests
 
 from inflation_viz.config import ReferenceTableSource, SeriesSource, SourceRegistry, load_external
+from inflation_viz.http import new_session
 
 DATASET_PAGE = (
     "https://www.ons.gov.uk/economy/inflationandpriceindices/datasets/consumerpriceindices/current"
@@ -311,7 +312,7 @@ def discover_catalog(session: requests.Session | None = None) -> Catalog:
     only run where ons.gov.uk is reachable.
     """
     owns_session = session is None
-    session = session or requests.Session()
+    session = session or new_session()
     try:
         csv_url = _find_bulk_csv_url(session)
         response = session.get(csv_url, timeout=120)

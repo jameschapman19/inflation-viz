@@ -7,11 +7,9 @@ requires-python = ">=3.12"
 license = { text = "MIT" }
 dependencies = [
     "polars>=1.9",
-    "plotly>=5.24",
-    "jinja2>=3.1",
     "requests>=2.32",
+    "urllib3>=2.0",
     "pyyaml>=6.0",
-    "openpyxl>=3.1",
 ]
 
 [dependency-groups]
@@ -21,7 +19,6 @@ dev = [
     "mypy>=1.13",
     "types-requests>=2.32",
     "types-PyYAML>=6.0",
-    "types-openpyxl>=3.1",
     "responses>=0.25",
 ]
 
@@ -43,10 +40,6 @@ select = ["E", "F", "I", "UP", "B", "SIM", "N"]
 strict = true
 python_version = "3.12"
 files = ["src", "tests"]
-
-[[tool.mypy.overrides]]
-module = ["plotly.*"]
-ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
