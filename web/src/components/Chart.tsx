@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import type { ECElementEvent, ECharts } from "echarts";
+import type { ECElementEvent, ECharts, EChartsOption } from "echarts";
 import type { ChartMode } from "@/lib/charts";
 import {
   basketTreemap,
@@ -11,17 +11,20 @@ import {
   divisionContributionChart,
   divisionWeightChart,
   headlineChart,
+  multiLineRateChart,
+  stackedWeightChart,
   subdivisionRateChart,
   subdivisionWeightChart,
 } from "@/lib/charts";
-import { divisionCoicopByName, divisionsSorted, seriesFor } from "@/lib/data";
+import type { ChildSeries } from "@/lib/data";
+import { divisionCoicopByName, seriesFor, topLevelContributionChildren } from "@/lib/data";
 
 // ECharts renders to a canvas sized off the container, so it's kept out of
 // the server-rendered bundle — this also means reading the browser's
 // color-scheme preference below carries no hydration-mismatch risk.
 const ReactECharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-type Builder = (mode: ChartMode, coicop?: string) => ReturnType<typeof headlineChart>;
+type Builder = (mode: ChartMode, coicop?: string, entries?: ChildSeries[]) => EChartsOption;
 
 const BUILDERS: Record<string, Builder> = {
   headline: (mode) => headlineChart(mode),
@@ -31,11 +34,15 @@ const BUILDERS: Record<string, Builder> = {
   "division-weight": (mode, coicop) => divisionWeightChart(coicop ?? "", mode),
   "subdivision-rate": (mode, coicop) => subdivisionRateChart(coicop ?? "", mode),
   "subdivision-weight": (mode, coicop) => subdivisionWeightChart(coicop ?? "", mode),
+  "stacked-weight": (mode, _coicop, entries) => stackedWeightChart(entries ?? [], mode),
+  "multiline-rate": (mode, _coicop, entries) => multiLineRateChart(entries ?? [], mode),
 };
 
-// Charts where clicking a division's series/segment should drill into its
-// detail page.
-const DRILLABLE = new Set(["basket", "contributors"]);
+// Charts where clicking a series/segment should drill into that entry's
+// detail page. "stacked-weight" (any level) and "multiline-rate" both
+// need an explicit `entries` + `drillBasePath` prop to know what they're
+// drilling into and where.
+const STACK_DRILLABLE = new Set(["basket", "contributors", "stacked-weight"]);
 
 export type ChartKind = keyof typeof BUILDERS;
 
@@ -49,14 +56,14 @@ function currentMode(): ChartMode {
  * line or symbol — not on a stacked area's filled band itself (the same
  * hit-testing gap that made Plotly's fill regions unreliable). Rather than
  * rely on that, we read the raw pixel click straight off zrender, convert
- * it back to a data coordinate, and work out which division's stacked band
+ * it back to a data coordinate, and work out which entry's stacked band
  * contains that (date, value) pair ourselves — so clicking anywhere inside
  * a band works, not just on its edge.
  */
-function divisionAtStackedPoint(dateMs: number, value: number): string | undefined {
+function coicopAtStackedPoint(entries: ChildSeries[], dateMs: number, value: number): string | undefined {
   let cumulative = 0;
-  for (const division of divisionsSorted()) {
-    const points = seriesFor(division.unique_id);
+  for (const entry of entries) {
+    const points = seriesFor(entry.uniqueId);
     if (points.length === 0 || new Date(points[0].ds).getTime() > dateMs) continue;
     let nearest = points[0];
     for (const p of points) {
@@ -64,7 +71,7 @@ function divisionAtStackedPoint(dateMs: number, value: number): string | undefin
       nearest = p;
     }
     cumulative += nearest.y;
-    if (value <= cumulative) return division.division_name ?? undefined;
+    if (value <= cumulative) return entry.coicop;
   }
   return undefined;
 }
@@ -72,10 +79,18 @@ function divisionAtStackedPoint(dateMs: number, value: number): string | undefin
 export function Chart({
   chart,
   coicop,
+  entries,
+  drillBasePath,
   height = "440px",
 }: {
   chart: ChartKind;
   coicop?: string;
+  /** Required by "stacked-weight" and "multiline-rate" — the entries to
+   * chart, e.g. from `topLevelWeightChildren()` or `childRateSeriesOf(coicop)`. */
+  entries?: ChildSeries[];
+  /** Required alongside `entries` — where a click should navigate, e.g.
+   * "/division" or "/subdivision" (the clicked entry's coicop is appended). */
+  drillBasePath?: string;
   height?: string;
 }) {
   const router = useRouter();
@@ -92,8 +107,8 @@ export function Chart({
 
   useEffect(() => () => unbindZrClick.current?.(), []);
 
-  const option = BUILDERS[chart](mode, coicop);
-  const drillable = DRILLABLE.has(chart);
+  const option = BUILDERS[chart](mode, coicop, entries);
+  const drillable = STACK_DRILLABLE.has(chart) || (chart === "multiline-rate" && Boolean(drillBasePath));
 
   return (
     <ReactECharts
@@ -109,7 +124,11 @@ export function Chart({
         // disposed immediately after, leaving the live chart unclickable.
         unbindZrClick.current?.();
         unbindZrClick.current = null;
-        if (chart !== "contributors") return;
+        if (!STACK_DRILLABLE.has(chart) || chart === "basket") return;
+
+        const stackEntries = chart === "contributors" ? topLevelContributionChildren() : (entries ?? []);
+        const basePath = chart === "contributors" ? "/division" : drillBasePath;
+        if (!basePath || stackEntries.length === 0) return;
 
         const zr = instance.getZr();
         const onZrClick = (event: { offsetX: number; offsetY: number }) => {
@@ -120,9 +139,8 @@ export function Chart({
           if (!point) return;
           const [dateMs, value] = point;
           if (value < 0) return;
-          const name = divisionAtStackedPoint(dateMs, value);
-          const target = name && divisionCoicopByName(name);
-          if (target) router.push(`/division/${target}`);
+          const target = coicopAtStackedPoint(stackEntries, dateMs, value);
+          if (target) router.push(`${basePath}/${target}`);
         };
         zr.on("click", onZrClick);
         unbindZrClick.current = () => zr.off("click", onZrClick);
@@ -136,7 +154,14 @@ export function Chart({
                 if (target) router.push(`/division/${target}`);
               },
             }
-          : undefined
+          : chart === "multiline-rate" && drillBasePath
+            ? {
+                click: (event: ECElementEvent) => {
+                  const match = (entries ?? []).find((c) => c.name === event.seriesName);
+                  if (match) router.push(`${drillBasePath}/${match.coicop}`);
+                },
+              }
+            : undefined
       }
     />
   );

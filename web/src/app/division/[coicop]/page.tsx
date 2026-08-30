@@ -2,8 +2,10 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Chart } from "@/components/Chart";
-import { divisionColor, subdivisionColor } from "@/lib/colors";
+import { childColor, divisionColor } from "@/lib/colors";
 import {
+  childRateSeriesOf,
+  childWeightSeriesOf,
   divisionByCoicop,
   divisionsSorted,
   seriesFor,
@@ -35,6 +37,8 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
   const latestWeight = weightPoints[weightPoints.length - 1];
   const color = divisionColor(coicop);
   const subdivisions = subdivisionsUnderDivision(coicop);
+  const childRates = childRateSeriesOf(coicop);
+  const childWeights = childWeightSeriesOf(coicop);
 
   return (
     <>
@@ -87,6 +91,34 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
         </section>
       )}
 
+      {childWeights.length > 0 && (
+        <section>
+          <h2>Basket weight by sub-category</h2>
+          <p className="lede">
+            {division.division_name}&apos;s basket weight, broken down into its own sub-categories
+            over time — additive, so this stacks validly (unlike rates, below).
+          </p>
+          <div className="chart-section">
+            <Chart chart="stacked-weight" entries={childWeights} drillBasePath="/subdivision" height="360px" />
+          </div>
+        </section>
+      )}
+
+      {childRates.length > 0 && (
+        <section>
+          <h2>Sub-category 12-month rates</h2>
+          <p className="lede">
+            Each sub-category&apos;s own rate of change, compared side by side — these are
+            independent rates rather than pre-weighted contributions, so they&apos;re shown as
+            separate lines rather than stacked (stacking rates would produce a number that
+            doesn&apos;t mean anything).
+          </p>
+          <div className="chart-section">
+            <Chart chart="multiline-rate" entries={childRates} drillBasePath="/subdivision" height="360px" />
+          </div>
+        </section>
+      )}
+
       {subdivisions.length > 0 && (
         <section>
           <h2>Sub-categories</h2>
@@ -105,12 +137,14 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
                 </tr>
               </thead>
               <tbody>
-                {subdivisions.map((s) => (
+                {subdivisions.map((s, i) => (
                   <tr key={s.unique_id}>
                     <td>
                       <span
                         className="swatch"
-                        style={{ background: s.coicop ? subdivisionColor(s.coicop, "dark") : "#898781" }}
+                        style={{
+                          background: s.coicop ? childColor(s.coicop, i, subdivisions.length, "dark") : "#898781",
+                        }}
                       />
                       <Link href={`/subdivision/${s.coicop}`}>{s.division_name}</Link>
                     </td>

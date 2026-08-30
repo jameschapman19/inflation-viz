@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { Chart } from "@/components/Chart";
 import { divisionColor } from "@/lib/colors";
-import { divisionsSorted } from "@/lib/data";
+import { divisionsSorted, topLevelWeightChildren } from "@/lib/data";
 
 export const metadata = { title: "Contributors — Inflation Radar (UK)" };
 
 export default function ContributorsPage() {
   const divisions = divisionsSorted();
+  const weightChildren = topLevelWeightChildren();
 
   return (
     <>
@@ -54,6 +55,20 @@ export default function ContributorsPage() {
           </tbody>
         </table>
       </section>
+
+      {weightChildren.length > 0 && (
+        <section>
+          <h2>Basket weight by division</h2>
+          <p className="lede">
+            Each division&apos;s share of the household basket over time, in per mille (parts per
+            1000) — weights are additive, so unlike contribution they stack validly. Refreshed by
+            ONS each January/February.
+          </p>
+          <div className="chart-section">
+            <Chart chart="stacked-weight" entries={weightChildren} drillBasePath="/division" />
+          </div>
+        </section>
+      )}
     </>
   );
 }

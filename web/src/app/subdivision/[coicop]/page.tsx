@@ -2,8 +2,10 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Chart } from "@/components/Chart";
-import { subdivisionColor } from "@/lib/colors";
+import { childColor, subdivisionColor } from "@/lib/colors";
 import {
+  childRateSeriesOf,
+  childWeightSeriesOf,
   seriesFor,
   subdivisionByCoicop,
   subdivisionsSorted,
@@ -37,6 +39,8 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
   const latestWeight = weightPoints[weightPoints.length - 1];
   const color = subdivisionColor(coicop);
   const children = subdivisionsUnder(coicop);
+  const childRates = childRateSeriesOf(coicop);
+  const childWeights = childWeightSeriesOf(coicop);
 
   return (
     <>
@@ -90,6 +94,32 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
         </section>
       )}
 
+      {childWeights.length > 0 && (
+        <section>
+          <h2>Basket weight by sub-category</h2>
+          <p className="lede">
+            {subdivision.division_name}&apos;s basket weight, broken down further — additive, so
+            this stacks validly (unlike rates, below).
+          </p>
+          <div className="chart-section">
+            <Chart chart="stacked-weight" entries={childWeights} drillBasePath="/subdivision" height="320px" />
+          </div>
+        </section>
+      )}
+
+      {childRates.length > 0 && (
+        <section>
+          <h2>Sub-category 12-month rates</h2>
+          <p className="lede">
+            Each sub-category&apos;s own rate of change, compared side by side rather than
+            stacked — see the division page for why.
+          </p>
+          <div className="chart-section">
+            <Chart chart="multiline-rate" entries={childRates} drillBasePath="/subdivision" height="320px" />
+          </div>
+        </section>
+      )}
+
       {children.length > 0 && (
         <section>
           <h2>Sub-categories</h2>
@@ -102,12 +132,12 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
                 </tr>
               </thead>
               <tbody>
-                {children.map((c) => (
+                {children.map((c, i) => (
                   <tr key={c.unique_id}>
                     <td>
                       <span
                         className="swatch"
-                        style={{ background: c.coicop ? subdivisionColor(c.coicop, "dark") : "#898781" }}
+                        style={{ background: c.coicop ? childColor(c.coicop, i, children.length, "dark") : "#898781" }}
                       />
                       <Link href={`/subdivision/${c.coicop}`}>{c.division_name}</Link>
                     </td>

@@ -68,6 +68,55 @@ export function subdivisionsUnderDivision(coicop: string): SeriesSource[] {
   return subdivisionsSorted().filter((s) => (s.coicop ?? "").startsWith(`${coicop}.`));
 }
 
+export interface ChildSeries {
+  coicop: string;
+  name: string;
+  uniqueId: string;
+}
+
+/** The 12 divisions, as drillable children of the "all items" root — their
+ * own ppt contribution to headline CPI (the series the top-level
+ * contributors chart stacks).
+ */
+export function topLevelContributionChildren(): ChildSeries[] {
+  return divisionsSorted()
+    .filter((d): d is SeriesSource & { coicop: string } => Boolean(d.coicop))
+    .map((d) => ({ coicop: d.coicop, name: d.division_name ?? d.name, uniqueId: d.unique_id }));
+}
+
+/** The 12 divisions' own basket weights, as drillable children of the "all
+ * items" root — stacks validly (weights are additive shares of one total),
+ * unlike rates.
+ */
+export function topLevelWeightChildren(): ChildSeries[] {
+  return weightsSorted()
+    .filter((w): w is SeriesSource & { coicop: string } => Boolean(w.coicop))
+    .map((w) => ({ coicop: w.coicop, name: w.division_name ?? w.name, uniqueId: w.unique_id }));
+}
+
+/** A division or subdivision's direct sub-categories' own 12-month rates —
+ * NOT additive (each is an independent rate of change, not a
+ * pre-weighted contribution), so these are compared as separate lines,
+ * never stacked.
+ */
+export function childRateSeriesOf(parentCoicop: string): ChildSeries[] {
+  return subdivisionsUnder(parentCoicop).map((s) => ({
+    coicop: s.coicop as string,
+    name: s.division_name ?? s.name,
+    uniqueId: s.unique_id,
+  }));
+}
+
+/** A division or subdivision's direct sub-categories' own basket weights —
+ * additive, so these stack validly.
+ */
+export function childWeightSeriesOf(parentCoicop: string): ChildSeries[] {
+  return [...registry.subdivisionWeights]
+    .filter((w) => w.parent_coicop === parentCoicop)
+    .sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""))
+    .map((w) => ({ coicop: w.coicop as string, name: w.division_name ?? w.name, uniqueId: w.unique_id }));
+}
+
 export interface HeadlineStat {
   name: string;
   value: number;

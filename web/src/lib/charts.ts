@@ -1,5 +1,6 @@
 import type { EChartsOption, SeriesOption } from "echarts";
-import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, divisionColor, subdivisionColor } from "./colors";
+import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, childColor, divisionColor, subdivisionColor } from "./colors";
+import type { ChildSeries } from "./data";
 import {
   divisionByCoicop,
   divisionsSorted,
@@ -8,6 +9,7 @@ import {
   seriesFor,
   subdivisionByCoicop,
   subdivisionWeightByCoicop,
+  topLevelContributionChildren,
   weightByCoicop,
 } from "./data";
 
@@ -70,17 +72,46 @@ export function headlineChart(mode: ChartMode): EChartsOption {
   return { ...base, series };
 }
 
-export function contributorsChart(mode: ChartMode): EChartsOption {
-  const base = baseOption(mode);
-  const divisions = divisionsSorted();
+/**
+ * The 12 top-level divisions each already have their own validated,
+ * CVD-checked hue — those stay exactly as assigned. But a division or
+ * subdivision's own sub-categories (e.g. Transport's 07.1/07.2/07.3) all
+ * share one hue via `subdivisionColor` (inherited from their common
+ * top-level division), so plotted together they're indistinguishable.
+ * When every entry in a set shares the same top-level division, spread
+ * them across a same-hue lightness ramp instead — still reads as
+ * "Transport", but each sibling gets a distinct shade.
+ */
+function colorsFor(children: ChildSeries[], mode: ChartMode): string[] {
+  const topLevels = new Set(children.map((c) => c.coicop.split(".")[0]));
+  if (topLevels.size <= 1 && children.length > 1) {
+    return children.map((c, i) => childColor(c.coicop, i, children.length, mode));
+  }
+  return children.map((c) => subdivisionColor(c.coicop, mode));
+}
 
-  const series: SeriesOption[] = divisions.map((source) => {
-    const color = source.coicop ? divisionColor(source.coicop, mode) : "#898781";
+/**
+ * A set of children's series stacked as a filled area chart — valid for
+ * anything additive (ppt contributions, which ONS pre-weights to sum to
+ * the parent's own rate; basket weights, which are per-mille shares of one
+ * total). Never feed a set of independent rates/percentages into this —
+ * see `multiLineChildrenChart` for those.
+ */
+function stackedChildrenChart(
+  children: ChildSeries[],
+  mode: ChartMode,
+  yAxisName: string,
+  yAxisFormatter: string,
+): EChartsOption {
+  const base = baseOption(mode);
+  const colors = colorsFor(children, mode);
+  const series: SeriesOption[] = children.map((child, i) => {
+    const color = colors[i];
     return {
       type: "line",
-      name: source.division_name ?? source.name,
-      data: toTimeSeries(seriesFor(source.unique_id)),
-      stack: "contributions",
+      name: child.name,
+      data: toTimeSeries(seriesFor(child.uniqueId)),
+      stack: "children",
       showSymbol: false,
       lineStyle: { width: 0.5, color },
       itemStyle: { color },
@@ -89,20 +120,95 @@ export function contributorsChart(mode: ChartMode): EChartsOption {
     };
   });
 
-  const headline = registry.headline.find((s) => s.unique_id === "GB.CPI");
-  if (headline) {
-    series.push({
+  return {
+    ...base,
+    yAxis: {
+      ...base.yAxis,
+      name: yAxisName,
+      nameGap: 40,
+      nameLocation: "middle",
+      axisLabel: { color: MUTED_TEXT[mode], formatter: yAxisFormatter },
+    },
+    series,
+  };
+}
+
+/**
+ * The same set of children as separate (non-stacked) lines — the correct
+ * shape for comparing independent rates of change, where stacking would
+ * produce a number with no real meaning.
+ */
+function multiLineChildrenChart(
+  children: ChildSeries[],
+  mode: ChartMode,
+  yAxisName: string,
+  yAxisFormatter: string,
+): EChartsOption {
+  const base = baseOption(mode);
+  const colors = colorsFor(children, mode);
+  const series: SeriesOption[] = children.map((child, i) => {
+    const color = colors[i];
+    return {
       type: "line",
-      name: headline.name,
-      data: toTimeSeries(seriesFor("GB.CPI")),
+      name: child.name,
+      data: toTimeSeries(seriesFor(child.uniqueId)),
       showSymbol: false,
-      lineStyle: { width: 2.5, color: HEADLINE_COLOR[mode], type: "dotted" },
-      itemStyle: { color: HEADLINE_COLOR[mode] },
-      z: 10,
-    });
+      lineStyle: { width: 1.5, color },
+      itemStyle: { color },
+      emphasis: { focus: "series", lineStyle: { width: 3 } },
+    };
+  });
+
+  return {
+    ...base,
+    yAxis: {
+      ...base.yAxis,
+      name: yAxisName,
+      nameGap: 40,
+      nameLocation: "middle",
+      axisLabel: { color: MUTED_TEXT[mode], formatter: yAxisFormatter },
+    },
+    series,
+  };
+}
+
+export function contributorsChart(mode: ChartMode): EChartsOption {
+  const option = stackedChildrenChart(topLevelContributionChildren(), mode, "Percentage points", "{value}%");
+
+  const headline = registry.headline.find((s) => s.unique_id === "GB.CPI");
+  if (headline && Array.isArray(option.series)) {
+    option.series = [
+      ...option.series,
+      {
+        type: "line",
+        name: headline.name,
+        data: toTimeSeries(seriesFor("GB.CPI")),
+        showSymbol: false,
+        lineStyle: { width: 2.5, color: HEADLINE_COLOR[mode], type: "dotted" },
+        itemStyle: { color: HEADLINE_COLOR[mode] },
+        z: 10,
+      },
+    ];
   }
 
-  return { ...base, series };
+  return option;
+}
+
+/** Stacked basket-weight-over-time chart for any set of children — the 12
+ * divisions at the top level, or a division/subdivision's own
+ * sub-categories further down. Weights are additive, so this is valid at
+ * every level, unlike the rate chart below.
+ */
+export function stackedWeightChart(children: ChildSeries[], mode: ChartMode): EChartsOption {
+  return stackedChildrenChart(children, mode, "Basket weight (‰)", "{value}");
+}
+
+/** Multi-line 12-month-rate comparison for any set of children — never
+ * stacked, since each is an independent rate of change rather than a
+ * pre-weighted contribution (see `childRateSeriesOf`'s doc comment).
+ */
+export function multiLineRateChart(children: ChildSeries[], mode: ChartMode): EChartsOption {
+  return multiLineChildrenChart(children, mode, "12-month rate", "{value}%");
 }
 
 export function basketTreemap(mode: ChartMode): EChartsOption {

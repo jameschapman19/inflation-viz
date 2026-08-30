@@ -60,3 +60,75 @@ export function subdivisionColor(coicop: string, mode: "light" | "dark" = "light
   const topLevel = coicop.split(".")[0];
   return divisionColor(topLevel, mode);
 }
+
+function hexToHsl(hex: string): { h: number; s: number; l: number } {
+  const r = parseInt(hex.slice(1, 3), 16) / 255;
+  const g = parseInt(hex.slice(3, 5), 16) / 255;
+  const b = parseInt(hex.slice(5, 7), 16) / 255;
+  const max = Math.max(r, g, b);
+  const min = Math.min(r, g, b);
+  const l = (max + min) / 2;
+  if (max === min) return { h: 0, s: 0, l: l * 100 };
+
+  const d = max - min;
+  const s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+  let h: number;
+  switch (max) {
+    case r:
+      h = (g - b) / d + (g < b ? 6 : 0);
+      break;
+    case g:
+      h = (b - r) / d + 2;
+      break;
+    default:
+      h = (r - g) / d + 4;
+  }
+  return { h: h * 60, s: s * 100, l: l * 100 };
+}
+
+function hslToHex(h: number, s: number, l: number): string {
+  const sNorm = s / 100;
+  const lNorm = l / 100;
+  const c = (1 - Math.abs(2 * lNorm - 1)) * sNorm;
+  const hPrime = h / 60;
+  const x = c * (1 - Math.abs((hPrime % 2) - 1));
+  const m = lNorm - c / 2;
+  let [r, g, b] = [0, 0, 0];
+  if (hPrime >= 0 && hPrime < 1) [r, g, b] = [c, x, 0];
+  else if (hPrime < 2) [r, g, b] = [x, c, 0];
+  else if (hPrime < 3) [r, g, b] = [0, c, x];
+  else if (hPrime < 4) [r, g, b] = [0, x, c];
+  else if (hPrime < 5) [r, g, b] = [x, 0, c];
+  else [r, g, b] = [c, 0, x];
+
+  const toHex = (v: number) =>
+    Math.round((v + m) * 255)
+      .toString(16)
+      .padStart(2, "0");
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+
+/**
+ * A color for one sibling among a set of `total` sub-categories that all
+ * share the same parent (and so all resolve to the same base hue via
+ * `subdivisionColor`) — a plain family of same-hue lines/bands is
+ * indistinguishable from each other, so this spreads them across a
+ * lightness ramp (same hue and saturation as the parent, sequential
+ * light->dark by position) instead. Pass `index`/`total` as the sibling's
+ * position within its own siblings list, not any global index.
+ */
+export function childColor(
+  coicop: string,
+  index: number,
+  total: number,
+  mode: "light" | "dark" = "light",
+): string {
+  const base = subdivisionColor(coicop, mode);
+  if (total <= 1) return base;
+
+  const { h, s } = hexToHsl(base);
+  const [minL, maxL] = mode === "dark" ? [40, 82] : [20, 58];
+  const t = index / (total - 1);
+  const targetL = minL + t * (maxL - minL);
+  return hslToHex(h, Math.max(s, 45), targetL);
+}
