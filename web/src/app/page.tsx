@@ -7,9 +7,9 @@ export default function HomePage() {
   return (
     <>
       <section className="hero">
-        <span className="pill">Live from ONS</span>
+        <span className="pill">Live data</span>
         <h1>UK inflation, traced to its source</h1>
-        <p className="lede">Every number on this site is one click from the ONS series that produced it.</p>
+        <p className="lede">Every number on this site is one click from the official series that produced it.</p>
 
         <div className="stat-row">
           {stats.map((stat) => (
