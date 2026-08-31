@@ -12,6 +12,7 @@ import {
   subdivisionsUnder,
   weightByCoicop,
 } from "@/lib/data";
+import { formatPpt, formatWeight } from "@/lib/format";
 
 export function generateStaticParams() {
   return divisionsSorted()
@@ -54,14 +55,14 @@ export default async function DivisionPage({ params }: { params: Promise<{ coico
         <StatTile
           label="Contribution to headline CPI"
           point={latestPointFor(division.unique_id)}
-          format={(y) => `${y.toFixed(2)}ppt`}
+          format={formatPpt}
           source={division}
         />
         {weight && (
           <StatTile
             label="Basket weight"
             point={latestPointFor(weight.unique_id)}
-            format={(y) => `${y.toFixed(1)}‰`}
+            format={formatWeight}
             source={weight}
           />
         )}

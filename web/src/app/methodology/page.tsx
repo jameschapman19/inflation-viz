@@ -169,12 +169,12 @@ export default function MethodologyPage() {
           <h2>Short-term projection</h2>
           <p>
             The dashed continuation on the headline and contributors charts is this project&apos;s
-            own estimate, not an ONS figure — a {forecast.model} model fit independently to each
-            division&apos;s own contribution history, then reconciled bottom-up ({forecast.reconciliation}
-            ) so the projected divisions always sum to the projected headline total. It carries
-            an {forecast.level}% prediction interval per division; the reconciled total has no
-            interval of its own, since summing per-division intervals isn&apos;t a statistically valid
-            interval for their sum.
+            own estimate, not an ONS figure — an {forecast.model} model fit independently to each
+            division&apos;s own contribution history, then reconciled bottom-up so the projected
+            divisions always sum to the projected headline total. It carries an {forecast.level}%
+            prediction interval per division; the reconciled total has no interval of its own,
+            since summing per-division intervals isn&apos;t a statistically valid interval for
+            their sum.
           </p>
           <p className="muted">
             Currently projects {forecast.coverage.included.length} of 12 divisions.

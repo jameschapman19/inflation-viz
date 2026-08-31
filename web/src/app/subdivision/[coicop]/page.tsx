@@ -12,6 +12,7 @@ import {
   subdivisionsUnder,
   subdivisionWeightByCoicop,
 } from "@/lib/data";
+import { formatPercent, formatWeight } from "@/lib/format";
 
 export function generateStaticParams() {
   return subdivisionsSorted().map((s) => ({ coicop: s.coicop as string }));
@@ -57,14 +58,14 @@ export default async function SubdivisionPage({ params }: { params: Promise<{ co
         <StatTile
           label="12-month rate"
           point={latestPointFor(subdivision.unique_id)}
-          format={(y) => `${y.toFixed(1)}%`}
+          format={formatPercent}
           source={subdivision}
         />
         {weight && (
           <StatTile
             label="Basket weight"
             point={latestPointFor(weight.unique_id)}
-            format={(y) => `${y.toFixed(1)}‰`}
+            format={formatWeight}
             source={weight}
           />
         )}

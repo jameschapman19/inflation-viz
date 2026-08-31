@@ -16,12 +16,62 @@ import {
   weightByCoicop,
   weightsSorted,
 } from "./data";
+import { formatPercent, formatWeight } from "./format";
 
 export type ChartMode = "light" | "dark";
 
 const FONT_FAMILY = "system-ui, -apple-system, 'Segoe UI', sans-serif";
 
-function baseOption(mode: ChartMode): EChartsOption {
+// A forecast series is drawn at reduced opacity in addition to being
+// dashed — distinguishing "actual" from "projected" by dash pattern
+// alone is easy to miss at a glance; muting the color too is the
+// standard way to read uncertain/projected data as visually secondary.
+const FORECAST_OPACITY = 0.55;
+
+// Series ids ending in this suffix are marked as forecast points in the
+// tooltip formatter below — needed specifically for stackedChildrenChart,
+// whose forecast series intentionally *share* their real counterpart's
+// name (to avoid doubling the legend), so the name alone can't tell them
+// apart in a tooltip. headlineChart/singleSeriesChart give their forecast
+// series distinctly-worded names instead and don't need this.
+const FORECAST_ID_SUFFIX = "-forecast";
+
+interface TooltipParam {
+  axisValueLabel?: string;
+  seriesName?: string;
+  seriesId?: string;
+  marker?: string;
+  value?: [string, number];
+}
+
+/** A `tooltip.formatter` for axis-trigger tooltips that renders every
+ * series' value through `formatValue` instead of ECharts' default (which
+ * prints the raw, unrounded number) — the one tooltip formatter every
+ * chart in this file uses, parameterized by unit (percent vs. per-mille)
+ * and decimal precision per chart. Series hidden from the legend by name
+ * (the confidence-band helper series) are also hidden here.
+ */
+function axisTooltipFormatter(formatValue: (value: number) => string) {
+  return (raw: unknown): string => {
+    const params = (Array.isArray(raw) ? raw : [raw]) as TooltipParam[];
+    const visible = params.filter(
+      (p) => Array.isArray(p.value) && typeof p.value[1] === "number" && !Number.isNaN(p.value[1]) && !p.seriesName?.startsWith("__"),
+    );
+    if (visible.length === 0) return "";
+    const header = visible[0]?.axisValueLabel ?? "";
+    const rows = visible
+      .map((p) => {
+        const value = (p.value as [string, number])[1];
+        const isForecast = typeof p.seriesId === "string" && p.seriesId.endsWith(FORECAST_ID_SUFFIX);
+        const label = isForecast ? `${p.seriesName} (projected)` : p.seriesName;
+        return `<div>${p.marker ?? ""}${label}: <b>${formatValue(value)}</b></div>`;
+      })
+      .join("");
+    return `<div style="font-weight:600;margin-bottom:2px;">${header}</div>${rows}`;
+  };
+}
+
+function baseOption(mode: ChartMode, tooltipFormat: (value: number) => string): EChartsOption {
   const textColor = mode === "dark" ? "#ffffff" : "#0b0b0b";
   const muted = MUTED_TEXT[mode];
   const grid = GRIDLINE[mode];
@@ -34,6 +84,7 @@ function baseOption(mode: ChartMode): EChartsOption {
       borderColor: grid,
       textStyle: { color: textColor, fontFamily: FONT_FAMILY },
       axisPointer: { type: "cross", label: { backgroundColor: mode === "dark" ? "#202020" : "#ffffff" } },
+      formatter: axisTooltipFormatter(tooltipFormat),
     },
     // "scroll" keeps the legend to a single row (paging with </> controls
     // once it overflows) instead of wrapping onto a second line — a
@@ -83,6 +134,46 @@ function toForecastTimeSeries(actual: SeriesPoint[], points: ForecastPoint[]): [
 }
 
 /**
+ * A shaded confidence band around a forecast line: an invisible
+ * lower-bound series (`lo`) with an area-only delta series (`hi - lo`)
+ * stacked on top of it, so the visible fill spans exactly [lo, hi] at
+ * every date — showing a forecast's own uncertainty rather than a single
+ * point estimate that reads as more certain than it is. No-ops (returns
+ * `[]`) wherever a point carries no interval at all — the reconciled
+ * total never does (summing per-division intervals isn't statistically
+ * valid, see inflation-forecast's publish.py), so this only ever
+ * produces a band for a single division's own forecast.
+ */
+function toForecastBandSeries(actual: SeriesPoint[], points: ForecastPoint[], color: string): SeriesOption[] {
+  const withInterval = points.filter((p): p is ForecastPoint & { lo: number; hi: number } => p.lo != null && p.hi != null);
+  if (withInterval.length === 0) return [];
+
+  const bridge = actual.length > 0 ? actual[actual.length - 1] : undefined;
+  const lowerData: [string, number][] = bridge ? [[bridge.ds, bridge.y]] : [];
+  const deltaData: [string, number][] = bridge ? [[bridge.ds, 0]] : [];
+  for (const p of withInterval) {
+    lowerData.push([p.ds, p.lo]);
+    deltaData.push([p.ds, p.hi - p.lo]);
+  }
+
+  const bandLabel = forecast.level != null ? `${forecast.level}% interval` : "Projected interval";
+  const shared = { type: "line" as const, stack: "forecast-interval", showSymbol: false, silent: true, tooltip: { show: false } };
+
+  return [
+    { ...shared, id: "__interval-lower", name: "__interval-lower", data: lowerData, lineStyle: { opacity: 0 }, areaStyle: { opacity: 0 } },
+    {
+      ...shared,
+      id: "__interval-band",
+      name: bandLabel,
+      data: deltaData,
+      lineStyle: { opacity: 0 },
+      areaStyle: { color, opacity: 0.15 },
+      itemStyle: { color, opacity: 0.15 },
+    },
+  ];
+}
+
+/**
  * Aligns every child's series onto the union of all dates that appear in
  * any of them, filling 0 wherever one child has no observation at a date
  * another does. Sub-categories are introduced/retired at different times
@@ -105,7 +196,7 @@ function alignedForStacking(children: ChildSeries[]): [string, number][][] {
 }
 
 export function headlineChart(mode: ChartMode): EChartsOption {
-  const base = baseOption(mode);
+  const base = baseOption(mode, (v) => formatPercent(v, 1));
   const series: SeriesOption[] = registry.headline.map((source) => ({
     type: "line",
     name: source.name,
@@ -118,19 +209,31 @@ export function headlineChart(mode: ChartMode): EChartsOption {
   // Only GB.CPI gets a projection — the reconciliation hierarchy is built
   // from CPI-consistent division contributions, with no basis for CPIH's
   // owner-occupier housing cost treatment.
+  const actualCpi = seriesFor("GB.CPI");
   const projected = hasForecast() ? forecastFor(forecast.totalUniqueId) : [];
   if (projected.length > 0) {
     series.push({
       type: "line",
+      // No FORECAST_ID_SUFFIX id here — the tooltip formatter appends
+      // "(projected)" for series marked that way, which would double up
+      // with this series' own already-descriptive name.
       name: "CPI (projected)",
-      data: toForecastTimeSeries(seriesFor("GB.CPI"), projected),
+      data: toForecastTimeSeries(actualCpi, projected),
       showSymbol: false,
-      lineStyle: { width: 2, color: HEADLINE_COLOR[mode], type: "dashed" },
-      itemStyle: { color: HEADLINE_COLOR[mode] },
+      lineStyle: { width: 2, color: HEADLINE_COLOR[mode], type: "dashed", opacity: FORECAST_OPACITY },
+      itemStyle: { color: HEADLINE_COLOR[mode], opacity: FORECAST_OPACITY },
     });
+    // No-ops today — the reconciled total never carries an interval (see
+    // toForecastBandSeries) — but written generically so a future total
+    // with a real interval picks up a band automatically.
+    series.push(...toForecastBandSeries(actualCpi, projected, HEADLINE_COLOR[mode]));
   }
 
-  return { ...base, series };
+  return {
+    ...base,
+    legend: { ...base.legend, data: series.map((s) => s.name as string).filter((name) => !name.startsWith("__")) },
+    series,
+  };
 }
 
 /**
@@ -163,8 +266,9 @@ function stackedChildrenChart(
   mode: ChartMode,
   yAxisName: string,
   yAxisFormatter: string,
+  tooltipFormat: (value: number) => string,
 ): EChartsOption {
-  const base = baseOption(mode);
+  const base = baseOption(mode, tooltipFormat);
   const colors = colorsFor(children, mode);
   const aligned = alignedForStacking(children);
   const series: SeriesOption[] = children.map((child, i) => {
@@ -202,12 +306,13 @@ function stackedChildrenChart(
       const color = colors[i];
       series.push({
         type: "line",
+        id: `${child.uniqueId}${FORECAST_ID_SUFFIX}`,
         name: child.name,
         data: toForecastTimeSeries(seriesFor(child.uniqueId), points),
         stack: "children-forecast",
         showSymbol: false,
-        lineStyle: { width: 0.5, color, type: "dashed" },
-        itemStyle: { color },
+        lineStyle: { width: 0.5, color, type: "dashed", opacity: FORECAST_OPACITY },
+        itemStyle: { color, opacity: FORECAST_OPACITY },
         emphasis: { focus: "series" },
       });
     });
@@ -236,8 +341,9 @@ function multiLineChildrenChart(
   mode: ChartMode,
   yAxisName: string,
   yAxisFormatter: string,
+  tooltipFormat: (value: number) => string,
 ): EChartsOption {
-  const base = baseOption(mode);
+  const base = baseOption(mode, tooltipFormat);
   const colors = colorsFor(children, mode);
   const series: SeriesOption[] = children.map((child, i) => {
     const color = colors[i];
@@ -273,7 +379,7 @@ function multiLineChildrenChart(
  * on its own.
  */
 export function contributorsChart(mode: ChartMode): EChartsOption {
-  return stackedChildrenChart(topLevelContributionChildren(), mode, "Percentage points", "{value}%");
+  return stackedChildrenChart(topLevelContributionChildren(), mode, "Percentage points", "{value}%", (v) => formatPercent(v, 2));
 }
 
 /** Stacked basket-weight-over-time chart for any set of children — the 12
@@ -282,7 +388,7 @@ export function contributorsChart(mode: ChartMode): EChartsOption {
  * every level, unlike the rate chart below.
  */
 export function stackedWeightChart(children: ChildSeries[], mode: ChartMode): EChartsOption {
-  return stackedChildrenChart(children, mode, "Basket weight (‰)", "{value}");
+  return stackedChildrenChart(children, mode, "Basket weight (‰)", "{value}", formatWeight);
 }
 
 /** Multi-line 12-month-rate comparison for any set of children — never
@@ -290,7 +396,7 @@ export function stackedWeightChart(children: ChildSeries[], mode: ChartMode): EC
  * pre-weighted contribution (see `childRateSeriesOf`'s doc comment).
  */
 export function multiLineRateChart(children: ChildSeries[], mode: ChartMode): EChartsOption {
-  return multiLineChildrenChart(children, mode, "12-month rate", "{value}%");
+  return multiLineChildrenChart(children, mode, "12-month rate", "{value}%", (v) => formatPercent(v, 1));
 }
 
 interface TreemapNode {
@@ -352,7 +458,7 @@ export function basketTreemap(mode: ChartMode): EChartsOption {
         const link = href
           ? `<div style="margin-top:4px"><a href="${href}" style="color:${accent};font-weight:600;">View page &rarr;</a></div>`
           : "";
-        return `<div>${p.name}<br/><b>${p.value.toFixed(1)}‰</b> of the basket</div>${link}`;
+        return `<div>${p.name}<br/><b>${formatWeight(p.value)}</b> of the basket</div>${link}`;
       },
     },
     series: [
@@ -443,9 +549,10 @@ function singleSeriesChart(
   mode: ChartMode,
   yAxisName: string,
   variant: "area" | "step",
+  tooltipFormat: (value: number) => string,
   forecastPoints: ForecastPoint[] = [],
 ): EChartsOption {
-  const base = baseOption(mode);
+  const base = baseOption(mode, tooltipFormat);
   const name = source?.division_name ?? coicop;
   const actual = source ? seriesFor(source.unique_id) : [];
   const data = toTimeSeries(actual);
@@ -461,17 +568,22 @@ function singleSeriesChart(
       name: "Projected",
       data: toForecastTimeSeries(actual, forecastPoints),
       showSymbol: false,
-      lineStyle: { width: 2, color, type: "dashed" },
-      itemStyle: { color },
+      lineStyle: { width: 2, color, type: "dashed", opacity: FORECAST_OPACITY },
+      itemStyle: { color, opacity: FORECAST_OPACITY },
     });
+    series.push(...toForecastBandSeries(actual, forecastPoints, color));
   }
 
   return {
     ...base,
     // Unconditionally hidden otherwise (a single series names itself in
     // the chart's own heading) — shown only once a forecast series joins,
-    // so actual vs. projected is labeled.
-    legend: { ...base.legend, show: forecastPoints.length > 0 },
+    // so actual vs. projected (and the interval band, if any) is labeled.
+    legend: {
+      ...base.legend,
+      show: forecastPoints.length > 0,
+      data: series.map((s) => s.name as string).filter((n) => !n.startsWith("__")),
+    },
     yAxis: {
       ...base.yAxis,
       name: yAxisName,
@@ -494,18 +606,29 @@ export function divisionContributionChart(coicop: string, mode: ChartMode): ECha
     mode,
     "Contribution to headline CPI (ppt)",
     "area",
+    (v) => formatPercent(v, 2),
     forecastPoints,
   );
 }
 
 export function divisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
-  return singleSeriesChart(weightByCoicop(coicop), coicop, divisionColor(coicop, mode), mode, "Basket weight (‰)", "step");
+  return singleSeriesChart(weightByCoicop(coicop), coicop, divisionColor(coicop, mode), mode, "Basket weight (‰)", "step", formatWeight);
 }
 
 export function subdivisionRateChart(coicop: string, mode: ChartMode): EChartsOption {
-  return singleSeriesChart(subdivisionByCoicop(coicop), coicop, subdivisionColor(coicop, mode), mode, "12-month rate", "area");
+  return singleSeriesChart(subdivisionByCoicop(coicop), coicop, subdivisionColor(coicop, mode), mode, "12-month rate", "area", (v) =>
+    formatPercent(v, 1),
+  );
 }
 
 export function subdivisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {
-  return singleSeriesChart(subdivisionWeightByCoicop(coicop), coicop, subdivisionColor(coicop, mode), mode, "Basket weight (‰)", "step");
+  return singleSeriesChart(
+    subdivisionWeightByCoicop(coicop),
+    coicop,
+    subdivisionColor(coicop, mode),
+    mode,
+    "Basket weight (‰)",
+    "step",
+    formatWeight,
+  );
 }

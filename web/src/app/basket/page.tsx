@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Chart } from "@/components/Chart";
 import { divisionColor } from "@/lib/colors";
 import { latestWeights } from "@/lib/data";
+import { formatDecimal } from "@/lib/format";
 
 export const metadata = { title: "Basket explorer — Inflation Radar (UK)" };
 
@@ -43,7 +44,7 @@ export default function BasketPage() {
                   <Link href={`/division/${w.coicop}`}>{w.divisionName}</Link>
                 </td>
                 <td>{w.coicop}</td>
-                <td>{w.weightPerMille.toFixed(1)}</td>
+                <td>{formatDecimal(w.weightPerMille)}</td>
                 <td>
                   <a href={w.sourceUrl}>{w.cdid}</a>
                 </td>

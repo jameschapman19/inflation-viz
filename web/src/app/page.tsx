@@ -1,5 +1,6 @@
 import { Chart } from "@/components/Chart";
 import { hasForecast, headlineStats } from "@/lib/data";
+import { formatPercent } from "@/lib/format";
 
 export default function HomePage() {
   const stats = headlineStats();
@@ -15,7 +16,7 @@ export default function HomePage() {
           {stats.map((stat) => (
             <div className="stat-tile" key={stat.name}>
               <div className="stat-label">{stat.name}</div>
-              <div className="stat-value">{stat.value.toFixed(1)}%</div>
+              <div className="stat-value">{formatPercent(stat.value)}</div>
               <div className="stat-meta">
                 {stat.period} &middot; <a href={stat.sourceUrl}>source</a>
                 {stat.nextRelease ? ` · next release ${stat.nextRelease}` : null}
