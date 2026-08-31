@@ -103,13 +103,36 @@ function baseOption(mode: ChartMode, tooltipFormat: (value: number) => string): 
       pageIconInactiveColor: grid,
       pageTextStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 11 },
     },
-    grid: { left: 48, right: 24, top: 40, bottom: 32, containLabel: true },
+    grid: { left: 48, right: 24, top: 40, bottom: 56, containLabel: true },
     xAxis: {
       type: "time",
       axisLine: { lineStyle: { color: muted } },
       axisLabel: { color: muted },
       splitLine: { show: false },
     },
+    // "inside" gives scroll-wheel/pinch/drag zoom directly on the plot with
+    // no visible chrome; the "slider" below it is the discoverable control —
+    // most of this site's history is decades of monthly data, so a reader
+    // who wants "just the last year or two" needs both a quick gesture and
+    // something to actually see and drag. Left off basketTreemap, whose own
+    // option this file builds separately (a treemap has no time axis).
+    dataZoom: [
+      { type: "inside", xAxisIndex: 0 },
+      {
+        type: "slider",
+        xAxisIndex: 0,
+        height: 18,
+        bottom: 6,
+        borderColor: grid,
+        backgroundColor: "transparent",
+        fillerColor: mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.05)",
+        handleStyle: { color: muted, borderColor: muted },
+        moveHandleStyle: { color: muted },
+        textStyle: { color: muted, fontFamily: FONT_FAMILY, fontSize: 10 },
+        dataBackground: { lineStyle: { color: grid }, areaStyle: { color: grid, opacity: 0.4 } },
+        selectedDataBackground: { lineStyle: { color: muted }, areaStyle: { color: muted, opacity: 0.25 } },
+      },
+    ],
     yAxis: {
       type: "value",
       axisLabel: { color: muted, formatter: "{value}%" },
@@ -221,6 +244,31 @@ function toForecastFanSeries(actual: SeriesPoint[], points: ForecastPoint[], col
     );
   });
   return series;
+}
+
+/** The earliest and latest date across every series in a built chart
+ * option — used to turn a relative preset ("last 5 years") into the
+ * absolute `startValue`/`endValue` a dataZoom action needs, generically,
+ * without each chart kind having to know its own date range. `undefined`
+ * only for a chart with no time-series data at all (basketTreemap, which
+ * never calls this).
+ */
+export function seriesDateBounds(option: EChartsOption): { min: number; max: number } | undefined {
+  const seriesList = Array.isArray(option.series) ? option.series : option.series ? [option.series] : [];
+  let min = Infinity;
+  let max = -Infinity;
+  for (const s of seriesList) {
+    const data = (s as SeriesOption).data;
+    if (!Array.isArray(data)) continue;
+    for (const point of data) {
+      if (!Array.isArray(point)) continue;
+      const t = new Date(point[0] as string).getTime();
+      if (Number.isNaN(t)) continue;
+      if (t < min) min = t;
+      if (t > max) max = t;
+    }
+  }
+  return Number.isFinite(min) && Number.isFinite(max) ? { min, max } : undefined;
 }
 
 /**
