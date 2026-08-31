@@ -169,24 +169,41 @@ export interface HeadlineStat {
   band: InflationBand;
 }
 
+function rateStatFor(source: SeriesSource): HeadlineStat | undefined {
+  const points = seriesFor(source.unique_id);
+  const latest = points[points.length - 1];
+  if (!latest) return undefined;
+  const previous = points[points.length - 2];
+  return {
+    name: source.name,
+    value: latest.y,
+    period: latest.ds,
+    sourceUrl: source.source_url,
+    nextRelease: provenanceFor(source.unique_id)?.next_release_date ?? null,
+    deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
+    band: bandForRate(latest.y),
+  };
+}
+
 export function headlineStats(): HeadlineStat[] {
   return registry.headline
-    .map((source) => {
-      const points = seriesFor(source.unique_id);
-      const latest = points[points.length - 1];
-      if (!latest) return null;
-      const previous = points[points.length - 2];
-      return {
-        name: source.name,
-        value: latest.y,
-        period: latest.ds,
-        sourceUrl: source.source_url,
-        nextRelease: provenanceFor(source.unique_id)?.next_release_date ?? null,
-        deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
-        band: bandForRate(latest.y),
-      };
-    })
-    .filter((s): s is HeadlineStat => s !== null);
+    .map(rateStatFor)
+    .filter((s): s is HeadlineStat => s !== undefined);
+}
+
+const RPI_UNIQUE_ID = "GB.RPI";
+
+/** RPI's 12-month rate — a legacy measure ONS still publishes (rail fares,
+ * some student loans and index-linked gilts still reference it), banded
+ * the same way as CPI/CPIH even though it isn't itself the MPC's target.
+ * Structurally runs above CPI (the "formula effect"), so it lands in a
+ * higher band more easily — that's an honest signal, not a bug. Returns
+ * undefined until this series has data in series.json, same "recent
+ * registry addition" gate as realWageGrowth().
+ */
+export function rpiStat(): HeadlineStat | undefined {
+  const source = registry.context.find((s) => s.unique_id === RPI_UNIQUE_ID);
+  return source ? rateStatFor(source) : undefined;
 }
 
 /** "+0.3pt" / "-0.2pt" / "No change" — used next to a stat's headline value. */
@@ -229,6 +246,39 @@ export function realWageGrowth(): ContextStat | undefined {
     sourceUrl: source.source_url,
     deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
     band: latest.y > 0.2 ? "rising" : latest.y < -0.2 ? "falling" : null,
+  };
+}
+
+export interface LevelStat {
+  value: number;
+  period: string;
+  sourceUrl: string;
+  deltaFromPreviousMonth: number | null;
+}
+
+const BANK_RATE_UNIQUE_ID = "GB.BOE.RATE";
+
+/** The Bank of England's policy rate — the tool being used to bring
+ * inflation back to target, shown unbanded (no "good/bad" color): unlike
+ * a 12-month rate, a policy rate level has no target of its own to be
+ * near or far from. Returns undefined until this series has data in
+ * series.json (see boe.ts's fetcher — a different provider from every
+ * ONS series, so it lands in registry.boe, not registry.context).
+ */
+export function bankRate(): LevelStat | undefined {
+  const source = registry.boe.find((s) => s.unique_id === BANK_RATE_UNIQUE_ID);
+  if (!source) return undefined;
+
+  const points = seriesFor(source.unique_id);
+  const latest = points[points.length - 1];
+  if (!latest) return undefined;
+  const previous = points[points.length - 2];
+
+  return {
+    value: latest.y,
+    period: latest.ds,
+    sourceUrl: source.source_url,
+    deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
   };
 }
 

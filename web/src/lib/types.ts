@@ -31,9 +31,14 @@ export interface Registry {
   subdivisions: SeriesSource[];
   subdivisionWeights: SeriesSource[];
   external: ReferenceTableSource[];
-  /** Non-CPI ONS series added for context, e.g. real wage growth — see
+  /** Additional ONS series added for context — some alternative inflation
+   * measures (RPI), some outside CPI entirely (real wage growth) — see
    * sources.yaml's `context:` section. */
   context: SeriesSource[];
+  /** Bank of England series (currently just Bank Rate) — a different
+   * provider, fetched via boe.py rather than the ONS pipeline. Same
+   * SeriesSource shape; `dataset` is "iadb" rather than an ONS dataset. */
+  boe: SeriesSource[];
 }
 
 export interface SeriesPoint {

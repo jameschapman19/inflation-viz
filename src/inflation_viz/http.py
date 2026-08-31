@@ -1,6 +1,7 @@
-"""Shared HTTP session for talking to ons.gov.uk — retries a 429 (rate
-limited) or transient 5xx with backoff, honouring a `Retry-After` header
-when ONS sends one, instead of failing the whole refresh on one throttle.
+"""Shared HTTP session for talking to this pipeline's data providers (ONS,
+Bank of England) — retries a 429 (rate limited) or transient 5xx with
+backoff, honouring a `Retry-After` header when one is sent, instead of
+failing the whole refresh on one throttle.
 """
 
 from __future__ import annotations

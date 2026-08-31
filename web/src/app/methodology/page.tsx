@@ -87,8 +87,10 @@ export default function MethodologyPage() {
         <p className="lede">
           Every ONS series behind this site — headline, all 12 divisions, and their full
           sub-category tree — is discovered live from ONS&apos;s own bulk dataset at refresh time,
-          not hand-typed; nothing here is stale by construction. <code>sources.yaml</code> now only
-          lists the handful of non-ONS reference sources below.
+          not hand-typed; nothing here is stale by construction. <code>sources.yaml</code> lists
+          this pipeline&apos;s deliberate exceptions to that: a small number of additional,
+          individually hand-typed ONS series, Bank of England data (a different provider
+          entirely), and non-ONS reference sources — see below.
         </p>
       </section>
 
@@ -104,14 +106,35 @@ export default function MethodologyPage() {
         <section>
           <h2>Context indicators</h2>
           <p className="lede">
-            Non-CPI ONS series added for context — currently real (CPI-deflated) regular pay
-            growth, so you can see whether pay is keeping pace with prices without leaving the
-            site. Fetched the same way as every CPI series above, just from a different ONS
-            dataset.
+            Additional ONS series added for context — some alternative inflation measures (RPI,
+            still used for rail fares, some student loans, and index-linked gilts), some outside
+            CPI entirely (real, CPI-deflated regular pay growth, so you can see whether pay is
+            keeping pace with prices without leaving the site). Fetched the same way as every CPI
+            series above, just from a different ONS dataset.
           </p>
           <SourceTable
             rows={registry.context}
             columns={[{ header: "Series", render: (s) => s.name }, CDID_COLUMN, ...SOURCE_COLUMNS]}
+          />
+        </section>
+      )}
+
+      {registry.boe.length > 0 && (
+        <section>
+          <h2>Bank of England</h2>
+          <p className="lede">
+            A different provider entirely — the Bank&apos;s Interactive Database (IADB) rather
+            than ONS&apos;s timeseries API, so it&apos;s fetched by its own small pipeline module
+            (<code>boe.py</code>). Currently just Bank Rate, the Bank&apos;s own lever for
+            bringing inflation back to target.
+          </p>
+          <SourceTable
+            rows={registry.boe}
+            columns={[
+              { header: "Series", render: (s) => s.name },
+              { header: "Series code", render: (s) => <a href={s.source_url}>{s.cdid}</a> },
+              ...SOURCE_COLUMNS,
+            ]}
           />
         </section>
       )}

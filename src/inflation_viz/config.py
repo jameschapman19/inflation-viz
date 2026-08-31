@@ -17,6 +17,13 @@ import yaml
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SOURCES_PATH = REPO_ROOT / "sources.yaml"
 
+# The Bank of England's Interactive Database (IADB) query endpoint — CSV by
+# series code, a completely different shape from ONS's JSON timeseries API.
+# Lives here (rather than in boe.py, which needs it to actually fetch) so
+# config.py never has to import boe.py: everything else in this module's
+# dependency direction is "config has no imports from its own callers."
+BOE_IADB_QUERY_URL = "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp"
+
 
 @dataclass(frozen=True, slots=True)
 class SeriesSource:
@@ -95,12 +102,39 @@ def load_context(path: Path = SOURCES_PATH) -> dict[str, SeriesSource]:
     return result
 
 
+def load_boe(path: Path = SOURCES_PATH) -> dict[str, SeriesSource]:
+    """Bank of England series (currently just Bank Rate) — see
+    `sources.yaml`'s `boe:` header comment. `api_url` is only the IADB's
+    base query endpoint here; `boe.py`'s fetcher adds the date-range/format
+    query params itself at fetch time, since (unlike ONS) an explicit
+    Dateto is required on every request rather than always returning full
+    history.
+    """
+    raw: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
+    result: dict[str, SeriesSource] = {}
+    for entry in raw.get("boe", {}).values():
+        unique_id = entry["unique_id"]
+        result[unique_id] = SeriesSource(
+            unique_id=unique_id,
+            name=entry["name"],
+            cdid=entry["series_code"],
+            dataset="iadb",
+            source_name="Bank of England",
+            source_url=entry["source_url"],
+            api_url=BOE_IADB_QUERY_URL,
+            license=entry["license"],
+            cadence=entry["cadence"],
+            unit=entry["unit"],
+        )
+    return result
+
+
 class SourceRegistry:
     """A fully-assembled set of series — some live-discovered from ONS
     (headline/divisions/weights/subdivisions/subdivision_weights, built by
     `ons_catalog.discover_registry()`), some read from `sources.yaml`
-    (`external`). Construction is intentionally dumb: this class just holds
-    whatever dicts it's given.
+    (`external`, `context`, `boe`). Construction is intentionally dumb:
+    this class just holds whatever dicts it's given.
     """
 
     def __init__(
@@ -113,6 +147,7 @@ class SourceRegistry:
         subdivision_weights: dict[str, SeriesSource],
         external: dict[str, ReferenceTableSource],
         context: dict[str, SeriesSource] | None = None,
+        boe: dict[str, SeriesSource] | None = None,
     ) -> None:
         self.headline = headline
         self.divisions = divisions
@@ -121,10 +156,16 @@ class SourceRegistry:
         self.subdivision_weights = subdivision_weights
         self.external = external
         self.context = context if context is not None else {}
+        self.boe = boe if boe is not None else {}
 
     @property
     def all_series(self) -> dict[str, SeriesSource]:
-        """Every fetchable series, keyed by unique_id."""
+        """Every series fetchable via ONS's JSON timeseries API, keyed by
+        unique_id. Deliberately excludes `boe` — a different provider with
+        a different API shape, fetched separately by `boe.py` (see
+        `fetch.py`'s `fetch_all`) — so this stays a safe, uniform set for
+        anything that assumes "every one of these is an ONS CDID".
+        """
         return {
             **self.headline,
             **self.divisions,

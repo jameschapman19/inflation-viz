@@ -1,9 +1,18 @@
 import { Chart } from "@/components/Chart";
-import { formatDelta, hasForecast, headlineStats, realWageGrowth } from "@/lib/data";
+import {
+  bankRate,
+  formatDelta,
+  hasForecast,
+  headlineStats,
+  realWageGrowth,
+  rpiStat,
+} from "@/lib/data";
 
 export default function HomePage() {
-  const stats = headlineStats();
+  const rpi = rpiStat();
+  const stats = rpi ? [...headlineStats(), rpi] : headlineStats();
   const wageGrowth = realWageGrowth();
+  const rate = bankRate();
 
   return (
     <>
@@ -50,8 +59,8 @@ export default function HomePage() {
           )}
         </div>
         <p className="muted">
-          Colour bands CPI/CPIH against the Bank of England&apos;s 2% target, and pay against zero
-          real growth.
+          Colour bands each 12-month rate against the Bank of England&apos;s 2% target, and pay
+          against zero real growth.
         </p>
       </section>
 
@@ -64,6 +73,33 @@ export default function HomePage() {
           </p>
         )}
       </section>
+
+      {rate && (
+        <section>
+          <h2>Bank Rate</h2>
+          <p className="lede">
+            The Bank of England&apos;s own policy rate — its lever for bringing inflation back to
+            target. Shown without a colour band: unlike a 12-month rate, a policy rate has no
+            target of its own to be near or far from.
+          </p>
+          <div className="stat-row">
+            <div className="stat-tile">
+              <div className="stat-label">Bank Rate</div>
+              <div className="stat-value-row">
+                <span className="stat-value">{rate.value.toFixed(2)}%</span>
+                {rate.deltaFromPreviousMonth ? (
+                  <span className="stat-delta">
+                    {formatDelta(rate.deltaFromPreviousMonth)} vs last month
+                  </span>
+                ) : null}
+              </div>
+              <div className="stat-meta">
+                {rate.period} &middot; <a href={rate.sourceUrl}>source</a>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
     </>
   );
 }

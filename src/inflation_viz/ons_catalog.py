@@ -42,6 +42,7 @@ from inflation_viz.config import (
     ReferenceTableSource,
     SeriesSource,
     SourceRegistry,
+    load_boe,
     load_context,
     load_external,
 )
@@ -255,6 +256,7 @@ def build_registry(
     catalog: Catalog,
     external: dict[str, ReferenceTableSource],
     context: dict[str, SeriesSource] | None = None,
+    boe: dict[str, SeriesSource] | None = None,
 ) -> SourceRegistry:
     """Classifies a discovered catalog into the registry's five ONS-series
     sections, purely by COICOP code depth — "00" is the headline, a
@@ -322,6 +324,7 @@ def build_registry(
         subdivision_weights=subdivision_weights,
         external=external,
         context=context if context is not None else load_context(),
+        boe=boe if boe is not None else load_boe(),
     )
 
 
@@ -347,17 +350,20 @@ def discover_registry(
     session: requests.Session | None = None,
     external: dict[str, ReferenceTableSource] | None = None,
     context: dict[str, SeriesSource] | None = None,
+    boe: dict[str, SeriesSource] | None = None,
 ) -> SourceRegistry:
     """The pipeline's single entry point: a fresh, fully-live SourceRegistry
     for the COICOP tree, with no hardcoded CDID anywhere upstream of ONS's
-    own bulk dataset — plus `external`/`context`, the small hand-curated
-    sets `sources.yaml` documents as the deliberate exceptions to that.
+    own bulk dataset — plus `external`/`context`/`boe`, the small
+    hand-curated sets `sources.yaml` documents as the deliberate exceptions
+    to that.
     """
     catalog = discover_catalog(session)
     return build_registry(
         catalog,
         external if external is not None else load_external(),
         context,
+        boe,
     )
 
 

@@ -67,6 +67,7 @@ def _registry_payload(registry: SourceRegistry) -> dict[str, Any]:
         "subdivisionWeights": [asdict(s) for s in registry.subdivision_weights_sorted()],
         "external": [asdict(s) for s in registry.external.values()],
         "context": [asdict(s) for s in registry.context.values()],
+        "boe": [asdict(s) for s in registry.boe.values()],
     }
 
 
