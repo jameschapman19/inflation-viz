@@ -5,7 +5,6 @@ import {
   divisionsSorted,
   forecast,
   hasForecast,
-  hasHeadlineFan,
   meta,
   registry,
   subdivisionsSorted,
@@ -170,24 +169,8 @@ export default function MethodologyPage() {
           <h2>Short-term projection</h2>
           <p>
             The dashed continuation on the headline and contributors charts is this project&apos;s
-            own estimate, not an ONS figure — an {forecast.model} model fit independently to each
-            division&apos;s own contribution history, then reconciled bottom-up so the projected
-            divisions always sum to the projected headline total. Each division&apos;s own line
-            carries an {forecast.level}% prediction interval.
+            own short-term projection, not an ONS figure.
           </p>
-          {hasHeadlineFan() && (
-            <p>
-              The shaded fan around the projected CPI line on the headline chart is a separate
-              calculation, not the divisions&apos; intervals added together — summing per-division
-              intervals isn&apos;t statistically valid (quantiles don&apos;t add). Instead it&apos;s
-              a{" "}
-              <a href="https://arxiv.org/abs/2411.13479">conformal prediction interval</a>{" "}
-              computed directly on the reconciled total&apos;s own historical forecast errors:
-              distribution-free, built from realized out-of-sample accuracy rather than a
-              parametric assumption. The three nested bands are 50%, 80%, and 95% intervals — wider
-              bands are less likely to be exceeded, and read fainter on the chart to match.
-            </p>
-          )}
           <p className="muted">
             Currently projects {forecast.coverage.included.length} of 12 divisions.
             {missingNames.length > 0 && <> Not yet covered: {missingNames.join(", ")}.</>}
