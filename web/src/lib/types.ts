@@ -31,6 +31,9 @@ export interface Registry {
   subdivisions: SeriesSource[];
   subdivisionWeights: SeriesSource[];
   external: ReferenceTableSource[];
+  /** Non-CPI ONS series added for context, e.g. real wage growth — see
+   * sources.yaml's `context:` section. */
+  context: SeriesSource[];
 }
 
 export interface SeriesPoint {

@@ -100,6 +100,22 @@ export default function MethodologyPage() {
         />
       </section>
 
+      {registry.context.length > 0 && (
+        <section>
+          <h2>Context indicators</h2>
+          <p className="lede">
+            Non-CPI ONS series added for context — currently real (CPI-deflated) regular pay
+            growth, so you can see whether pay is keeping pace with prices without leaving the
+            site. Fetched the same way as every CPI series above, just from a different ONS
+            dataset.
+          </p>
+          <SourceTable
+            rows={registry.context}
+            columns={[{ header: "Series", render: (s) => s.name }, CDID_COLUMN, ...SOURCE_COLUMNS]}
+          />
+        </section>
+      )}
+
       <section>
         <h2>COICOP division contribution series</h2>
         <SourceTable

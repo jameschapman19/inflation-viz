@@ -10,11 +10,29 @@
 # how a title string becomes a series, and tests/test_ons_catalog.py for
 # the parsing/classification logic it's tested against.
 #
-# The only thing still listed here is `external:` — reference tables that
-# have no ONS CDID timeseries API to discover from at all.
+# Besides `external:` (reference tables with no CDID timeseries API at
+# all), there's also `context:` — a small number of hand-curated *non-CPI*
+# ONS series that give the headline inflation numbers context. Each one
+# does have a live ONS timeseries JSON API, fetched and exported exactly
+# like every CPI series in this pipeline — it's just a different ONS
+# dataset/theme than mm23, and there's no bulk catalog to auto-discover a
+# single named series from, so (like `external`) its CDID is typed by
+# hand here rather than discovered.
 
 license_defaults:
   ons_ogl: &ons_ogl "Open Government Licence v3.0"
+
+context:
+  real_wage_growth:
+    unique_id: GB.WAGE.REAL
+    name: "AWE: Whole Economy Real Terms Year-on-Year 3-Month Average Growth: Regular Pay (SA)"
+    cdid: A2FA
+    dataset: lms
+    theme_path: employmentandlabourmarket/peopleinwork/earningsandworkinghours
+    source_name: "Office for National Statistics"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
 
 external:
   ofgem_price_cap:

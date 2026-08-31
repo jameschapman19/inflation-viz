@@ -66,6 +66,35 @@ def load_external(path: Path = SOURCES_PATH) -> dict[str, ReferenceTableSource]:
     }
 
 
+def load_context(path: Path = SOURCES_PATH) -> dict[str, SeriesSource]:
+    """The handful of non-CPI ONS series added for context (e.g. real wage
+    growth) — see `sources.yaml`'s `context:` header comment for why these
+    are hand-typed rather than discovered like the COICOP tree.
+    """
+    raw: dict[str, Any] = yaml.safe_load(path.read_text(encoding="utf-8"))
+    result: dict[str, SeriesSource] = {}
+    for entry in raw.get("context", {}).values():
+        cdid = entry["cdid"]
+        dataset = entry["dataset"]
+        source_url = (
+            f"https://www.ons.gov.uk/{entry['theme_path']}/timeseries/{cdid.lower()}/{dataset}"
+        )
+        unique_id = entry["unique_id"]
+        result[unique_id] = SeriesSource(
+            unique_id=unique_id,
+            name=entry["name"],
+            cdid=cdid,
+            dataset=dataset,
+            source_name=entry["source_name"],
+            source_url=source_url,
+            api_url=f"{source_url}/data",
+            license=entry["license"],
+            cadence=entry["cadence"],
+            unit=entry["unit"],
+        )
+    return result
+
+
 class SourceRegistry:
     """A fully-assembled set of series — some live-discovered from ONS
     (headline/divisions/weights/subdivisions/subdivision_weights, built by
@@ -83,6 +112,7 @@ class SourceRegistry:
         subdivisions: dict[str, SeriesSource],
         subdivision_weights: dict[str, SeriesSource],
         external: dict[str, ReferenceTableSource],
+        context: dict[str, SeriesSource] | None = None,
     ) -> None:
         self.headline = headline
         self.divisions = divisions
@@ -90,6 +120,7 @@ class SourceRegistry:
         self.subdivisions = subdivisions
         self.subdivision_weights = subdivision_weights
         self.external = external
+        self.context = context if context is not None else {}
 
     @property
     def all_series(self) -> dict[str, SeriesSource]:
@@ -100,6 +131,7 @@ class SourceRegistry:
             **self.weights,
             **self.subdivisions,
             **self.subdivision_weights,
+            **self.context,
         }
 
     def divisions_sorted(self) -> list[SeriesSource]:

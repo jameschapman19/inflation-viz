@@ -146,28 +146,90 @@ export function childWeightSeriesOf(parentCoicop: string): ChildSeries[] {
     .map(toChildSeries);
 }
 
+export type InflationBand = "near-target" | "elevated" | "high";
+
+/** Bands a 12-month rate against the Bank of England's 2% CPI inflation
+ * target — the same near/elevated/high framing used in MPC commentary.
+ * Applied to CPIH too since it moves on the same scale, even though the
+ * formal remit target is CPI specifically.
+ */
+export function bandForRate(value: number): InflationBand {
+  if (value <= 2.5) return "near-target";
+  if (value <= 5) return "elevated";
+  return "high";
+}
+
 export interface HeadlineStat {
   name: string;
   value: number;
   period: string;
   sourceUrl: string;
   nextRelease: string | null;
+  deltaFromPreviousMonth: number | null;
+  band: InflationBand;
 }
 
 export function headlineStats(): HeadlineStat[] {
   return registry.headline
     .map((source) => {
-      const latest = latestPointFor(source.unique_id);
+      const points = seriesFor(source.unique_id);
+      const latest = points[points.length - 1];
       if (!latest) return null;
+      const previous = points[points.length - 2];
       return {
         name: source.name,
         value: latest.y,
         period: latest.ds,
         sourceUrl: source.source_url,
         nextRelease: provenanceFor(source.unique_id)?.next_release_date ?? null,
+        deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
+        band: bandForRate(latest.y),
       };
     })
     .filter((s): s is HeadlineStat => s !== null);
+}
+
+/** "+0.3pt" / "-0.2pt" / "No change" — used next to a stat's headline value. */
+export function formatDelta(delta: number): string {
+  if (delta === 0) return "No change";
+  return `${delta > 0 ? "+" : ""}${delta.toFixed(1)}pt`;
+}
+
+export interface ContextStat {
+  value: number;
+  period: string;
+  sourceUrl: string;
+  deltaFromPreviousMonth: number | null;
+  /** null inside the dead zone around zero — real pay is genuinely
+   * treading water, not meaningfully rising or falling, so it gets no
+   * color signal rather than a forced red/green call. */
+  band: "rising" | "falling" | null;
+}
+
+const REAL_WAGE_GROWTH_UNIQUE_ID = "GB.WAGE.REAL";
+
+/** Real (CPI-deflated) regular pay growth — ONS's own calculation (Average
+ * Weekly Earnings, real terms), not derived here from nominal pay minus
+ * CPI. Returns undefined until this series has data in series.json — it's
+ * a recent addition to the registry, so it only starts appearing after
+ * the next scheduled ONS refresh.
+ */
+export function realWageGrowth(): ContextStat | undefined {
+  const source = registry.context.find((s) => s.unique_id === REAL_WAGE_GROWTH_UNIQUE_ID);
+  if (!source) return undefined;
+
+  const points = seriesFor(source.unique_id);
+  const latest = points[points.length - 1];
+  if (!latest) return undefined;
+  const previous = points[points.length - 2];
+
+  return {
+    value: latest.y,
+    period: latest.ds,
+    sourceUrl: source.source_url,
+    deltaFromPreviousMonth: previous ? latest.y - previous.y : null,
+    band: latest.y > 0.2 ? "rising" : latest.y < -0.2 ? "falling" : null,
+  };
 }
 
 export interface WeightRow {
