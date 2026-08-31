@@ -1,10 +1,13 @@
 import type { EChartsOption, SeriesOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, childColor, divisionColor, subdivisionColor } from "./colors";
 import type { ChildSeries } from "./data";
-import type { SeriesSource } from "./types";
+import type { ForecastPoint, SeriesPoint, SeriesSource } from "./types";
 import {
   childWeightSeriesOf,
   divisionByCoicop,
+  forecast,
+  forecastFor,
+  hasForecast,
   registry,
   seriesFor,
   subdivisionByCoicop,
@@ -69,6 +72,16 @@ function toTimeSeries(points: { ds: string; y: number }[]): [string, number][] {
   return points.map((p) => [p.ds, p.y]);
 }
 
+/** Prepends the last real point as a "bridge" so a dashed forecast series
+ * connects to the real one with no visual gap at the actual/forecast
+ * boundary — without it, ECharts draws the dashed line starting only at
+ * the first forecast date, leaving a blank stretch between the two.
+ */
+function toForecastTimeSeries(actual: SeriesPoint[], points: ForecastPoint[]): [string, number][] {
+  const bridge: [string, number][] = actual.length > 0 ? [[actual[actual.length - 1].ds, actual[actual.length - 1].y]] : [];
+  return [...bridge, ...points.map((p) => [p.ds, p.yhat] as [string, number])];
+}
+
 /**
  * Aligns every child's series onto the union of all dates that appear in
  * any of them, filling 0 wherever one child has no observation at a date
@@ -101,6 +114,22 @@ export function headlineChart(mode: ChartMode): EChartsOption {
     lineStyle: { width: 2, color: source.unique_id === "GB.CPI" ? HEADLINE_COLOR[mode] : "#898781" },
     itemStyle: { color: source.unique_id === "GB.CPI" ? HEADLINE_COLOR[mode] : "#898781" },
   }));
+
+  // Only GB.CPI gets a projection — the reconciliation hierarchy is built
+  // from CPI-consistent division contributions, with no basis for CPIH's
+  // owner-occupier housing cost treatment.
+  const projected = hasForecast() ? forecastFor(forecast.totalUniqueId) : [];
+  if (projected.length > 0) {
+    series.push({
+      type: "line",
+      name: "CPI (projected)",
+      data: toForecastTimeSeries(seriesFor("GB.CPI"), projected),
+      showSymbol: false,
+      lineStyle: { width: 2, color: HEADLINE_COLOR[mode], type: "dashed" },
+      itemStyle: { color: HEADLINE_COLOR[mode] },
+    });
+  }
+
   return { ...base, series };
 }
 
@@ -152,6 +181,37 @@ function stackedChildrenChart(
       emphasis: { focus: "series" },
     };
   });
+
+  // A separate stack id ("children-forecast", not "children") for the
+  // dashed continuation — putting it in the same stack as the real series
+  // would double-count the one date they share (the bridge point sits at
+  // the same x-date as the real series' own last point, and ECharts sums
+  // every series sharing a stack id at each x-value). With its own stack
+  // id, this stack's own total at the bridge date equals the real stack's
+  // total there anyway (every child's bridge value is just its own last
+  // real value), so the two visually align without ECharts ever summing
+  // across both groups. An uncovered child simply gets no forecast series.
+  // Named identically to its real counterpart (not "X (projected)") so
+  // the two share one legend entry — 12 divisions already fill the legend;
+  // doubling it with near-duplicate names would just be clutter.
+  if (hasForecast()) {
+    children.forEach((child, i) => {
+      if (!forecast.coverage.included.includes(child.uniqueId)) return;
+      const points = forecastFor(child.uniqueId);
+      if (points.length === 0) return;
+      const color = colors[i];
+      series.push({
+        type: "line",
+        name: child.name,
+        data: toForecastTimeSeries(seriesFor(child.uniqueId), points),
+        stack: "children-forecast",
+        showSymbol: false,
+        lineStyle: { width: 0.5, color, type: "dashed" },
+        itemStyle: { color },
+        emphasis: { focus: "series" },
+      });
+    });
+  }
 
   return {
     ...base,
@@ -383,18 +443,35 @@ function singleSeriesChart(
   mode: ChartMode,
   yAxisName: string,
   variant: "area" | "step",
+  forecastPoints: ForecastPoint[] = [],
 ): EChartsOption {
   const base = baseOption(mode);
   const name = source?.division_name ?? coicop;
-  const data = toTimeSeries(source ? seriesFor(source.unique_id) : []);
+  const actual = source ? seriesFor(source.unique_id) : [];
+  const data = toTimeSeries(actual);
   const line: SeriesOption =
     variant === "area"
       ? { type: "line", name, data, showSymbol: false, lineStyle: { width: 2, color }, itemStyle: { color }, areaStyle: { color, opacity: 0.85 } }
       : { type: "line", name, data, step: "end", showSymbol: true, symbolSize: 6, lineStyle: { width: 2, color }, itemStyle: { color } };
 
+  const series: SeriesOption[] = [line];
+  if (forecastPoints.length > 0) {
+    series.push({
+      type: "line",
+      name: "Projected",
+      data: toForecastTimeSeries(actual, forecastPoints),
+      showSymbol: false,
+      lineStyle: { width: 2, color, type: "dashed" },
+      itemStyle: { color },
+    });
+  }
+
   return {
     ...base,
-    legend: { show: false },
+    // Unconditionally hidden otherwise (a single series names itself in
+    // the chart's own heading) — shown only once a forecast series joins,
+    // so actual vs. projected is labeled.
+    legend: { ...base.legend, show: forecastPoints.length > 0 },
     yAxis: {
       ...base.yAxis,
       name: yAxisName,
@@ -402,12 +479,23 @@ function singleSeriesChart(
       nameLocation: "middle",
       axisLabel: { color: MUTED_TEXT[mode], formatter: variant === "area" ? "{value}%" : "{value}" },
     },
-    series: [line],
+    series,
   };
 }
 
 export function divisionContributionChart(coicop: string, mode: ChartMode): EChartsOption {
-  return singleSeriesChart(divisionByCoicop(coicop), coicop, divisionColor(coicop, mode), mode, "Contribution to headline CPI (ppt)", "area");
+  const source = divisionByCoicop(coicop);
+  const covered = hasForecast() && !!source && forecast.coverage.included.includes(source.unique_id);
+  const forecastPoints = covered && source ? forecastFor(source.unique_id) : [];
+  return singleSeriesChart(
+    source,
+    coicop,
+    divisionColor(coicop, mode),
+    mode,
+    "Contribution to headline CPI (ppt)",
+    "area",
+    forecastPoints,
+  );
 }
 
 export function divisionWeightChart(coicop: string, mode: ChartMode): EChartsOption {

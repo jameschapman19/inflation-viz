@@ -54,3 +54,26 @@ export interface Meta {
   generatedAt: string;
   latestVintage: string | null;
 }
+
+export interface ForecastPoint {
+  unique_id: string;
+  ds: string;
+  yhat: number;
+  lo: number | null;
+  hi: number | null;
+}
+
+export interface ForecastExport {
+  schemaVersion: number;
+  generatedAt: string | null;
+  dataVintage: string | null;
+  model: string | null;
+  reconciliation: string | null;
+  level: number | null;
+  coverage: {
+    included: string[];
+    missing: string[];
+  };
+  totalUniqueId: string;
+  points: ForecastPoint[];
+}

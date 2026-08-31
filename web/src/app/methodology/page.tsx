@@ -3,6 +3,8 @@ import Link from "next/link";
 import { divisionColor, subdivisionColor } from "@/lib/colors";
 import {
   divisionsSorted,
+  forecast,
+  hasForecast,
   meta,
   registry,
   subdivisionsSorted,
@@ -72,6 +74,11 @@ export default function MethodologyPage() {
   const subdivisionRows = [...subdivisionsSorted(), ...subdivisionWeightsSorted()].sort((a, b) =>
     (a.coicop ?? "").localeCompare(b.coicop ?? ""),
   );
+  const missingNames = hasForecast()
+    ? divisions
+        .filter((d) => d.coicop && forecast.coverage.missing.includes(d.unique_id))
+        .map((d) => d.division_name)
+    : [];
 
   return (
     <>
@@ -156,6 +163,25 @@ export default function MethodologyPage() {
           ]}
         />
       </section>
+
+      {hasForecast() && (
+        <section>
+          <h2>Short-term projection</h2>
+          <p>
+            The dashed continuation on the headline and contributors charts is this project&apos;s
+            own estimate, not an ONS figure — a {forecast.model} model fit independently to each
+            division&apos;s own contribution history, then reconciled bottom-up ({forecast.reconciliation}
+            ) so the projected divisions always sum to the projected headline total. It carries
+            an {forecast.level}% prediction interval per division; the reconciled total has no
+            interval of its own, since summing per-division intervals isn&apos;t a statistically valid
+            interval for their sum.
+          </p>
+          <p className="muted">
+            Currently projects {forecast.coverage.included.length} of 12 divisions.
+            {missingNames.length > 0 && <> Not yet covered: {missingNames.join(", ")}.</>}
+          </p>
+        </section>
+      )}
 
       <section>
         <h2>Data vintages</h2>

@@ -19,10 +19,12 @@ a Phase 2 (inflation-forecast) requirement.
 
 from __future__ import annotations
 
+import json
 import shutil
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
 import polars as pl
 
@@ -31,6 +33,7 @@ from inflation_viz.config import REPO_ROOT
 DATA_DIR = REPO_ROOT / "data"
 VINTAGES_DIR = DATA_DIR / "vintages"
 LATEST_DIR = DATA_DIR / "latest"
+FORECAST_DIR = DATA_DIR / "forecast"
 
 SERIES_SCHEMA = {"unique_id": pl.Utf8, "ds": pl.Date, "y": pl.Float64}
 PROVENANCE_SCHEMA = {
@@ -111,3 +114,16 @@ def list_vintages(data_dir: Path = DATA_DIR) -> list[str]:
     if not vintages_dir.exists():
         return []
     return sorted(p.name for p in vintages_dir.iterdir() if p.is_dir())
+
+
+def read_latest_forecast(data_dir: Path = DATA_DIR) -> dict[str, Any] | None:
+    """The bottom-up forecast export committed by inflation-forecast's
+    pipeline (`data/forecast/latest.json`), or `None` if no forecast run
+    has ever been published — a real state, not an error, since this repo
+    can build and ship fine before the first forecast lands.
+    """
+    forecast_path = data_dir / "forecast" / "latest.json"
+    if not forecast_path.exists():
+        return None
+    result: dict[str, Any] = json.loads(forecast_path.read_text(encoding="utf-8"))
+    return result

@@ -1,13 +1,18 @@
 import Link from "next/link";
 import { Chart } from "@/components/Chart";
 import { divisionColor } from "@/lib/colors";
-import { divisionsSorted, topLevelWeightChildren } from "@/lib/data";
+import { divisionsSorted, forecast, hasForecast, topLevelWeightChildren } from "@/lib/data";
 
 export const metadata = { title: "Contributors — Inflation Radar (UK)" };
 
 export default function ContributorsPage() {
   const divisions = divisionsSorted();
   const weightChildren = topLevelWeightChildren();
+  const missingNames = hasForecast()
+    ? divisions
+        .filter((d) => d.coicop && forecast.coverage.missing.includes(d.unique_id))
+        .map((d) => d.division_name)
+    : [];
 
   return (
     <>
@@ -17,6 +22,15 @@ export default function ContributorsPage() {
           Each division&apos;s percentage-point contribution to the headline 12-month CPI rate, as
           published by ONS — not reconstructed from index and weight, so it reflects ONS&apos;s own
           vintage weighting.
+          {hasForecast() && (
+            <>
+              {" "}Dashed bands past the last real month are this project&apos;s own short-term
+              projection, not ONS data — see <Link href="/methodology">Methodology</Link>.
+              {missingNames.length > 0 && (
+                <> Not yet projected: {missingNames.join(", ")}.</>
+              )}
+            </>
+          )}
         </p>
       </section>
 

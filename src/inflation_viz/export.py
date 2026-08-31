@@ -24,11 +24,28 @@ from inflation_viz.ons_catalog import discover_registry
 from inflation_viz.storage import (
     DATA_DIR,
     list_vintages,
+    read_latest_forecast,
     read_latest_provenance,
     read_latest_series,
 )
 
 DEFAULT_OUT_DIR = REPO_ROOT / "web" / "src" / "data"
+
+# A forecast run hasn't landed yet on a fresh checkout (or before
+# inflation-forecast's first publish) — this placeholder keeps the frontend
+# buildable in that state. Shape matches inflation-forecast's real export
+# (publish.py), just with nothing in it yet.
+EMPTY_FORECAST_EXPORT: dict[str, Any] = {
+    "schemaVersion": 1,
+    "generatedAt": None,
+    "dataVintage": None,
+    "model": None,
+    "reconciliation": None,
+    "level": None,
+    "coverage": {"included": [], "missing": []},
+    "totalUniqueId": "GB.CPI.FORECAST.BOTTOMUP",
+    "points": [],
+}
 
 
 def _json_default(value: object) -> str:
@@ -50,6 +67,18 @@ def _registry_payload(registry: SourceRegistry) -> dict[str, Any]:
         "subdivisionWeights": [asdict(s) for s in registry.subdivision_weights_sorted()],
         "external": [asdict(s) for s in registry.external.values()],
     }
+
+
+def export_forecast(*, data_dir: Path = DATA_DIR, out_dir: Path = DEFAULT_OUT_DIR) -> None:
+    """Writes `web/src/data/forecast.json` — a straight copy of
+    inflation-forecast's public export (`data/forecast/latest.json`), not
+    reshaped. `publish.py` on that side already builds exactly what the
+    frontend needs; keeping this a pass-through means any schema drift
+    between the two repos shows up here, not as a silent mismatch.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    forecast = read_latest_forecast(data_dir)
+    _write_json(out_dir / "forecast.json", forecast or EMPTY_FORECAST_EXPORT)
 
 
 def export_web_data(
@@ -75,6 +104,7 @@ def export_web_data(
             "latestVintage": vintages[-1] if vintages else None,
         },
     )
+    export_forecast(data_dir=data_dir, out_dir=out_dir)
 
 
 def main() -> None:

@@ -2,12 +2,40 @@ import provenanceData from "@/data/provenance.json";
 import registryData from "@/data/registry.json";
 import seriesData from "@/data/series.json";
 import metaData from "@/data/meta.json";
-import type { Meta, ProvenanceRecord, Registry, SeriesPoint, SeriesSource } from "./types";
+import forecastData from "@/data/forecast.json";
+import type {
+  ForecastExport,
+  ForecastPoint,
+  Meta,
+  ProvenanceRecord,
+  Registry,
+  SeriesPoint,
+  SeriesSource,
+} from "./types";
 
 export const registry = registryData as Registry;
 export const series = seriesData as SeriesPoint[];
 export const provenance = provenanceData as ProvenanceRecord[];
 export const meta = metaData as Meta;
+export const forecast = forecastData as ForecastExport;
+
+/** Whether a real forecast run has been published — false on a fresh
+ * checkout or before inflation-forecast's first publish, in which case
+ * `forecast` is the empty placeholder `export_forecast()` writes.
+ */
+export function hasForecast(): boolean {
+  return forecast.points.length > 0;
+}
+
+/** A single series' forecast points, sorted by date — either one of the 12
+ * divisions (only present when covered by that run, see
+ * `forecast.coverage`) or the reconciled total (`forecast.totalUniqueId`).
+ */
+export function forecastFor(uniqueId: string): ForecastPoint[] {
+  return forecast.points
+    .filter((row) => row.unique_id === uniqueId)
+    .sort((a, b) => a.ds.localeCompare(b.ds));
+}
 
 export function seriesFor(uniqueId: string): SeriesPoint[] {
   return series.filter((row) => row.unique_id === uniqueId).sort((a, b) => a.ds.localeCompare(b.ds));

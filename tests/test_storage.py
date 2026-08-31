@@ -1,3 +1,4 @@
+import json
 from datetime import UTC, datetime
 from pathlib import Path
 
@@ -6,6 +7,7 @@ import polars as pl
 from inflation_viz.storage import (
     ProvenanceRecord,
     list_vintages,
+    read_latest_forecast,
     read_latest_provenance,
     read_latest_series,
     write_vintage,
@@ -56,6 +58,19 @@ def test_write_vintage_never_overwrites_and_updates_latest(tmp_path: Path) -> No
     assert vintage_1.exists(), "old vintage must not be deleted or overwritten"
     assert read_latest_series(tmp_path).shape == (1, 3), "latest must point at the newest vintage"
     assert list_vintages(tmp_path) == sorted(list_vintages(tmp_path))
+
+
+def test_read_latest_forecast_returns_none_when_absent(tmp_path: Path) -> None:
+    assert read_latest_forecast(tmp_path) is None
+
+
+def test_read_latest_forecast_reads_the_committed_export(tmp_path: Path) -> None:
+    forecast_dir = tmp_path / "forecast"
+    forecast_dir.mkdir(parents=True)
+    payload = {"schemaVersion": 1, "points": [{"unique_id": "GB.CP01", "yhat": 0.3}]}
+    (forecast_dir / "latest.json").write_text(json.dumps(payload))
+
+    assert read_latest_forecast(tmp_path) == payload
 
 
 def test_provenance_round_trips(tmp_path: Path) -> None:

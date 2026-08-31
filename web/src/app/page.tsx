@@ -1,5 +1,5 @@
 import { Chart } from "@/components/Chart";
-import { headlineStats } from "@/lib/data";
+import { hasForecast, headlineStats } from "@/lib/data";
 
 export default function HomePage() {
   const stats = headlineStats();
@@ -27,6 +27,12 @@ export default function HomePage() {
 
       <section className="chart-section">
         <Chart chart="headline" />
+        {hasForecast() && (
+          <p className="muted">
+            Dashed line: this project&apos;s own short-term projection, not an ONS figure — see{" "}
+            <a href="/methodology">Methodology</a>.
+          </p>
+        )}
       </section>
     </>
   );
