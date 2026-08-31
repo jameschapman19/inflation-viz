@@ -63,6 +63,20 @@ boe:
     cadence: daily
     unit: percent
 
+  gilt_breakeven_10y:
+    unique_id: GB.BOE.BREAKEVEN10Y
+    name: "10-year breakeven inflation"
+    # "Yield from British Government Securities, 10 year Inflation Zero
+    # Coupon" — the Bank's own zero-coupon inflation (breakeven) curve,
+    # not the "implied forward" curve (a different, forward-rate concept)
+    # and not derived here from nominal minus real ourselves: the Bank
+    # already publishes this exact curve as its own series.
+    series_code: IUDMIZC
+    source_url: "https://www.bankofengland.co.uk/statistics/yield-curves"
+    license: "Bank of England (see the Database's own terms of use)"
+    cadence: daily
+    unit: percent
+
 external:
   ofgem_price_cap:
     name: "Ofgem energy price cap level and effective dates"

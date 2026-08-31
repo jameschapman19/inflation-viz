@@ -125,8 +125,11 @@ export default function MethodologyPage() {
           <p className="lede">
             A different provider entirely — the Bank&apos;s Interactive Database (IADB) rather
             than ONS&apos;s timeseries API, so it&apos;s fetched by its own small pipeline module
-            (<code>boe.py</code>). Currently just Bank Rate, the Bank&apos;s own lever for
-            bringing inflation back to target.
+            (<code>boe.py</code>). Bank Rate is the Bank&apos;s own lever for bringing inflation
+            back to target; 10-year breakeven inflation is the Bank&apos;s own zero-coupon
+            inflation curve — the gap between conventional and index-linked gilt yields, i.e. what
+            the bond market itself expects inflation to average over the next decade, not
+            something derived here.
           </p>
           <SourceTable
             rows={registry.boe}

@@ -2,6 +2,7 @@ import { Chart } from "@/components/Chart";
 import {
   bankRate,
   formatDelta,
+  giltBreakevenInflation,
   hasForecast,
   headlineStats,
   realWageGrowth,
@@ -13,6 +14,7 @@ export default function HomePage() {
   const stats = rpi ? [...headlineStats(), rpi] : headlineStats();
   const wageGrowth = realWageGrowth();
   const rate = bankRate();
+  const breakeven = giltBreakevenInflation();
 
   return (
     <>
@@ -74,29 +76,47 @@ export default function HomePage() {
         )}
       </section>
 
-      {rate && (
+      {(rate || breakeven) && (
         <section>
-          <h2>Bank Rate</h2>
+          <h2>Interest rates &amp; markets</h2>
           <p className="lede">
-            The Bank of England&apos;s own policy rate — its lever for bringing inflation back to
-            target. Shown without a colour band: unlike a 12-month rate, a policy rate has no
-            target of its own to be near or far from.
+            The Bank of England&apos;s own lever for bringing inflation back to target, and what
+            the bond market itself expects inflation to average over the next decade — a second,
+            independent forecast alongside this project&apos;s own.
           </p>
           <div className="stat-row">
-            <div className="stat-tile">
-              <div className="stat-label">Bank Rate</div>
-              <div className="stat-value-row">
-                <span className="stat-value">{rate.value.toFixed(2)}%</span>
-                {rate.deltaFromPreviousMonth ? (
-                  <span className="stat-delta">
-                    {formatDelta(rate.deltaFromPreviousMonth)} vs last month
-                  </span>
-                ) : null}
+            {rate && (
+              <div className="stat-tile">
+                <div className="stat-label">Bank Rate</div>
+                <div className="stat-value-row">
+                  <span className="stat-value">{rate.value.toFixed(2)}%</span>
+                  {rate.deltaFromPreviousMonth ? (
+                    <span className="stat-delta">
+                      {formatDelta(rate.deltaFromPreviousMonth)} vs last month
+                    </span>
+                  ) : null}
+                </div>
+                <div className="stat-meta">
+                  {rate.period} &middot; <a href={rate.sourceUrl}>source</a>
+                </div>
               </div>
-              <div className="stat-meta">
-                {rate.period} &middot; <a href={rate.sourceUrl}>source</a>
+            )}
+            {breakeven && (
+              <div className={`stat-tile band-${breakeven.band}`}>
+                <div className="stat-label">{breakeven.name}</div>
+                <div className="stat-value-row">
+                  <span className="stat-value">{breakeven.value.toFixed(2)}%</span>
+                  {breakeven.deltaFromPreviousMonth ? (
+                    <span className="stat-delta">
+                      {formatDelta(breakeven.deltaFromPreviousMonth)} vs last month
+                    </span>
+                  ) : null}
+                </div>
+                <div className="stat-meta">
+                  {breakeven.period} &middot; <a href={breakeven.sourceUrl}>source</a>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </section>
       )}

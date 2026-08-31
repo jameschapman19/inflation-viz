@@ -149,6 +149,15 @@ def test_boe_bank_rate_present_and_excluded_from_all_series(registry: SourceRegi
     assert "GB.BOE.RATE" not in registry.all_series
 
 
+def test_boe_includes_10y_gilt_breakeven_inflation() -> None:
+    boe = load_boe()
+    assert "GB.BOE.BREAKEVEN10Y" in boe
+    breakeven = boe["GB.BOE.BREAKEVEN10Y"]
+    assert breakeven.cdid == "IUDMIZC"
+    assert breakeven.dataset == "iadb"
+    assert breakeven.source_name == "Bank of England"
+
+
 def test_series_api_urls_use_the_live_ons_endpoint_not_the_retired_v0_api(
     registry: SourceRegistry,
 ) -> None:

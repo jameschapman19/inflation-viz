@@ -282,6 +282,20 @@ export function bankRate(): LevelStat | undefined {
   };
 }
 
+const BREAKEVEN_10Y_UNIQUE_ID = "GB.BOE.BREAKEVEN10Y";
+
+/** The market's own 10-year inflation forecast, implied by the gap
+ * between conventional and index-linked gilt yields — the Bank of
+ * England's own zero-coupon "inflation" curve (not derived here from
+ * nominal minus real ourselves). Banded the same way as CPI/CPIH/RPI
+ * since it's genuinely the same kind of number, just forward-looking and
+ * market-implied rather than realised.
+ */
+export function giltBreakevenInflation(): HeadlineStat | undefined {
+  const source = registry.boe.find((s) => s.unique_id === BREAKEVEN_10Y_UNIQUE_ID);
+  return source ? rateStatFor(source) : undefined;
+}
+
 export interface WeightRow {
   coicop: string;
   divisionName: string;
