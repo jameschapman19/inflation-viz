@@ -37,6 +37,16 @@ export function forecastFor(uniqueId: string): ForecastPoint[] {
     .sort((a, b) => a.ds.localeCompare(b.ds));
 }
 
+/** Whether the reconciled total's own conformal prediction bands are
+ * present — false before the first run that computed them (`compute_fan`
+ * defaults on, but earlier published runs predate the feature and a
+ * `compute_fan=False` run can still opt out), in which case the headline
+ * chart's fan silently has nothing to draw.
+ */
+export function hasHeadlineFan(): boolean {
+  return forecastFor(forecast.totalUniqueId).some((p) => !!p.bands && p.bands.length > 0);
+}
+
 export function seriesFor(uniqueId: string): SeriesPoint[] {
   return series.filter((row) => row.unique_id === uniqueId).sort((a, b) => a.ds.localeCompare(b.ds));
 }

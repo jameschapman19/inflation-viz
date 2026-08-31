@@ -55,12 +55,24 @@ export interface Meta {
   latestVintage: string | null;
 }
 
+export interface ForecastBand {
+  level: number;
+  lo: number;
+  hi: number;
+}
+
 export interface ForecastPoint {
   unique_id: string;
   ds: string;
   yhat: number;
   lo: number | null;
   hi: number | null;
+  /** A conformal prediction band per requested confidence level, for a
+   * fan-chart rendering — present only on the reconciled total's points
+   * (see inflation-forecast's conformal.py); `null` everywhere else,
+   * including on the total before the first run that computed one.
+   */
+  bands: ForecastBand[] | null;
 }
 
 export interface ForecastExport {

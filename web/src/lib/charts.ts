@@ -1,7 +1,7 @@
 import type { EChartsOption, SeriesOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT, childColor, divisionColor, subdivisionColor } from "./colors";
 import type { ChildSeries } from "./data";
-import type { ForecastPoint, SeriesPoint, SeriesSource } from "./types";
+import type { ForecastBand, ForecastPoint, SeriesPoint, SeriesSource } from "./types";
 import {
   childWeightSeriesOf,
   divisionByCoicop,
@@ -174,6 +174,56 @@ function toForecastBandSeries(actual: SeriesPoint[], points: ForecastPoint[], co
 }
 
 /**
+ * A "fan" of nested confidence bands — several `toForecastBandSeries`-style
+ * stacked [lower, delta] pairs, one per level in each point's `bands`
+ * array, each on its own independent stack id (so the levels don't sum
+ * into each other) with *decreasing* opacity as the level widens: the
+ * narrow, more-likely band reads as the most solid, the widest band the
+ * faintest — the standard fan-chart convention (e.g. the Bank of
+ * England's own Monetary Policy Report fan charts). Points without a
+ * `bands` array are skipped; returns `[]` entirely if none carry one
+ * (e.g. a run with `compute_fan=False`, or before the first run that
+ * computed conformal bands at all).
+ */
+function toForecastFanSeries(actual: SeriesPoint[], points: ForecastPoint[], color: string): SeriesOption[] {
+  const withBands = points.filter((p): p is ForecastPoint & { bands: ForecastBand[] } => !!p.bands && p.bands.length > 0);
+  if (withBands.length === 0) return [];
+
+  const levels = Array.from(new Set(withBands.flatMap((p) => p.bands.map((b) => b.level)))).sort((a, b) => a - b);
+  const bridge = actual.length > 0 ? actual[actual.length - 1] : undefined;
+  const maxOpacity = 0.3;
+  const minOpacity = 0.1;
+
+  const series: SeriesOption[] = [];
+  levels.forEach((level, i) => {
+    const lowerData: [string, number][] = bridge ? [[bridge.ds, bridge.y]] : [];
+    const deltaData: [string, number][] = bridge ? [[bridge.ds, 0]] : [];
+    for (const p of withBands) {
+      const band = p.bands.find((b) => b.level === level);
+      if (!band) continue;
+      lowerData.push([p.ds, band.lo]);
+      deltaData.push([p.ds, band.hi - band.lo]);
+    }
+
+    const opacity = levels.length > 1 ? maxOpacity - i * ((maxOpacity - minOpacity) / (levels.length - 1)) : maxOpacity;
+    const shared = { type: "line" as const, stack: `fan-${level}`, showSymbol: false, silent: true, tooltip: { show: false } };
+    series.push(
+      { ...shared, id: `__fan-lower-${level}`, name: `__fan-lower-${level}`, data: lowerData, lineStyle: { opacity: 0 }, areaStyle: { opacity: 0 } },
+      {
+        ...shared,
+        id: `__fan-band-${level}`,
+        name: `${level}% interval`,
+        data: deltaData,
+        lineStyle: { opacity: 0 },
+        areaStyle: { color, opacity },
+        itemStyle: { color, opacity },
+      },
+    );
+  });
+  return series;
+}
+
+/**
  * Aligns every child's series onto the union of all dates that appear in
  * any of them, filling 0 wherever one child has no observation at a date
  * another does. Sub-categories are introduced/retired at different times
@@ -223,10 +273,13 @@ export function headlineChart(mode: ChartMode): EChartsOption {
       lineStyle: { width: 2, color: HEADLINE_COLOR[mode], type: "dashed", opacity: FORECAST_OPACITY },
       itemStyle: { color: HEADLINE_COLOR[mode], opacity: FORECAST_OPACITY },
     });
-    // No-ops today — the reconciled total never carries an interval (see
-    // toForecastBandSeries) — but written generically so a future total
-    // with a real interval picks up a band automatically.
-    series.push(...toForecastBandSeries(actualCpi, projected, HEADLINE_COLOR[mode]));
+    // A fan, not a single band — the reconciled total's own conformal
+    // prediction bands (inflation-forecast's conformal.py), not combined
+    // from the divisions' (still not statistically valid, same as ever —
+    // this sidesteps that instead of working around it). No-ops if the
+    // points don't carry a `bands` array at all (e.g. before the first
+    // run that computed one, or a `compute_fan=False` run).
+    series.push(...toForecastFanSeries(actualCpi, projected, HEADLINE_COLOR[mode]));
   }
 
   return {
