@@ -3,7 +3,6 @@
     "included": [
       "GB.CP01",
       "GB.CP02",
-      "GB.CP03",
       "GB.CP04",
       "GB.CP06",
       "GB.CP07",
@@ -14,11 +13,12 @@
       "GB.CP12"
     ],
     "missing": [
+      "GB.CP03",
       "GB.CP05"
     ]
   },
   "dataVintage": "2026-08-31T072553Z",
-  "generatedAt": "2026-08-31T11:41:22.053507+00:00",
+  "generatedAt": "2026-08-31T12:23:02.267420+00:00",
   "level": 80,
   "model": "AutoARIMA",
   "points": [
@@ -65,6 +65,48 @@
       "yhat": 0.11
     },
     {
+      "ds": "2027-02-01",
+      "hi": 0.49,
+      "lo": -0.2,
+      "unique_id": "GB.CP01",
+      "yhat": 0.15
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.51,
+      "lo": -0.26,
+      "unique_id": "GB.CP01",
+      "yhat": 0.13
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.6,
+      "lo": -0.26,
+      "unique_id": "GB.CP01",
+      "yhat": 0.17
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.68,
+      "lo": -0.27,
+      "unique_id": "GB.CP01",
+      "yhat": 0.21
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.75,
+      "lo": -0.28,
+      "unique_id": "GB.CP01",
+      "yhat": 0.24
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.81,
+      "lo": -0.3,
+      "unique_id": "GB.CP01",
+      "yhat": 0.25
+    },
+    {
       "ds": "2026-08-01",
       "hi": 0.14,
       "lo": 0.06,
@@ -107,46 +149,46 @@
       "yhat": 0.12
     },
     {
-      "ds": "2026-08-01",
-      "hi": 0.13,
-      "lo": -0.04,
-      "unique_id": "GB.CP03",
-      "yhat": 0.04
+      "ds": "2027-02-01",
+      "hi": 0.22,
+      "lo": 0.03,
+      "unique_id": "GB.CP02",
+      "yhat": 0.13
     },
     {
-      "ds": "2026-09-01",
-      "hi": 0.17,
-      "lo": -0.06,
-      "unique_id": "GB.CP03",
-      "yhat": 0.06
+      "ds": "2027-03-01",
+      "hi": 0.25,
+      "lo": 0.05,
+      "unique_id": "GB.CP02",
+      "yhat": 0.15
     },
     {
-      "ds": "2026-10-01",
-      "hi": 0.21,
-      "lo": -0.07,
-      "unique_id": "GB.CP03",
-      "yhat": 0.07
-    },
-    {
-      "ds": "2026-11-01",
+      "ds": "2027-04-01",
       "hi": 0.26,
-      "lo": -0.08,
-      "unique_id": "GB.CP03",
-      "yhat": 0.09
+      "lo": 0.05,
+      "unique_id": "GB.CP02",
+      "yhat": 0.15
     },
     {
-      "ds": "2026-12-01",
-      "hi": 0.26,
-      "lo": -0.11,
-      "unique_id": "GB.CP03",
-      "yhat": 0.07
+      "ds": "2027-05-01",
+      "hi": 0.29,
+      "lo": 0.06,
+      "unique_id": "GB.CP02",
+      "yhat": 0.17
     },
     {
-      "ds": "2027-01-01",
-      "hi": 0.27,
-      "lo": -0.14,
-      "unique_id": "GB.CP03",
-      "yhat": 0.06
+      "ds": "2027-06-01",
+      "hi": 0.29,
+      "lo": 0.05,
+      "unique_id": "GB.CP02",
+      "yhat": 0.17
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.3,
+      "lo": 0.05,
+      "unique_id": "GB.CP02",
+      "yhat": 0.17
     },
     {
       "ds": "2026-08-01",
@@ -191,6 +233,48 @@
       "yhat": 0.71
     },
     {
+      "ds": "2027-02-01",
+      "hi": 1.41,
+      "lo": 0.09,
+      "unique_id": "GB.CP04",
+      "yhat": 0.75
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 1.42,
+      "lo": 0.0,
+      "unique_id": "GB.CP04",
+      "yhat": 0.71
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 1.43,
+      "lo": -0.08,
+      "unique_id": "GB.CP04",
+      "yhat": 0.67
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 1.49,
+      "lo": -0.09,
+      "unique_id": "GB.CP04",
+      "yhat": 0.7
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 1.55,
+      "lo": -0.1,
+      "unique_id": "GB.CP04",
+      "yhat": 0.72
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 1.34,
+      "lo": -0.37,
+      "unique_id": "GB.CP04",
+      "yhat": 0.49
+    },
+    {
       "ds": "2026-08-01",
       "hi": 0.11,
       "lo": 0.08,
@@ -229,6 +313,48 @@
       "ds": "2027-01-01",
       "hi": 0.13,
       "lo": 0.07,
+      "unique_id": "GB.CP06",
+      "yhat": 0.1
+    },
+    {
+      "ds": "2027-02-01",
+      "hi": 0.13,
+      "lo": 0.07,
+      "unique_id": "GB.CP06",
+      "yhat": 0.1
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.13,
+      "lo": 0.06,
+      "unique_id": "GB.CP06",
+      "yhat": 0.1
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.15,
+      "lo": 0.08,
+      "unique_id": "GB.CP06",
+      "yhat": 0.11
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.15,
+      "lo": 0.07,
+      "unique_id": "GB.CP06",
+      "yhat": 0.11
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.15,
+      "lo": 0.07,
+      "unique_id": "GB.CP06",
+      "yhat": 0.11
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.14,
+      "lo": 0.06,
       "unique_id": "GB.CP06",
       "yhat": 0.1
     },
@@ -275,6 +401,48 @@
       "yhat": 0.79
     },
     {
+      "ds": "2027-02-01",
+      "hi": 1.28,
+      "lo": 0.33,
+      "unique_id": "GB.CP07",
+      "yhat": 0.8
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 1.11,
+      "lo": 0.1,
+      "unique_id": "GB.CP07",
+      "yhat": 0.6
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.85,
+      "lo": -0.21,
+      "unique_id": "GB.CP07",
+      "yhat": 0.32
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.87,
+      "lo": -0.23,
+      "unique_id": "GB.CP07",
+      "yhat": 0.32
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.99,
+      "lo": -0.16,
+      "unique_id": "GB.CP07",
+      "yhat": 0.42
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 1.09,
+      "lo": -0.09,
+      "unique_id": "GB.CP07",
+      "yhat": 0.5
+    },
+    {
       "ds": "2026-08-01",
       "hi": 0.15,
       "lo": 0.1,
@@ -315,6 +483,48 @@
       "lo": 0.06,
       "unique_id": "GB.CP08",
       "yhat": 0.13
+    },
+    {
+      "ds": "2027-02-01",
+      "hi": 0.2,
+      "lo": 0.06,
+      "unique_id": "GB.CP08",
+      "yhat": 0.13
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.2,
+      "lo": 0.06,
+      "unique_id": "GB.CP08",
+      "yhat": 0.13
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.2,
+      "lo": 0.05,
+      "unique_id": "GB.CP08",
+      "yhat": 0.12
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.2,
+      "lo": 0.04,
+      "unique_id": "GB.CP08",
+      "yhat": 0.12
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.2,
+      "lo": 0.04,
+      "unique_id": "GB.CP08",
+      "yhat": 0.12
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.21,
+      "lo": 0.03,
+      "unique_id": "GB.CP08",
+      "yhat": 0.12
     },
     {
       "ds": "2026-08-01",
@@ -359,6 +569,48 @@
       "yhat": 0.41
     },
     {
+      "ds": "2027-02-01",
+      "hi": 0.66,
+      "lo": 0.32,
+      "unique_id": "GB.CP09",
+      "yhat": 0.49
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.72,
+      "lo": 0.35,
+      "unique_id": "GB.CP09",
+      "yhat": 0.53
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.78,
+      "lo": 0.39,
+      "unique_id": "GB.CP09",
+      "yhat": 0.58
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.83,
+      "lo": 0.42,
+      "unique_id": "GB.CP09",
+      "yhat": 0.62
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.82,
+      "lo": 0.39,
+      "unique_id": "GB.CP09",
+      "yhat": 0.6
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.88,
+      "lo": 0.43,
+      "unique_id": "GB.CP09",
+      "yhat": 0.66
+    },
+    {
       "ds": "2026-08-01",
       "hi": 0.19,
       "lo": 0.13,
@@ -399,6 +651,48 @@
       "lo": 0.09,
       "unique_id": "GB.CP10",
       "yhat": 0.16
+    },
+    {
+      "ds": "2027-02-01",
+      "hi": 0.24,
+      "lo": 0.09,
+      "unique_id": "GB.CP10",
+      "yhat": 0.16
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.24,
+      "lo": 0.08,
+      "unique_id": "GB.CP10",
+      "yhat": 0.16
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.24,
+      "lo": 0.08,
+      "unique_id": "GB.CP10",
+      "yhat": 0.16
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.24,
+      "lo": 0.07,
+      "unique_id": "GB.CP10",
+      "yhat": 0.16
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.24,
+      "lo": 0.07,
+      "unique_id": "GB.CP10",
+      "yhat": 0.16
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.24,
+      "lo": 0.06,
+      "unique_id": "GB.CP10",
+      "yhat": 0.15
     },
     {
       "ds": "2026-08-01",
@@ -443,6 +737,48 @@
       "yhat": 0.67
     },
     {
+      "ds": "2027-02-01",
+      "hi": 0.84,
+      "lo": 0.45,
+      "unique_id": "GB.CP11",
+      "yhat": 0.64
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.87,
+      "lo": 0.43,
+      "unique_id": "GB.CP11",
+      "yhat": 0.65
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.86,
+      "lo": 0.39,
+      "unique_id": "GB.CP11",
+      "yhat": 0.62
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.9,
+      "lo": 0.39,
+      "unique_id": "GB.CP11",
+      "yhat": 0.64
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.87,
+      "lo": 0.32,
+      "unique_id": "GB.CP11",
+      "yhat": 0.59
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.92,
+      "lo": 0.33,
+      "unique_id": "GB.CP11",
+      "yhat": 0.62
+    },
+    {
       "ds": "2026-08-01",
       "hi": 0.29,
       "lo": 0.21,
@@ -485,46 +821,130 @@
       "yhat": 0.27
     },
     {
+      "ds": "2027-02-01",
+      "hi": 0.37,
+      "lo": 0.13,
+      "unique_id": "GB.CP12",
+      "yhat": 0.25
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": 0.39,
+      "lo": 0.12,
+      "unique_id": "GB.CP12",
+      "yhat": 0.25
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": 0.4,
+      "lo": 0.11,
+      "unique_id": "GB.CP12",
+      "yhat": 0.25
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": 0.42,
+      "lo": 0.11,
+      "unique_id": "GB.CP12",
+      "yhat": 0.26
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": 0.42,
+      "lo": 0.09,
+      "unique_id": "GB.CP12",
+      "yhat": 0.26
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": 0.44,
+      "lo": 0.08,
+      "unique_id": "GB.CP12",
+      "yhat": 0.26
+    },
+    {
       "ds": "2026-08-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 2.84
+      "yhat": 2.8
     },
     {
       "ds": "2026-09-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.13
+      "yhat": 3.07
     },
     {
       "ds": "2026-10-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.12
+      "yhat": 3.05
     },
     {
       "ds": "2026-11-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.35
+      "yhat": 3.26
     },
     {
       "ds": "2026-12-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.33
+      "yhat": 3.26
     },
     {
       "ds": "2027-01-01",
       "hi": null,
       "lo": null,
       "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.53
+      "yhat": 3.47
+    },
+    {
+      "ds": "2027-02-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.6
+    },
+    {
+      "ds": "2027-03-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.41
+    },
+    {
+      "ds": "2027-04-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.15
+    },
+    {
+      "ds": "2027-05-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.31
+    },
+    {
+      "ds": "2027-06-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.39
+    },
+    {
+      "ds": "2027-07-01",
+      "hi": null,
+      "lo": null,
+      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
+      "yhat": 3.32
     }
   ],
   "reconciliation": "BottomUp",
