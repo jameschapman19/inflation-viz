@@ -48,6 +48,21 @@
       "parent_coicop": null
     },
     {
+      "unique_id": "GB.CP02",
+      "name": "Alcoholic drinks, tobacco and narcotics",
+      "cdid": "WUMB",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumb/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percentage_points",
+      "division_name": "Alcoholic drinks, tobacco and narcotics",
+      "coicop": "02",
+      "parent_coicop": null
+    },
+    {
       "unique_id": "GB.CP03",
       "name": "Clothing and footwear",
       "cdid": "WUMC",
@@ -60,6 +75,36 @@
       "unit": "percentage_points",
       "division_name": "Clothing and footwear",
       "coicop": "03",
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "name": "Housing, water and fuels",
+      "cdid": "WUMD",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wumd/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percentage_points",
+      "division_name": "Housing, water and fuels",
+      "coicop": "04",
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "name": "Furn, hh equipment and repair of the house",
+      "cdid": "WUMP",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wump/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percentage_points",
+      "division_name": "Furn, hh equipment and repair of the house",
+      "coicop": "05",
       "parent_coicop": null
     },
     {
@@ -135,6 +180,36 @@
       "unit": "percentage_points",
       "division_name": "Education",
       "coicop": "10",
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "name": "Hotels, cafes and restaurants",
+      "cdid": "WUNE",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wune/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percentage_points",
+      "division_name": "Hotels, cafes and restaurants",
+      "coicop": "11",
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "name": "Miscellaneous goods and services",
+      "cdid": "WUNG",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/wung/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percentage_points",
+      "division_name": "Miscellaneous goods and services",
+      "coicop": "12",
       "parent_coicop": null
     }
   ],
