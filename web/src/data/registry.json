@@ -9404,6 +9404,68 @@
       "notes": "Not ingested in v1. Reserved for inflation-forecast's transport exogenous regressor."
     }
   ],
-  "context": [],
-  "boe": []
+  "context": [
+    {
+      "unique_id": "GB.WAGE.REAL",
+      "name": "AWE: Whole Economy Real Terms Year-on-Year 3-Month Average Growth: Regular Pay (SA)",
+      "cdid": "A2FA",
+      "dataset": "lms",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a2fa/lms",
+      "api_url": "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/earningsandworkinghours/timeseries/a2fa/lms/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": null,
+      "coicop": null,
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.RPI",
+      "name": "RPI: All items 12-month rate",
+      "cdid": "CZBH",
+      "dataset": "mm23",
+      "source_name": "Office for National Statistics",
+      "source_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23",
+      "api_url": "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23/data",
+      "license": "Open Government Licence v3.0",
+      "cadence": "monthly",
+      "unit": "percent",
+      "division_name": null,
+      "coicop": null,
+      "parent_coicop": null
+    }
+  ],
+  "boe": [
+    {
+      "unique_id": "GB.BOE.RATE",
+      "name": "Bank Rate",
+      "cdid": "IUDBEDR",
+      "dataset": "iadb",
+      "source_name": "Bank of England",
+      "source_url": "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
+      "api_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp",
+      "license": "Bank of England (see the Database's own terms of use)",
+      "cadence": "daily",
+      "unit": "percent",
+      "division_name": null,
+      "coicop": null,
+      "parent_coicop": null
+    },
+    {
+      "unique_id": "GB.BOE.BREAKEVEN10Y",
+      "name": "10-year breakeven inflation",
+      "cdid": "IUDMIZC",
+      "dataset": "iadb",
+      "source_name": "Bank of England",
+      "source_url": "https://www.bankofengland.co.uk/statistics/yield-curves",
+      "api_url": "https://www.bankofengland.co.uk/boeapps/database/_iadb-fromshowcolumns.asp",
+      "license": "Bank of England (see the Database's own terms of use)",
+      "cadence": "daily",
+      "unit": "percent",
+      "division_name": null,
+      "coicop": null,
+      "parent_coicop": null
+    }
+  ]
 }
