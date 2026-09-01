@@ -60,12 +60,13 @@ def test_fetch_boe_series_returns_data_and_provenance(sample_source: SeriesSourc
     assert provenance.source_url == sample_source.source_url
     assert provenance.fetched_at == datetime(2024, 4, 20, tzinfo=UTC)
 
-    # The date range is built at fetch time (see boe.py's module docstring
-    # for why, unlike every ONS SeriesSource, api_url alone isn't enough).
+    # api_url alone isn't the full request (unlike every ONS SeriesSource)
+    # — Dateto is a fixed "now" per the IADB's own documented keyword,
+    # not built from fetched_at (see boe.py's module docstring for why).
     request_url = responses.calls[0].request.url
     assert request_url is not None
     assert "SeriesCodes=IUDBEDR" in request_url
-    assert "Dateto=20%2FApr%2F2024" in request_url
+    assert "Dateto=now" in request_url
 
 
 @responses.activate

@@ -20,10 +20,21 @@ it changed, same "don't reshape what the source gives you" approach as
 every ONS series here).
 
 Unlike ONS's timeseries API, which always returns full history regardless
-of when you ask, the IADB requires an explicit end date on every request —
-so, unlike `SeriesSource.api_url` elsewhere in this pipeline, the date
-range here is built fresh at fetch time rather than baked into a static
-URL (see `config.py`'s `load_boe` docstring).
+of when you ask, the IADB requires an explicit end date on every request
+(`Dateto`) — the Bank's own IADB help page (boeapps/database/help.asp)
+documents the literal keyword "now" as valid here, alongside a real
+DD/MON/YYYY date, so that's used rather than formatting today's date
+ourselves.
+
+That same help page confirms every other parameter here (`SeriesCodes`,
+`Datefrom`, `CSVF`, `UsingCodes`) against the Bank's own spec, and
+documents no authentication, required headers, or bot-access policy at
+all — this is a plain, self-service download tool. Which makes the 403
+this returned on 2026-09-01 (see fetch.py's `fetch_all` docstring) most
+likely an infrastructure-level bot-protection layer in front of the
+site, not the IADB itself rejecting the request — hence the descriptive
+User-Agent below as a best-effort fix, unverified since
+bankofengland.co.uk is unreachable from the sandbox this was written in.
 """
 
 from __future__ import annotations
@@ -83,7 +94,7 @@ def fetch_boe_series(
     params = {
         "csv.x": "yes",
         "Datefrom": _DATE_FROM,
-        "Dateto": fetched_at.strftime("%d/%b/%Y"),
+        "Dateto": "now",
         "SeriesCodes": source.cdid,
         "CSVF": "TN",
         "UsingCodes": "Y",
