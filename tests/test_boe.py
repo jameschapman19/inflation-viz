@@ -20,7 +20,7 @@ def sample_source() -> SeriesSource:
         source_name="Bank of England",
         source_url="https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp",
         api_url=BOE_IADB_QUERY_URL,
-        license="Bank of England (see the Database's own terms of use)",
+        license="Open Government Licence v3.0",
         cadence="daily",
         unit="percent",
     )

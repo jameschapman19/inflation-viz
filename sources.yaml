@@ -45,21 +45,28 @@ context:
     cadence: monthly
     unit: percent
 
-# `boe:` — Bank of England series (currently just Bank Rate). A different
-# provider with a different API shape entirely: the Bank's Interactive
-# Database (IADB) returns CSV by series code, not ONS's JSON timeseries
-# API, so these are fetched by src/inflation_viz/boe.py's own small
-# fetcher rather than fetch.py's ONS-only one — see that module's
-# docstring. Same "hand-typed, single stable series" exception as
-# `context`, just from a second provider; kept out of every ONS-shaped
-# registry bucket (see config.py's SourceRegistry).
+# `boe:` — Bank of England series (currently Bank Rate and 10-year
+# breakeven inflation). A different provider with a different API shape
+# entirely: the Bank's Interactive Database (IADB) returns CSV by series
+# code, not ONS's JSON timeseries API, so these are fetched by
+# src/inflation_viz/boe.py's own small fetcher rather than fetch.py's
+# ONS-only one — see that module's docstring. Same "hand-typed, single
+# stable series" exception as `context`, just from a second provider;
+# kept out of every ONS-shaped registry bucket (see config.py's
+# SourceRegistry).
+#
+# License: confirmed against bankofengland.co.uk/legal ("Bank of England
+# Database" section) — Database data is released under the same UK Open
+# Government Licence as every ONS series here ("allowing and encouraging
+# free and flexible data reuse"), except exchange rates, SONIA, and Isle
+# of Man/Guernsey/Jersey MFI data, none of which this pipeline uses.
 boe:
   bank_rate:
     unique_id: GB.BOE.RATE
     name: "Bank Rate"
     series_code: IUDBEDR
     source_url: "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp"
-    license: "Bank of England (see the Database's own terms of use)"
+    license: *ons_ogl
     cadence: daily
     unit: percent
 
@@ -73,7 +80,7 @@ boe:
     # already publishes this exact curve as its own series.
     series_code: IUDMIZC
     source_url: "https://www.bankofengland.co.uk/statistics/yield-curves"
-    license: "Bank of England (see the Database's own terms of use)"
+    license: *ons_ogl
     cadence: daily
     unit: percent
 
