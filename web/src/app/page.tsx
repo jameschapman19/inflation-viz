@@ -55,8 +55,7 @@ export default function HomePage() {
                 )}
               </div>
               <div className="stat-meta">
-                Real regular pay growth, {wageGrowth.period} &middot;{" "}
-                <a href={wageGrowth.sourceUrl}>source</a>
+                {wageGrowth.period} &middot; <a href={wageGrowth.sourceUrl}>source</a>
               </div>
             </div>
           )}
