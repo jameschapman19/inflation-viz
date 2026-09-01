@@ -1,4 +1,10 @@
-from inflation_viz.config import SourceRegistry, load_external
+from inflation_viz.config import (
+    BOE_IADB_QUERY_URL,
+    SourceRegistry,
+    load_boe,
+    load_context,
+    load_external,
+)
 
 
 def test_registry_has_twelve_divisions(registry: SourceRegistry) -> None:
@@ -94,6 +100,62 @@ def test_external_placeholders_present() -> None:
     external = load_external()
     assert "ofgem_price_cap" in external
     assert "fuel_prices" in external
+
+
+def test_context_series_present_and_wired_like_any_other_ons_series() -> None:
+    context = load_context()
+    assert "GB.WAGE.REAL" in context
+    wage = context["GB.WAGE.REAL"]
+    assert wage.cdid == "A2FA"
+    assert wage.dataset == "lms"
+    assert wage.source_url == (
+        "https://www.ons.gov.uk/employmentandlabourmarket/peopleinwork/"
+        "earningsandworkinghours/timeseries/a2fa/lms"
+    )
+    assert wage.api_url == f"{wage.source_url}/data"
+
+
+def test_registry_includes_context_series_in_all_series(registry: SourceRegistry) -> None:
+    assert "GB.WAGE.REAL" in registry.context
+    assert "GB.WAGE.REAL" in registry.all_series
+
+
+def test_context_includes_rpi_headline_rate() -> None:
+    context = load_context()
+    assert "GB.RPI" in context
+    rpi = context["GB.RPI"]
+    assert rpi.cdid == "CZBH"
+    assert rpi.dataset == "mm23"
+    assert (
+        rpi.source_url
+        == "https://www.ons.gov.uk/economy/inflationandpriceindices/timeseries/czbh/mm23"
+    )
+    assert rpi.api_url == f"{rpi.source_url}/data"
+
+
+def test_boe_bank_rate_present_and_excluded_from_all_series(registry: SourceRegistry) -> None:
+    boe = load_boe()
+    assert "GB.BOE.RATE" in boe
+    bank_rate = boe["GB.BOE.RATE"]
+    assert bank_rate.cdid == "IUDBEDR"
+    assert bank_rate.dataset == "iadb"
+    assert bank_rate.source_name == "Bank of England"
+    assert bank_rate.api_url == BOE_IADB_QUERY_URL
+
+    # boe is a different provider with a different API shape — it must
+    # never leak into all_series, which every ONS-only fetch/test assumes
+    # is safe to treat uniformly (see SourceRegistry.all_series's docstring).
+    assert "GB.BOE.RATE" in registry.boe
+    assert "GB.BOE.RATE" not in registry.all_series
+
+
+def test_boe_includes_10y_gilt_breakeven_inflation() -> None:
+    boe = load_boe()
+    assert "GB.BOE.BREAKEVEN10Y" in boe
+    breakeven = boe["GB.BOE.BREAKEVEN10Y"]
+    assert breakeven.cdid == "IUDMIZC"
+    assert breakeven.dataset == "iadb"
+    assert breakeven.source_name == "Bank of England"
 
 
 def test_series_api_urls_use_the_live_ons_endpoint_not_the_retired_v0_api(

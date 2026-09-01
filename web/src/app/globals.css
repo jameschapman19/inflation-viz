@@ -13,6 +13,11 @@
   --header-bg: rgba(26, 26, 25, 0.72);
   --nav-track-bg: rgba(0, 0, 0, 0.25);
   --nav-hover-bg: rgba(255, 255, 255, 0.06);
+  /* Stat-tile bands (reusing the validated division palette's teal/amber/red
+     hues rather than introducing new, unvalidated colors). */
+  --band-near: #199e70;
+  --band-elevated: #c98500;
+  --band-high: #e66767;
 }
 
 * {
@@ -209,12 +214,25 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+.stat-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 6px 0 4px;
+}
 .stat-value {
   font-size: 2.4rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  margin: 6px 0 4px;
+  margin: 0;
   font-variant-numeric: tabular-nums;
+}
+.stat-delta {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
 }
 .stat-meta {
   color: var(--muted);
@@ -222,6 +240,33 @@ main {
 }
 .stat-meta a {
   color: var(--text-secondary);
+}
+
+/* A banded tile (see lib/data.ts's InflationBand) tints its label dot and
+   value by --tile-accent — the same "colored dot next to a label" idiom
+   as .pill, above, just per-tile instead of fixed to --accent. */
+.stat-tile.band-near-target,
+.stat-tile.band-rising {
+  --tile-accent: var(--band-near);
+}
+.stat-tile.band-elevated {
+  --tile-accent: var(--band-elevated);
+}
+.stat-tile.band-high,
+.stat-tile.band-falling {
+  --tile-accent: var(--band-high);
+}
+.stat-tile[class*="band-"] .stat-label::before {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin-right: 6px;
+  background: var(--tile-accent);
+}
+.stat-tile[class*="band-"] .stat-value {
+  color: var(--tile-accent);
 }
 
 .chart-section {
@@ -371,5 +416,8 @@ h2 {
     --shadow:
       0 1px 2px rgba(11, 11, 11, 0.06),
       0 8px 24px rgba(11, 11, 11, 0.06);
+    --band-near: #1baf7a;
+    --band-elevated: #eda100;
+    --band-high: #e34948;
   }
 }

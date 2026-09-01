@@ -84,6 +84,10 @@ def test_exported_registry_json_lists_every_group(
     assert exported_cdids == {s.cdid for s in registry.divisions.values()}
     exported_sub_coicops = {d["coicop"] for d in payload["subdivisions"]}
     assert exported_sub_coicops == {s.coicop for s in registry.subdivisions.values()}
+    assert len(payload["context"]) == len(registry.context)
+    assert {s["unique_id"] for s in payload["context"]} == set(registry.context)
+    assert len(payload["boe"]) == len(registry.boe)
+    assert {s["unique_id"] for s in payload["boe"]} == set(registry.boe)
 
 
 def test_exported_meta_json_has_generated_at_and_vintage(

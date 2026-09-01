@@ -38,7 +38,14 @@ from dataclasses import dataclass
 
 import requests
 
-from inflation_viz.config import ReferenceTableSource, SeriesSource, SourceRegistry, load_external
+from inflation_viz.config import (
+    ReferenceTableSource,
+    SeriesSource,
+    SourceRegistry,
+    load_boe,
+    load_context,
+    load_external,
+)
 from inflation_viz.http import new_session
 
 DATASET_PAGE = (
@@ -245,11 +252,17 @@ def _series_source(
     )
 
 
-def build_registry(catalog: Catalog, external: dict[str, ReferenceTableSource]) -> SourceRegistry:
+def build_registry(
+    catalog: Catalog,
+    external: dict[str, ReferenceTableSource],
+    context: dict[str, SeriesSource] | None = None,
+    boe: dict[str, SeriesSource] | None = None,
+) -> SourceRegistry:
     """Classifies a discovered catalog into the registry's five ONS-series
     sections, purely by COICOP code depth — "00" is the headline, a
     2-digit code is a division, anything with a "." is a sub-division —
-    plus whatever external (non-ONS-timeseries) sources are configured.
+    plus whatever external (non-ONS-timeseries) and context (non-CPI ONS
+    series, e.g. real wage growth) sources are configured.
     """
     headline: dict[str, SeriesSource] = {}
     divisions: dict[str, SeriesSource] = {}
@@ -310,6 +323,8 @@ def build_registry(catalog: Catalog, external: dict[str, ReferenceTableSource]) 
         subdivisions=subdivisions,
         subdivision_weights=subdivision_weights,
         external=external,
+        context=context if context is not None else load_context(),
+        boe=boe if boe is not None else load_boe(),
     )
 
 
@@ -334,11 +349,22 @@ def discover_catalog(session: requests.Session | None = None) -> Catalog:
 def discover_registry(
     session: requests.Session | None = None,
     external: dict[str, ReferenceTableSource] | None = None,
+    context: dict[str, SeriesSource] | None = None,
+    boe: dict[str, SeriesSource] | None = None,
 ) -> SourceRegistry:
     """The pipeline's single entry point: a fresh, fully-live SourceRegistry
-    with no hardcoded CDID anywhere upstream of ONS's own bulk dataset."""
+    for the COICOP tree, with no hardcoded CDID anywhere upstream of ONS's
+    own bulk dataset — plus `external`/`context`/`boe`, the small
+    hand-curated sets `sources.yaml` documents as the deliberate exceptions
+    to that.
+    """
     catalog = discover_catalog(session)
-    return build_registry(catalog, external if external is not None else load_external())
+    return build_registry(
+        catalog,
+        external if external is not None else load_external(),
+        context,
+        boe,
+    )
 
 
 def main() -> None:

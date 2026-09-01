@@ -25,6 +25,7 @@ from pathlib import Path
 import polars as pl
 import requests
 
+from inflation_viz.boe import fetch_boe_series
 from inflation_viz.config import SeriesSource, SourceRegistry
 from inflation_viz.http import new_session
 from inflation_viz.ons_catalog import discover_registry
@@ -157,14 +158,16 @@ def fetch_all(
     *,
     request_delay_seconds: float = 0.3,
 ) -> Path:
-    """Fetch every series in the registry (headline, divisions, and basket
-    weights alike) and write a new vintage snapshot. Returns the new vintage
-    directory.
+    """Fetch every series in the registry — every ONS series
+    (`registry.all_series`) plus every Bank of England series
+    (`registry.boe`, fetched via `boe.py`'s own CSV fetcher, a different
+    provider with a different API shape) — into one combined vintage
+    snapshot. Returns the new vintage directory.
 
     Live discovery means this can now be a few hundred sequential requests
-    in one run — `request_delay_seconds` paces them to stay under ONS's
-    rate limit (a 429 mid-run still retries with backoff, see `http.py`,
-    but pacing avoids triggering it in the first place).
+    in one run — `request_delay_seconds` paces them to stay under each
+    provider's rate limit (a 429 mid-run still retries with backoff, see
+    `http.py`, but pacing avoids triggering it in the first place).
     """
     owns_session = session is None
     session = session or new_session()
@@ -177,6 +180,11 @@ def fetch_all(
             series_df, prov = fetch_series(source, session, fetched_at=fetched_at)
             frames.append(series_df)
             provenance.append(prov)
+            time.sleep(request_delay_seconds)
+        for source in registry.boe.values():
+            boe_series_df, boe_prov = fetch_boe_series(source, session, fetched_at=fetched_at)
+            frames.append(boe_series_df)
+            provenance.append(boe_prov)
             time.sleep(request_delay_seconds)
     finally:
         if owns_session:

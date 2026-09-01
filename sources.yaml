@@ -10,11 +10,72 @@
 # how a title string becomes a series, and tests/test_ons_catalog.py for
 # the parsing/classification logic it's tested against.
 #
-# The only thing still listed here is `external:` — reference tables that
-# have no ONS CDID timeseries API to discover from at all.
+# Besides `external:` (reference tables with no CDID timeseries API at
+# all), there's also `context:` — a small number of hand-curated *non-CPI*
+# ONS series that give the headline inflation numbers context. Each one
+# does have a live ONS timeseries JSON API, fetched and exported exactly
+# like every CPI series in this pipeline — it's just a different ONS
+# dataset/theme than mm23, and there's no bulk catalog to auto-discover a
+# single named series from, so (like `external`) its CDID is typed by
+# hand here rather than discovered.
 
 license_defaults:
   ons_ogl: &ons_ogl "Open Government Licence v3.0"
+
+context:
+  real_wage_growth:
+    unique_id: GB.WAGE.REAL
+    name: "AWE: Whole Economy Real Terms Year-on-Year 3-Month Average Growth: Regular Pay (SA)"
+    cdid: A2FA
+    dataset: lms
+    theme_path: employmentandlabourmarket/peopleinwork/earningsandworkinghours
+    source_name: "Office for National Statistics"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+  rpi:
+    unique_id: GB.RPI
+    name: "RPI: All items 12-month rate"
+    cdid: CZBH
+    dataset: mm23
+    theme_path: economy/inflationandpriceindices
+    source_name: "Office for National Statistics"
+    license: *ons_ogl
+    cadence: monthly
+    unit: percent
+
+# `boe:` — Bank of England series (currently just Bank Rate). A different
+# provider with a different API shape entirely: the Bank's Interactive
+# Database (IADB) returns CSV by series code, not ONS's JSON timeseries
+# API, so these are fetched by src/inflation_viz/boe.py's own small
+# fetcher rather than fetch.py's ONS-only one — see that module's
+# docstring. Same "hand-typed, single stable series" exception as
+# `context`, just from a second provider; kept out of every ONS-shaped
+# registry bucket (see config.py's SourceRegistry).
+boe:
+  bank_rate:
+    unique_id: GB.BOE.RATE
+    name: "Bank Rate"
+    series_code: IUDBEDR
+    source_url: "https://www.bankofengland.co.uk/boeapps/database/Bank-Rate.asp"
+    license: "Bank of England (see the Database's own terms of use)"
+    cadence: daily
+    unit: percent
+
+  gilt_breakeven_10y:
+    unique_id: GB.BOE.BREAKEVEN10Y
+    name: "10-year breakeven inflation"
+    # "Yield from British Government Securities, 10 year Inflation Zero
+    # Coupon" — the Bank's own zero-coupon inflation (breakeven) curve,
+    # not the "implied forward" curve (a different, forward-rate concept)
+    # and not derived here from nominal minus real ourselves: the Bank
+    # already publishes this exact curve as its own series.
+    series_code: IUDMIZC
+    source_url: "https://www.bankofengland.co.uk/statistics/yield-curves"
+    license: "Bank of England (see the Database's own terms of use)"
+    cadence: daily
+    unit: percent
 
 external:
   ofgem_price_cap:
