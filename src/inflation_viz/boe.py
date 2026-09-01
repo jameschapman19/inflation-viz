@@ -43,6 +43,13 @@ from inflation_viz.storage import ProvenanceRecord
 # whatever data really exists from that point on.
 _DATE_FROM = "01/Jan/1975"
 
+# requests' default User-Agent ("python-requests/X.Y") gets a flat 403 from
+# the IADB (confirmed via a live CI run: every ONS request in the same run
+# succeeded with the same default UA, only this endpoint rejected it) — a
+# descriptive one identifying this project, rather than spoofing a browser,
+# is the more honest fix to try first.
+_HEADERS = {"User-Agent": "inflation-viz/1.0 (+https://github.com/jameschapman19/inflation-viz)"}
+
 
 def parse_iadb_csv(unique_id: str, csv_text: str) -> pl.DataFrame:
     """Parses a `CSVF=TN` single-series response into unique_id/ds/y rows.
@@ -83,7 +90,7 @@ def fetch_boe_series(
         "VPD": "Y",
         "VFD": "N",
     }
-    response = session.get(BOE_IADB_QUERY_URL, params=params, timeout=30)
+    response = session.get(BOE_IADB_QUERY_URL, params=params, headers=_HEADERS, timeout=30)
     response.raise_for_status()
 
     series_df = parse_iadb_csv(source.unique_id, response.text)

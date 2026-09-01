@@ -29,7 +29,7 @@ from inflation_viz.boe import fetch_boe_series
 from inflation_viz.config import SeriesSource, SourceRegistry
 from inflation_viz.http import new_session
 from inflation_viz.ons_catalog import discover_registry
-from inflation_viz.storage import ProvenanceRecord, write_vintage
+from inflation_viz.storage import DATA_DIR, ProvenanceRecord, write_vintage
 
 _MONTH_ABBR = {
     "JAN": 1,
@@ -157,6 +157,7 @@ def fetch_all(
     session: requests.Session | None = None,
     *,
     request_delay_seconds: float = 0.3,
+    data_dir: Path = DATA_DIR,
 ) -> Path:
     """Fetch every series in the registry — every ONS series
     (`registry.all_series`) plus every Bank of England series
@@ -168,6 +169,14 @@ def fetch_all(
     in one run — `request_delay_seconds` paces them to stay under each
     provider's rate limit (a 429 mid-run still retries with backoff, see
     `http.py`, but pacing avoids triggering it in the first place).
+
+    An ONS fetch failure aborts the whole run (as before) — ONS is this
+    pipeline's primary, load-bearing source. A `registry.boe` failure is
+    logged and skipped instead: by the time it's reached, every ONS series
+    has already been fetched, and a temporary problem with one secondary,
+    non-ONS provider (bankofengland.co.uk 403'd an entire run this way
+    once already) shouldn't throw away a day's worth of otherwise-good
+    CPI/CPIH/RPI/wage-growth data that's sitting fetched in memory.
     """
     owns_session = session is None
     session = session or new_session()
@@ -175,6 +184,7 @@ def fetch_all(
 
     frames: list[pl.DataFrame] = []
     provenance: list[ProvenanceRecord] = []
+    boe_errors: list[str] = []
     try:
         for source in registry.all_series.values():
             series_df, prov = fetch_series(source, session, fetched_at=fetched_at)
@@ -182,16 +192,22 @@ def fetch_all(
             provenance.append(prov)
             time.sleep(request_delay_seconds)
         for source in registry.boe.values():
-            boe_series_df, boe_prov = fetch_boe_series(source, session, fetched_at=fetched_at)
-            frames.append(boe_series_df)
-            provenance.append(boe_prov)
+            try:
+                boe_series_df, boe_prov = fetch_boe_series(source, session, fetched_at=fetched_at)
+                frames.append(boe_series_df)
+                provenance.append(boe_prov)
+            except requests.exceptions.RequestException as exc:
+                boe_errors.append(f"{source.unique_id} ({source.cdid}): {exc}")
             time.sleep(request_delay_seconds)
     finally:
         if owns_session:
             session.close()
 
+    for error in boe_errors:
+        print(f"WARNING: Bank of England fetch failed, skipping for this vintage: {error}")
+
     combined = pl.concat(frames)
-    return write_vintage(combined, provenance, fetched_at=fetched_at)
+    return write_vintage(combined, provenance, fetched_at=fetched_at, data_dir=data_dir)
 
 
 def main() -> None:
