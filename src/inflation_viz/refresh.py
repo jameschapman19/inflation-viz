@@ -8,6 +8,9 @@ single script scheduled CI runs to keep the site current —
 
 from __future__ import annotations
 
+import logging
+
+from inflation_viz import drivers
 from inflation_viz.export import export_web_data
 from inflation_viz.fetch import fetch_all
 from inflation_viz.ons_catalog import discover_registry
@@ -17,6 +20,10 @@ def main() -> None:
     registry = discover_registry()
     fetch_all(registry)
     export_web_data(registry=registry)
+    try:
+        drivers.refresh()
+    except ValueError as exc:
+        logging.getLogger(__name__).warning("Driver refresh skipped: %s", exc)
 
 
 if __name__ == "__main__":

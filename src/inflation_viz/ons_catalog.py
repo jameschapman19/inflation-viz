@@ -66,6 +66,10 @@ _RATE_WEIGHT_RE = re.compile(
     r"^CPI(H)?\s+(ANNUAL RATE|WEIGHTS)\s+(\d{2}(?:[./-]\d+){0,4})\s*:?\s*(.+?)(?:\s+2015=100)?$",
     re.IGNORECASE,
 )
+_INDEX_RE = re.compile(
+    r"^CPI(H)?\s+INDEX\s+(\d{2}(?:[./-]\d+){0,4})\s*:?\s*(.+?)\s+2015=100$",
+    re.IGNORECASE,
+)
 
 # "CPI: Contribution to all items annual rate: Food & non-alcoholic beverages"
 _CONTRIBUTION_RE = re.compile(
@@ -182,6 +186,7 @@ class CatalogEntry:
     rate_cdid: str | None = None
     weight_cdid: str | None = None
     contribution_cdid: str | None = None
+    index_cdid: str | None = None
 
 
 Catalog = dict[tuple[str, str], CatalogEntry]
@@ -198,6 +203,14 @@ def build_catalog(titles_by_cdid: dict[str, str]) -> Catalog:
     catalog: Catalog = {}
 
     for cdid, title in titles_by_cdid.items():
+        index_match = _INDEX_RE.match(title)
+        if index_match is not None:
+            is_cpih, code, name = index_match.groups()
+            entry = catalog.setdefault(
+                ("CPIH" if is_cpih else "CPI", code), CatalogEntry(name=name.strip())
+            )
+            entry.index_cdid = cdid
+            continue
         rate_weight_match = _RATE_WEIGHT_RE.match(title)
         if rate_weight_match is not None:
             is_cpih, metric, code, name = rate_weight_match.groups()
