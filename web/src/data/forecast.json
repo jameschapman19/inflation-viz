@@ -1,4 +1,10 @@
 {
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-04T15:29:09.814358+00:00",
+  "dataVintage": "2026-10-04T135249Z",
+  "forecastOrigin": "2026-08-01",
+  "horizonMonths": 12,
+  "level": 80,
   "coverage": {
     "included": [
       "GB.CP01",
@@ -16,1453 +22,1447 @@
     ],
     "missing": []
   },
-  "dataVintage": "2026-08-31T072553Z",
-  "generatedAt": "2026-08-31T13:55:21.085537+00:00",
-  "level": 80,
-  "model": "AutoARIMA",
+  "totalUniqueId": "GB.CPI.FORECAST",
   "points": [
     {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.19,
-      "lo": 0.04,
       "unique_id": "GB.CP01",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
       "ds": "2026-09-01",
+      "yhat": 0.15,
+      "lo": 0.05,
       "hi": 0.24,
-      "lo": -0.01,
-      "unique_id": "GB.CP01",
-      "yhat": 0.11
+      "bands": null
     },
     {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2026-10-01",
-      "hi": 0.26,
-      "lo": -0.08,
-      "unique_id": "GB.CP01",
-      "yhat": 0.09
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.35,
-      "lo": -0.08,
-      "unique_id": "GB.CP01",
-      "yhat": 0.14
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.35,
-      "lo": -0.16,
-      "unique_id": "GB.CP01",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.41,
-      "lo": -0.19,
-      "unique_id": "GB.CP01",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.49,
-      "lo": -0.2,
-      "unique_id": "GB.CP01",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.51,
-      "lo": -0.26,
-      "unique_id": "GB.CP01",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.6,
-      "lo": -0.26,
-      "unique_id": "GB.CP01",
-      "yhat": 0.17
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.68,
-      "lo": -0.27,
-      "unique_id": "GB.CP01",
-      "yhat": 0.21
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.75,
-      "lo": -0.28,
-      "unique_id": "GB.CP01",
-      "yhat": 0.24
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.81,
-      "lo": -0.3,
-      "unique_id": "GB.CP01",
-      "yhat": 0.25
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.14,
-      "lo": 0.06,
-      "unique_id": "GB.CP02",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.16,
-      "lo": 0.06,
-      "unique_id": "GB.CP02",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.16,
-      "lo": 0.04,
-      "unique_id": "GB.CP02",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.19,
-      "lo": 0.05,
-      "unique_id": "GB.CP02",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.19,
-      "lo": 0.03,
-      "unique_id": "GB.CP02",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.21,
-      "lo": 0.03,
-      "unique_id": "GB.CP02",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.22,
-      "lo": 0.03,
-      "unique_id": "GB.CP02",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.25,
-      "lo": 0.05,
-      "unique_id": "GB.CP02",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.26,
-      "lo": 0.05,
-      "unique_id": "GB.CP02",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.29,
-      "lo": 0.06,
-      "unique_id": "GB.CP02",
-      "yhat": 0.17
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.29,
-      "lo": 0.05,
-      "unique_id": "GB.CP02",
-      "yhat": 0.17
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.3,
-      "lo": 0.05,
-      "unique_id": "GB.CP02",
-      "yhat": 0.17
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.13,
+      "yhat": 0.13,
       "lo": -0.04,
-      "unique_id": "GB.CP03",
-      "yhat": 0.04
+      "hi": 0.29,
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.17,
-      "lo": -0.06,
-      "unique_id": "GB.CP03",
-      "yhat": 0.06
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.21,
-      "lo": -0.07,
-      "unique_id": "GB.CP03",
-      "yhat": 0.07
-    },
-    {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2026-11-01",
-      "hi": 0.26,
-      "lo": -0.08,
-      "unique_id": "GB.CP03",
-      "yhat": 0.09
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.26,
+      "yhat": 0.18,
       "lo": -0.11,
-      "unique_id": "GB.CP03",
-      "yhat": 0.07
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.27,
-      "lo": -0.14,
-      "unique_id": "GB.CP03",
-      "yhat": 0.06
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.29,
-      "lo": -0.15,
-      "unique_id": "GB.CP03",
-      "yhat": 0.07
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.34,
-      "lo": -0.13,
-      "unique_id": "GB.CP03",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.35,
-      "lo": -0.15,
-      "unique_id": "GB.CP03",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.38,
-      "lo": -0.14,
-      "unique_id": "GB.CP03",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.42,
-      "lo": -0.13,
-      "unique_id": "GB.CP03",
-      "yhat": 0.14
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.39,
-      "lo": -0.18,
-      "unique_id": "GB.CP03",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.86,
-      "lo": 0.39,
-      "unique_id": "GB.CP04",
-      "yhat": 0.62
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 1.0,
-      "lo": 0.33,
-      "unique_id": "GB.CP04",
-      "yhat": 0.66
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.98,
-      "lo": 0.15,
-      "unique_id": "GB.CP04",
-      "yhat": 0.57
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 1.08,
-      "lo": 0.1,
-      "unique_id": "GB.CP04",
-      "yhat": 0.59
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 1.17,
-      "lo": 0.07,
-      "unique_id": "GB.CP04",
-      "yhat": 0.62
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 1.32,
-      "lo": 0.1,
-      "unique_id": "GB.CP04",
-      "yhat": 0.71
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 1.41,
-      "lo": 0.09,
-      "unique_id": "GB.CP04",
-      "yhat": 0.75
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 1.42,
-      "lo": 0.0,
-      "unique_id": "GB.CP04",
-      "yhat": 0.71
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 1.43,
-      "lo": -0.08,
-      "unique_id": "GB.CP04",
-      "yhat": 0.67
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 1.49,
-      "lo": -0.09,
-      "unique_id": "GB.CP04",
-      "yhat": 0.7
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 1.55,
-      "lo": -0.1,
-      "unique_id": "GB.CP04",
-      "yhat": 0.72
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 1.34,
-      "lo": -0.37,
-      "unique_id": "GB.CP04",
-      "yhat": 0.49
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.11,
-      "lo": 0.0,
-      "unique_id": "GB.CP05",
-      "yhat": 0.06
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.14,
-      "lo": -0.02,
-      "unique_id": "GB.CP05",
-      "yhat": 0.06
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.15,
-      "lo": -0.04,
-      "unique_id": "GB.CP05",
-      "yhat": 0.05
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.17,
-      "lo": -0.04,
-      "unique_id": "GB.CP05",
-      "yhat": 0.06
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.19,
-      "lo": -0.05,
-      "unique_id": "GB.CP05",
-      "yhat": 0.07
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.18,
-      "lo": -0.08,
-      "unique_id": "GB.CP05",
-      "yhat": 0.05
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.19,
-      "lo": -0.1,
-      "unique_id": "GB.CP05",
-      "yhat": 0.05
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.2,
-      "lo": -0.1,
-      "unique_id": "GB.CP05",
-      "yhat": 0.05
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.2,
-      "lo": -0.11,
-      "unique_id": "GB.CP05",
-      "yhat": 0.05
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.21,
-      "lo": -0.12,
-      "unique_id": "GB.CP05",
-      "yhat": 0.04
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.21,
-      "lo": -0.13,
-      "unique_id": "GB.CP05",
-      "yhat": 0.04
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.2,
-      "lo": -0.16,
-      "unique_id": "GB.CP05",
-      "yhat": 0.02
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.11,
-      "lo": 0.08,
-      "unique_id": "GB.CP06",
-      "yhat": 0.09
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.1,
-      "lo": 0.07,
-      "unique_id": "GB.CP06",
-      "yhat": 0.09
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.12,
-      "lo": 0.08,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.13,
-      "lo": 0.08,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.13,
-      "lo": 0.08,
-      "unique_id": "GB.CP06",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.13,
-      "lo": 0.07,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.13,
-      "lo": 0.07,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.13,
-      "lo": 0.06,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.15,
-      "lo": 0.08,
-      "unique_id": "GB.CP06",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.15,
-      "lo": 0.07,
-      "unique_id": "GB.CP06",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.15,
-      "lo": 0.07,
-      "unique_id": "GB.CP06",
-      "yhat": 0.11
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.14,
-      "lo": 0.06,
-      "unique_id": "GB.CP06",
-      "yhat": 0.1
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.7,
-      "lo": 0.37,
-      "unique_id": "GB.CP07",
-      "yhat": 0.54
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.92,
-      "lo": 0.41,
-      "unique_id": "GB.CP07",
-      "yhat": 0.67
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 1.0,
-      "lo": 0.36,
-      "unique_id": "GB.CP07",
-      "yhat": 0.68
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 1.1,
-      "lo": 0.36,
-      "unique_id": "GB.CP07",
-      "yhat": 0.73
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 1.11,
-      "lo": 0.29,
-      "unique_id": "GB.CP07",
-      "yhat": 0.7
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 1.24,
-      "lo": 0.35,
-      "unique_id": "GB.CP07",
-      "yhat": 0.79
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 1.28,
-      "lo": 0.33,
-      "unique_id": "GB.CP07",
-      "yhat": 0.8
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 1.11,
-      "lo": 0.1,
-      "unique_id": "GB.CP07",
-      "yhat": 0.6
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.85,
-      "lo": -0.21,
-      "unique_id": "GB.CP07",
-      "yhat": 0.32
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.87,
-      "lo": -0.23,
-      "unique_id": "GB.CP07",
-      "yhat": 0.32
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.99,
-      "lo": -0.16,
-      "unique_id": "GB.CP07",
-      "yhat": 0.42
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 1.09,
-      "lo": -0.09,
-      "unique_id": "GB.CP07",
-      "yhat": 0.5
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.15,
-      "lo": 0.1,
-      "unique_id": "GB.CP08",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.16,
-      "lo": 0.09,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.17,
-      "lo": 0.09,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.18,
-      "lo": 0.08,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.19,
-      "lo": 0.08,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.19,
-      "lo": 0.06,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.2,
-      "lo": 0.06,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.2,
-      "lo": 0.06,
-      "unique_id": "GB.CP08",
-      "yhat": 0.13
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.2,
-      "lo": 0.05,
-      "unique_id": "GB.CP08",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.2,
-      "lo": 0.04,
-      "unique_id": "GB.CP08",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.2,
-      "lo": 0.04,
-      "unique_id": "GB.CP08",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.21,
-      "lo": 0.03,
-      "unique_id": "GB.CP08",
-      "yhat": 0.12
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.31,
-      "lo": 0.16,
-      "unique_id": "GB.CP09",
-      "yhat": 0.23
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.4,
-      "lo": 0.21,
-      "unique_id": "GB.CP09",
-      "yhat": 0.31
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
       "hi": 0.47,
-      "lo": 0.24,
-      "unique_id": "GB.CP09",
-      "yhat": 0.36
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.53,
-      "lo": 0.26,
-      "unique_id": "GB.CP09",
-      "yhat": 0.4
-    },
-    {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2026-12-01",
-      "hi": 0.6,
-      "lo": 0.31,
-      "unique_id": "GB.CP09",
-      "yhat": 0.45
+      "yhat": 0.14,
+      "lo": -0.3,
+      "hi": 0.58,
+      "bands": null
     },
     {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2027-01-01",
-      "hi": 0.57,
-      "lo": 0.25,
-      "unique_id": "GB.CP09",
-      "yhat": 0.41
+      "yhat": 0.16,
+      "lo": -0.24,
+      "hi": 0.56,
+      "bands": null
     },
     {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2027-02-01",
-      "hi": 0.66,
-      "lo": 0.32,
-      "unique_id": "GB.CP09",
-      "yhat": 0.49
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.72,
-      "lo": 0.35,
-      "unique_id": "GB.CP09",
-      "yhat": 0.53
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
+      "yhat": 0.2,
+      "lo": -0.37,
       "hi": 0.78,
-      "lo": 0.39,
-      "unique_id": "GB.CP09",
-      "yhat": 0.58
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.83,
-      "lo": 0.42,
-      "unique_id": "GB.CP09",
-      "yhat": 0.62
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.82,
-      "lo": 0.39,
-      "unique_id": "GB.CP09",
-      "yhat": 0.6
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.88,
-      "lo": 0.43,
-      "unique_id": "GB.CP09",
-      "yhat": 0.66
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.19,
-      "lo": 0.13,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.2,
-      "lo": 0.11,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.2,
-      "lo": 0.09,
-      "unique_id": "GB.CP10",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.2,
-      "lo": 0.08,
-      "unique_id": "GB.CP10",
-      "yhat": 0.14
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.21,
-      "lo": 0.08,
-      "unique_id": "GB.CP10",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.23,
-      "lo": 0.09,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.24,
-      "lo": 0.09,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
+      "unique_id": "GB.CP01",
       "ds": "2027-03-01",
-      "hi": 0.24,
-      "lo": 0.08,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.24,
-      "lo": 0.08,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.24,
-      "lo": 0.07,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.24,
-      "lo": 0.07,
-      "unique_id": "GB.CP10",
-      "yhat": 0.16
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.24,
-      "lo": 0.06,
-      "unique_id": "GB.CP10",
-      "yhat": 0.15
-    },
-    {
-      "bands": null,
-      "ds": "2026-08-01",
-      "hi": 0.65,
-      "lo": 0.51,
-      "unique_id": "GB.CP11",
-      "yhat": 0.58
-    },
-    {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.65,
-      "lo": 0.47,
-      "unique_id": "GB.CP11",
-      "yhat": 0.56
-    },
-    {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.72,
-      "lo": 0.48,
-      "unique_id": "GB.CP11",
-      "yhat": 0.6
-    },
-    {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.78,
-      "lo": 0.51,
-      "unique_id": "GB.CP11",
-      "yhat": 0.64
-    },
-    {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.79,
-      "lo": 0.47,
-      "unique_id": "GB.CP11",
-      "yhat": 0.63
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.84,
-      "lo": 0.49,
-      "unique_id": "GB.CP11",
-      "yhat": 0.67
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.84,
-      "lo": 0.45,
-      "unique_id": "GB.CP11",
-      "yhat": 0.64
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
-      "hi": 0.87,
-      "lo": 0.43,
-      "unique_id": "GB.CP11",
-      "yhat": 0.65
-    },
-    {
-      "bands": null,
-      "ds": "2027-04-01",
-      "hi": 0.86,
-      "lo": 0.39,
-      "unique_id": "GB.CP11",
-      "yhat": 0.62
-    },
-    {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.9,
-      "lo": 0.39,
-      "unique_id": "GB.CP11",
-      "yhat": 0.64
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.87,
-      "lo": 0.32,
-      "unique_id": "GB.CP11",
-      "yhat": 0.59
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
+      "yhat": 0.18,
+      "lo": -0.55,
       "hi": 0.92,
-      "lo": 0.33,
-      "unique_id": "GB.CP11",
-      "yhat": 0.62
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-08-01",
+      "unique_id": "GB.CP01",
+      "ds": "2027-04-01",
+      "yhat": 0.23,
+      "lo": -0.31,
+      "hi": 0.78,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP01",
+      "ds": "2027-05-01",
+      "yhat": 0.27,
+      "lo": -0.45,
+      "hi": 0.99,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP01",
+      "ds": "2027-06-01",
+      "yhat": 0.3,
+      "lo": -0.58,
+      "hi": 1.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP01",
+      "ds": "2027-07-01",
+      "yhat": 0.32,
+      "lo": -0.85,
+      "hi": 1.5,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP01",
+      "ds": "2027-08-01",
+      "yhat": 0.32,
+      "lo": -0.99,
+      "hi": 1.63,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2026-09-01",
+      "yhat": 0.11,
+      "lo": 0.07,
+      "hi": 0.15,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2026-10-01",
+      "yhat": 0.11,
+      "lo": 0.05,
+      "hi": 0.16,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2026-11-01",
+      "yhat": 0.13,
+      "lo": 0.05,
+      "hi": 0.2,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2026-12-01",
+      "yhat": 0.11,
+      "lo": 0.03,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2027-01-01",
+      "yhat": 0.12,
+      "lo": 0.04,
+      "hi": 0.21,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2027-02-01",
+      "yhat": 0.13,
+      "lo": 0.03,
+      "hi": 0.23,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP02",
+      "ds": "2027-03-01",
+      "yhat": 0.15,
+      "lo": 0.01,
       "hi": 0.29,
-      "lo": 0.21,
-      "unique_id": "GB.CP12",
-      "yhat": 0.25
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-09-01",
-      "hi": 0.32,
-      "lo": 0.21,
-      "unique_id": "GB.CP12",
-      "yhat": 0.27
+      "unique_id": "GB.CP02",
+      "ds": "2027-04-01",
+      "yhat": 0.16,
+      "lo": 0.01,
+      "hi": 0.3,
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-10-01",
-      "hi": 0.34,
-      "lo": 0.2,
-      "unique_id": "GB.CP12",
-      "yhat": 0.27
+      "unique_id": "GB.CP02",
+      "ds": "2027-05-01",
+      "yhat": 0.18,
+      "lo": 0.03,
+      "hi": 0.33,
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-11-01",
-      "hi": 0.35,
-      "lo": 0.19,
-      "unique_id": "GB.CP12",
-      "yhat": 0.27
+      "unique_id": "GB.CP02",
+      "ds": "2027-06-01",
+      "yhat": 0.17,
+      "lo": 0.02,
+      "hi": 0.33,
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2026-12-01",
-      "hi": 0.35,
-      "lo": 0.16,
-      "unique_id": "GB.CP12",
-      "yhat": 0.26
-    },
-    {
-      "bands": null,
-      "ds": "2027-01-01",
-      "hi": 0.38,
-      "lo": 0.16,
-      "unique_id": "GB.CP12",
-      "yhat": 0.27
-    },
-    {
-      "bands": null,
-      "ds": "2027-02-01",
-      "hi": 0.37,
-      "lo": 0.13,
-      "unique_id": "GB.CP12",
-      "yhat": 0.25
-    },
-    {
-      "bands": null,
-      "ds": "2027-03-01",
+      "unique_id": "GB.CP02",
+      "ds": "2027-07-01",
+      "yhat": 0.18,
+      "lo": -0.03,
       "hi": 0.39,
-      "lo": 0.12,
-      "unique_id": "GB.CP12",
-      "yhat": 0.25
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2027-04-01",
+      "unique_id": "GB.CP02",
+      "ds": "2027-08-01",
+      "yhat": 0.17,
+      "lo": -0.06,
       "hi": 0.4,
-      "lo": 0.11,
-      "unique_id": "GB.CP12",
-      "yhat": 0.25
+      "bands": null
     },
     {
-      "bands": null,
-      "ds": "2027-05-01",
-      "hi": 0.42,
-      "lo": 0.11,
-      "unique_id": "GB.CP12",
-      "yhat": 0.26
-    },
-    {
-      "bands": null,
-      "ds": "2027-06-01",
-      "hi": 0.42,
-      "lo": 0.09,
-      "unique_id": "GB.CP12",
-      "yhat": 0.26
-    },
-    {
-      "bands": null,
-      "ds": "2027-07-01",
-      "hi": 0.44,
-      "lo": 0.08,
-      "unique_id": "GB.CP12",
-      "yhat": 0.26
-    },
-    {
-      "bands": [
-        {
-          "hi": 2.86,
-          "level": 50,
-          "lo": 2.0
-        },
-        {
-          "hi": 3.12,
-          "level": 80,
-          "lo": 1.28
-        },
-        {
-          "hi": 3.38,
-          "level": 95,
-          "lo": 0.83
-        }
-      ],
-      "ds": "2026-08-01",
-      "hi": 3.12,
-      "lo": 1.28,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 2.9
-    },
-    {
-      "bands": [
-        {
-          "hi": 3.11,
-          "level": 50,
-          "lo": 2.25
-        },
-        {
-          "hi": 3.37,
-          "level": 80,
-          "lo": 1.53
-        },
-        {
-          "hi": 3.63,
-          "level": 95,
-          "lo": 1.08
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2026-09-01",
-      "hi": 3.37,
-      "lo": 1.53,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.19
+      "yhat": 0.03,
+      "lo": -0.04,
+      "hi": 0.1,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.11,
-          "level": 50,
-          "lo": 2.24
-        },
-        {
-          "hi": 3.37,
-          "level": 80,
-          "lo": 1.53
-        },
-        {
-          "hi": 3.62,
-          "level": 95,
-          "lo": 1.08
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2026-10-01",
-      "hi": 3.37,
-      "lo": 1.53,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.17
+      "yhat": 0.04,
+      "lo": -0.05,
+      "hi": 0.14,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.37,
-          "level": 50,
-          "lo": 2.5
-        },
-        {
-          "hi": 3.63,
-          "level": 80,
-          "lo": 1.79
-        },
-        {
-          "hi": 3.88,
-          "level": 95,
-          "lo": 1.34
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2026-11-01",
-      "hi": 3.63,
-      "lo": 1.79,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.41
+      "yhat": 0.07,
+      "lo": -0.07,
+      "hi": 0.2,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.35,
-          "level": 50,
-          "lo": 2.48
-        },
-        {
-          "hi": 3.6,
-          "level": 80,
-          "lo": 1.77
-        },
-        {
-          "hi": 3.86,
-          "level": 95,
-          "lo": 1.32
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2026-12-01",
-      "hi": 3.6,
-      "lo": 1.77,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.4
+      "yhat": 0.05,
+      "lo": -0.14,
+      "hi": 0.24,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.53,
-          "level": 50,
-          "lo": 2.66
-        },
-        {
-          "hi": 3.78,
-          "level": 80,
-          "lo": 1.95
-        },
-        {
-          "hi": 4.04,
-          "level": 95,
-          "lo": 1.5
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-01-01",
-      "hi": 3.78,
-      "lo": 1.95,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.58
+      "yhat": 0.04,
+      "lo": -0.13,
+      "hi": 0.21,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.66,
-          "level": 50,
-          "lo": 2.8
-        },
-        {
-          "hi": 3.92,
-          "level": 80,
-          "lo": 2.08
-        },
-        {
-          "hi": 4.18,
-          "level": 95,
-          "lo": 1.63
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-02-01",
-      "hi": 3.92,
-      "lo": 2.08,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.72
+      "yhat": 0.05,
+      "lo": -0.19,
+      "hi": 0.28,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.52,
-          "level": 50,
-          "lo": 2.66
-        },
-        {
-          "hi": 3.78,
-          "level": 80,
-          "lo": 1.94
-        },
-        {
-          "hi": 4.04,
-          "level": 95,
-          "lo": 1.49
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-03-01",
-      "hi": 3.78,
-      "lo": 1.94,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.57
+      "yhat": 0.08,
+      "lo": -0.24,
+      "hi": 0.41,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.27,
-          "level": 50,
-          "lo": 2.4
-        },
-        {
-          "hi": 3.53,
-          "level": 80,
-          "lo": 1.69
-        },
-        {
-          "hi": 3.78,
-          "level": 95,
-          "lo": 1.24
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-04-01",
-      "hi": 3.53,
-      "lo": 1.69,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.3
+      "yhat": 0.07,
+      "lo": -0.35,
+      "hi": 0.49,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.43,
-          "level": 50,
-          "lo": 2.56
-        },
-        {
-          "hi": 3.69,
-          "level": 80,
-          "lo": 1.85
-        },
-        {
-          "hi": 3.94,
-          "level": 95,
-          "lo": 1.4
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-05-01",
-      "hi": 3.69,
-      "lo": 1.85,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.47
+      "yhat": 0.09,
+      "lo": -0.33,
+      "hi": 0.51,
+      "bands": null
     },
     {
-      "bands": [
-        {
-          "hi": 3.52,
-          "level": 50,
-          "lo": 2.65
-        },
-        {
-          "hi": 3.78,
-          "level": 80,
-          "lo": 1.94
-        },
-        {
-          "hi": 4.03,
-          "level": 95,
-          "lo": 1.49
-        }
-      ],
+      "unique_id": "GB.CP03",
       "ds": "2027-06-01",
-      "hi": 3.78,
-      "lo": 1.94,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.57
+      "yhat": 0.12,
+      "lo": -0.3,
+      "hi": 0.54,
+      "bands": null
     },
     {
+      "unique_id": "GB.CP03",
+      "ds": "2027-07-01",
+      "yhat": 0.08,
+      "lo": -0.35,
+      "hi": 0.51,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP03",
+      "ds": "2027-08-01",
+      "yhat": 0.09,
+      "lo": -0.29,
+      "hi": 0.47,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2026-09-01",
+      "yhat": 0.65,
+      "lo": 0.58,
+      "hi": 0.71,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2026-10-01",
+      "yhat": 0.6,
+      "lo": -0.24,
+      "hi": 1.45,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2026-11-01",
+      "yhat": 0.61,
+      "lo": -0.18,
+      "hi": 1.41,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2026-12-01",
+      "yhat": 0.63,
+      "lo": -0.24,
+      "hi": 1.49,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-01-01",
+      "yhat": 0.68,
+      "lo": -1.01,
+      "hi": 2.36,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-02-01",
+      "yhat": 0.69,
+      "lo": -0.97,
+      "hi": 2.35,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-03-01",
+      "yhat": 0.68,
+      "lo": -0.97,
+      "hi": 2.33,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-04-01",
+      "yhat": 0.66,
+      "lo": -1.79,
+      "hi": 3.1,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-05-01",
+      "yhat": 0.67,
+      "lo": -1.7,
+      "hi": 3.03,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-06-01",
+      "yhat": 0.68,
+      "lo": -1.63,
+      "hi": 2.99,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-07-01",
+      "yhat": 0.56,
+      "lo": -2.54,
+      "hi": 3.67,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP04",
+      "ds": "2027-08-01",
+      "yhat": 0.55,
+      "lo": -2.53,
+      "hi": 3.63,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2026-09-01",
+      "yhat": 0.04,
+      "lo": -0.03,
+      "hi": 0.11,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2026-10-01",
+      "yhat": 0.04,
+      "lo": -0.06,
+      "hi": 0.14,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2026-11-01",
+      "yhat": 0.05,
+      "lo": -0.08,
+      "hi": 0.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2026-12-01",
+      "yhat": 0.06,
+      "lo": -0.15,
+      "hi": 0.26,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-01-01",
+      "yhat": 0.04,
+      "lo": -0.16,
+      "hi": 0.24,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-02-01",
+      "yhat": 0.03,
+      "lo": -0.22,
+      "hi": 0.28,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-03-01",
+      "yhat": 0.04,
+      "lo": -0.28,
+      "hi": 0.35,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-04-01",
+      "yhat": 0.03,
+      "lo": -0.35,
+      "hi": 0.41,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-05-01",
+      "yhat": 0.03,
+      "lo": -0.43,
+      "hi": 0.48,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-06-01",
+      "yhat": 0.03,
+      "lo": -0.48,
+      "hi": 0.54,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-07-01",
+      "yhat": 0.01,
+      "lo": -0.52,
+      "hi": 0.53,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP05",
+      "ds": "2027-08-01",
+      "yhat": 0.01,
+      "lo": -0.56,
+      "hi": 0.59,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2026-09-01",
+      "yhat": 0.09,
+      "lo": 0.07,
+      "hi": 0.11,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2026-10-01",
+      "yhat": 0.11,
+      "lo": 0.08,
+      "hi": 0.14,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2026-11-01",
+      "yhat": 0.11,
+      "lo": 0.06,
+      "hi": 0.16,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2026-12-01",
+      "yhat": 0.12,
+      "lo": 0.06,
+      "hi": 0.17,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-01-01",
+      "yhat": 0.1,
+      "lo": 0.05,
+      "hi": 0.16,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-02-01",
+      "yhat": 0.1,
+      "lo": 0.05,
+      "hi": 0.16,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-03-01",
+      "yhat": 0.1,
+      "lo": 0.03,
+      "hi": 0.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-04-01",
+      "yhat": 0.12,
+      "lo": 0.03,
+      "hi": 0.21,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-05-01",
+      "yhat": 0.12,
+      "lo": 0.03,
+      "hi": 0.21,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-06-01",
+      "yhat": 0.12,
+      "lo": 0.02,
+      "hi": 0.22,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-07-01",
+      "yhat": 0.11,
+      "lo": -0.01,
+      "hi": 0.22,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP06",
+      "ds": "2027-08-01",
+      "yhat": 0.11,
+      "lo": -0.01,
+      "hi": 0.22,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2026-09-01",
+      "yhat": 0.77,
+      "lo": 0.58,
+      "hi": 0.96,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2026-10-01",
+      "yhat": 0.77,
+      "lo": 0.46,
+      "hi": 1.09,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2026-11-01",
+      "yhat": 0.8,
+      "lo": 0.43,
+      "hi": 1.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2026-12-01",
+      "yhat": 0.79,
+      "lo": 0.29,
+      "hi": 1.29,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-01-01",
+      "yhat": 0.84,
+      "lo": 0.26,
+      "hi": 1.42,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-02-01",
+      "yhat": 0.84,
+      "lo": 0.33,
+      "hi": 1.36,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-03-01",
+      "yhat": 0.74,
+      "lo": -0.0,
+      "hi": 1.47,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-04-01",
+      "yhat": 0.58,
+      "lo": -0.25,
+      "hi": 1.4,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-05-01",
+      "yhat": 0.58,
+      "lo": -0.28,
+      "hi": 1.44,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-06-01",
+      "yhat": 0.63,
+      "lo": -0.51,
+      "hi": 1.77,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-07-01",
+      "yhat": 0.67,
+      "lo": -0.45,
+      "hi": 1.78,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP07",
+      "ds": "2027-08-01",
+      "yhat": 0.62,
+      "lo": -0.46,
+      "hi": 1.7,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2026-09-01",
+      "yhat": 0.13,
+      "lo": 0.11,
+      "hi": 0.16,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2026-10-01",
+      "yhat": 0.14,
+      "lo": 0.1,
+      "hi": 0.17,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2026-11-01",
+      "yhat": 0.14,
+      "lo": 0.09,
+      "hi": 0.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2026-12-01",
+      "yhat": 0.14,
+      "lo": 0.1,
+      "hi": 0.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-01-01",
+      "yhat": 0.13,
+      "lo": 0.08,
+      "hi": 0.18,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-02-01",
+      "yhat": 0.14,
+      "lo": 0.09,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-03-01",
+      "yhat": 0.14,
+      "lo": 0.07,
+      "hi": 0.2,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-04-01",
+      "yhat": 0.13,
+      "lo": 0.07,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-05-01",
+      "yhat": 0.13,
+      "lo": 0.02,
+      "hi": 0.23,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-06-01",
+      "yhat": 0.13,
+      "lo": 0.05,
+      "hi": 0.21,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-07-01",
+      "yhat": 0.13,
+      "lo": 0.04,
+      "hi": 0.22,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP08",
+      "ds": "2027-08-01",
+      "yhat": 0.12,
+      "lo": 0.04,
+      "hi": 0.2,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2026-09-01",
+      "yhat": 0.31,
+      "lo": 0.23,
+      "hi": 0.39,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2026-10-01",
+      "yhat": 0.36,
+      "lo": 0.26,
+      "hi": 0.47,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2026-11-01",
+      "yhat": 0.4,
+      "lo": 0.25,
+      "hi": 0.55,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2026-12-01",
+      "yhat": 0.46,
+      "lo": 0.29,
+      "hi": 0.63,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-01-01",
+      "yhat": 0.41,
+      "lo": 0.19,
+      "hi": 0.64,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-02-01",
+      "yhat": 0.5,
+      "lo": 0.24,
+      "hi": 0.75,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-03-01",
+      "yhat": 0.54,
+      "lo": 0.27,
+      "hi": 0.81,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-04-01",
+      "yhat": 0.59,
+      "lo": 0.35,
+      "hi": 0.83,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-05-01",
+      "yhat": 0.63,
+      "lo": 0.34,
+      "hi": 0.92,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-06-01",
+      "yhat": 0.61,
+      "lo": 0.32,
+      "hi": 0.91,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-07-01",
+      "yhat": 0.66,
+      "lo": 0.33,
+      "hi": 0.99,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP09",
+      "ds": "2027-08-01",
+      "yhat": 0.65,
+      "lo": 0.34,
+      "hi": 0.97,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2026-09-01",
+      "yhat": 0.16,
+      "lo": 0.15,
+      "hi": 0.17,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2026-10-01",
+      "yhat": 0.16,
+      "lo": 0.13,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2026-11-01",
+      "yhat": 0.16,
+      "lo": 0.13,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2026-12-01",
+      "yhat": 0.16,
+      "lo": 0.13,
+      "hi": 0.19,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-01-01",
+      "yhat": 0.16,
+      "lo": 0.09,
+      "hi": 0.23,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-02-01",
+      "yhat": 0.16,
+      "lo": 0.09,
+      "hi": 0.23,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-03-01",
+      "yhat": 0.16,
+      "lo": 0.09,
+      "hi": 0.23,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-04-01",
+      "yhat": 0.16,
+      "lo": 0.05,
+      "hi": 0.27,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-05-01",
+      "yhat": 0.16,
+      "lo": 0.06,
+      "hi": 0.26,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-06-01",
+      "yhat": 0.16,
+      "lo": 0.06,
+      "hi": 0.26,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-07-01",
+      "yhat": 0.16,
+      "lo": 0.06,
+      "hi": 0.26,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP10",
+      "ds": "2027-08-01",
+      "yhat": 0.16,
+      "lo": 0.06,
+      "hi": 0.26,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2026-09-01",
+      "yhat": 0.55,
+      "lo": 0.44,
+      "hi": 0.67,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2026-10-01",
+      "yhat": 0.59,
+      "lo": 0.44,
+      "hi": 0.74,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2026-11-01",
+      "yhat": 0.63,
+      "lo": 0.38,
+      "hi": 0.88,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2026-12-01",
+      "yhat": 0.62,
+      "lo": 0.38,
+      "hi": 0.86,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-01-01",
+      "yhat": 0.66,
+      "lo": 0.31,
+      "hi": 1.0,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-02-01",
+      "yhat": 0.63,
+      "lo": 0.24,
+      "hi": 1.02,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-03-01",
+      "yhat": 0.64,
+      "lo": 0.18,
+      "hi": 1.1,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-04-01",
+      "yhat": 0.61,
+      "lo": 0.19,
+      "hi": 1.03,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-05-01",
+      "yhat": 0.63,
+      "lo": 0.2,
+      "hi": 1.06,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-06-01",
+      "yhat": 0.58,
+      "lo": 0.02,
+      "hi": 1.14,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-07-01",
+      "yhat": 0.61,
+      "lo": 0.0,
+      "hi": 1.21,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP11",
+      "ds": "2027-08-01",
+      "yhat": 0.6,
+      "lo": -0.25,
+      "hi": 1.45,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2026-09-01",
+      "yhat": 0.28,
+      "lo": 0.25,
+      "hi": 0.32,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2026-10-01",
+      "yhat": 0.28,
+      "lo": 0.23,
+      "hi": 0.33,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2026-11-01",
+      "yhat": 0.29,
+      "lo": 0.2,
+      "hi": 0.38,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2026-12-01",
+      "yhat": 0.28,
+      "lo": 0.17,
+      "hi": 0.39,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-01-01",
+      "yhat": 0.29,
+      "lo": 0.15,
+      "hi": 0.43,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-02-01",
+      "yhat": 0.27,
+      "lo": 0.08,
+      "hi": 0.46,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-03-01",
+      "yhat": 0.27,
+      "lo": 0.06,
+      "hi": 0.49,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-04-01",
+      "yhat": 0.28,
+      "lo": 0.01,
+      "hi": 0.54,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-05-01",
+      "yhat": 0.29,
+      "lo": 0.01,
+      "hi": 0.57,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-06-01",
+      "yhat": 0.28,
+      "lo": -0.0,
+      "hi": 0.56,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-07-01",
+      "yhat": 0.29,
+      "lo": -0.05,
+      "hi": 0.62,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CP12",
+      "ds": "2027-08-01",
+      "yhat": 0.28,
+      "lo": -0.11,
+      "hi": 0.66,
+      "bands": null
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2026-09-01",
+      "yhat": 3.27,
+      "lo": 2.85,
+      "hi": 3.71,
       "bands": [
         {
-          "hi": 3.4,
           "level": 50,
-          "lo": 2.53
+          "lo": 3.1,
+          "hi": 3.46
         },
         {
-          "hi": 3.65,
           "level": 80,
-          "lo": 1.82
+          "lo": 2.85,
+          "hi": 3.71
         },
         {
-          "hi": 3.91,
           "level": 95,
-          "lo": 1.37
+          "lo": 2.4,
+          "hi": 4.16
         }
-      ],
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2026-10-01",
+      "yhat": 3.33,
+      "lo": 2.29,
+      "hi": 4.37,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.91,
+          "hi": 3.75
+        },
+        {
+          "level": 80,
+          "lo": 2.29,
+          "hi": 4.37
+        },
+        {
+          "level": 95,
+          "lo": 0.39,
+          "hi": 6.27
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2026-11-01",
+      "yhat": 3.57,
+      "lo": 2.49,
+      "hi": 4.65,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.83,
+          "hi": 4.3
+        },
+        {
+          "level": 80,
+          "lo": 2.49,
+          "hi": 4.65
+        },
+        {
+          "level": 95,
+          "lo": 0.3,
+          "hi": 6.83
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2026-12-01",
+      "yhat": 3.56,
+      "lo": 2.07,
+      "hi": 5.01,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.79,
+          "hi": 4.3
+        },
+        {
+          "level": 80,
+          "lo": 2.07,
+          "hi": 5.01
+        },
+        {
+          "level": 95,
+          "lo": -0.3,
+          "hi": 7.39
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-01-01",
+      "yhat": 3.63,
+      "lo": 1.58,
+      "hi": 5.68,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.57,
+          "hi": 4.69
+        },
+        {
+          "level": 80,
+          "lo": 1.58,
+          "hi": 5.68
+        },
+        {
+          "level": 95,
+          "lo": -0.83,
+          "hi": 8.09
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-02-01",
+      "yhat": 3.74,
+      "lo": 0.94,
+      "hi": 6.55,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.51,
+          "hi": 4.98
+        },
+        {
+          "level": 80,
+          "lo": 0.94,
+          "hi": 6.55
+        },
+        {
+          "level": 95,
+          "lo": -0.9,
+          "hi": 8.39
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-03-01",
+      "yhat": 3.72,
+      "lo": 0.68,
+      "hi": 6.77,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.5,
+          "hi": 4.95
+        },
+        {
+          "level": 80,
+          "lo": 0.68,
+          "hi": 6.77
+        },
+        {
+          "level": 95,
+          "lo": -1.08,
+          "hi": 8.52
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-04-01",
+      "yhat": 3.62,
+      "lo": 0.33,
+      "hi": 6.91,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 2.11,
+          "hi": 5.13
+        },
+        {
+          "level": 80,
+          "lo": 0.33,
+          "hi": 6.91
+        },
+        {
+          "level": 95,
+          "lo": -2.57,
+          "hi": 9.8
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-05-01",
+      "yhat": 3.78,
+      "lo": -0.07,
+      "hi": 7.62,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 1.75,
+          "hi": 5.79
+        },
+        {
+          "level": 80,
+          "lo": -0.07,
+          "hi": 7.62
+        },
+        {
+          "level": 95,
+          "lo": -2.4,
+          "hi": 9.95
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-06-01",
+      "yhat": 3.81,
+      "lo": -0.88,
+      "hi": 8.5,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 1.71,
+          "hi": 5.91
+        },
+        {
+          "level": 80,
+          "lo": -0.88,
+          "hi": 8.5
+        },
+        {
+          "level": 95,
+          "lo": -2.95,
+          "hi": 10.57
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
       "ds": "2027-07-01",
-      "hi": 3.65,
-      "lo": 1.82,
-      "unique_id": "GB.CPI.FORECAST.BOTTOMUP",
-      "yhat": 3.44
+      "yhat": 3.78,
+      "lo": -2.05,
+      "hi": 9.58,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 1.66,
+          "hi": 5.87
+        },
+        {
+          "level": 80,
+          "lo": -2.05,
+          "hi": 9.58
+        },
+        {
+          "level": 95,
+          "lo": -3.58,
+          "hi": 11.11
+        }
+      ]
+    },
+    {
+      "unique_id": "GB.CPI.FORECAST",
+      "ds": "2027-08-01",
+      "yhat": 3.68,
+      "lo": -2.83,
+      "hi": 10.21,
+      "bands": [
+        {
+          "level": 50,
+          "lo": 1.5,
+          "hi": 5.87
+        },
+        {
+          "level": 80,
+          "lo": -2.83,
+          "hi": 10.21
+        },
+        {
+          "level": 95,
+          "lo": -3.89,
+          "hi": 11.27
+        }
+      ]
     }
-  ],
-  "reconciliation": "BottomUp",
-  "schemaVersion": 1,
-  "totalUniqueId": "GB.CPI.FORECAST.BOTTOMUP"
+  ]
 }

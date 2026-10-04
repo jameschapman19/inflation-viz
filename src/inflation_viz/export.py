@@ -20,6 +20,7 @@ from typing import Any
 import polars as pl
 
 from inflation_viz.config import REPO_ROOT, SourceRegistry
+from inflation_viz.forecast import public_forecast
 from inflation_viz.ons_catalog import discover_registry
 from inflation_viz.storage import (
     DATA_DIR,
@@ -36,14 +37,14 @@ DEFAULT_OUT_DIR = REPO_ROOT / "web" / "src" / "data"
 # buildable in that state. Shape matches inflation-forecast's real export
 # (publish.py), just with nothing in it yet.
 EMPTY_FORECAST_EXPORT: dict[str, Any] = {
-    "schemaVersion": 1,
+    "schemaVersion": 2,
     "generatedAt": None,
     "dataVintage": None,
-    "model": None,
-    "reconciliation": None,
+    "forecastOrigin": None,
+    "horizonMonths": 0,
     "level": None,
     "coverage": {"included": [], "missing": []},
-    "totalUniqueId": "GB.CPI.FORECAST.BOTTOMUP",
+    "totalUniqueId": "GB.CPI.FORECAST",
     "points": [],
 }
 
@@ -72,15 +73,12 @@ def _registry_payload(registry: SourceRegistry) -> dict[str, Any]:
 
 
 def export_forecast(*, data_dir: Path = DATA_DIR, out_dir: Path = DEFAULT_OUT_DIR) -> None:
-    """Writes `web/src/data/forecast.json` — a straight copy of
-    inflation-forecast's public export (`data/forecast/latest.json`), not
-    reshaped. `publish.py` on that side already builds exactly what the
-    frontend needs; keeping this a pass-through means any schema drift
-    between the two repos shows up here, not as a silent mismatch.
+    """Validate public results, normalize legacy payloads, and export the
+    output-only contract to web data. Unknown fields are discarded.
     """
     out_dir.mkdir(parents=True, exist_ok=True)
     forecast = read_latest_forecast(data_dir)
-    _write_json(out_dir / "forecast.json", forecast or EMPTY_FORECAST_EXPORT)
+    _write_json(out_dir / "forecast.json", public_forecast(forecast or EMPTY_FORECAST_EXPORT))
 
 
 def export_web_data(

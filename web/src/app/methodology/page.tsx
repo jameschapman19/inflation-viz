@@ -214,6 +214,10 @@ export default function MethodologyPage() {
             own short-term projection, not an ONS figure.
           </p>
           <p className="muted">
+            Based on observations through {forecast.forecastOrigin};
+            projects {forecast.horizonMonths} months ahead.
+          </p>
+          <p className="muted">
             Currently projects {forecast.coverage.included.length} of 12 divisions.
             {missingNames.length > 0 && <> Not yet covered: {missingNames.join(", ")}.</>}
           </p>

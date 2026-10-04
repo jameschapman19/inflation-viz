@@ -75,11 +75,7 @@ export interface ForecastPoint {
   yhat: number;
   lo: number | null;
   hi: number | null;
-  /** A conformal prediction band per requested confidence level, for a
-   * fan-chart rendering — present only on the reconciled total's points
-   * (see inflation-forecast's conformal.py); `null` everywhere else,
-   * including on the total before the first run that computed one.
-   */
+  /** Prediction bands for the total's fan chart; null when unavailable. */
   bands: ForecastBand[] | null;
 }
 
@@ -87,8 +83,8 @@ export interface ForecastExport {
   schemaVersion: number;
   generatedAt: string | null;
   dataVintage: string | null;
-  model: string | null;
-  reconciliation: string | null;
+  forecastOrigin: string | null;
+  horizonMonths: number;
   level: number | null;
   coverage: {
     included: string[];

@@ -162,10 +162,8 @@ function toForecastTimeSeries(actual: SeriesPoint[], points: ForecastPoint[]): [
  * stacked on top of it, so the visible fill spans exactly [lo, hi] at
  * every date — showing a forecast's own uncertainty rather than a single
  * point estimate that reads as more certain than it is. No-ops (returns
- * `[]`) wherever a point carries no interval at all — the reconciled
- * total never does (summing per-division intervals isn't statistically
- * valid, see inflation-forecast's publish.py), so this only ever
- * produces a band for a single division's own forecast.
+ * `[]`) wherever a point carries no interval. The total uses the
+ * separate fan-chart renderer below.
  */
 function toForecastBandSeries(actual: SeriesPoint[], points: ForecastPoint[], color: string): SeriesOption[] {
   const withInterval = points.filter((p): p is ForecastPoint & { lo: number; hi: number } => p.lo != null && p.hi != null);
@@ -205,8 +203,7 @@ function toForecastBandSeries(actual: SeriesPoint[], points: ForecastPoint[], co
  * faintest — the standard fan-chart convention (e.g. the Bank of
  * England's own Monetary Policy Report fan charts). Points without a
  * `bands` array are skipped; returns `[]` entirely if none carry one
- * (e.g. a run with `compute_fan=False`, or before the first run that
- * computed conformal bands at all).
+ * (e.g. a forecast without published prediction bands).
  */
 function toForecastFanSeries(actual: SeriesPoint[], points: ForecastPoint[], color: string): SeriesOption[] {
   const withBands = points.filter((p): p is ForecastPoint & { bands: ForecastBand[] } => !!p.bands && p.bands.length > 0);
@@ -321,12 +318,7 @@ export function headlineChart(mode: ChartMode): EChartsOption {
       lineStyle: { width: 2, color: HEADLINE_COLOR[mode], type: "dashed", opacity: FORECAST_OPACITY },
       itemStyle: { color: HEADLINE_COLOR[mode], opacity: FORECAST_OPACITY },
     });
-    // A fan, not a single band — the reconciled total's own conformal
-    // prediction bands (inflation-forecast's conformal.py), not combined
-    // from the divisions' (still not statistically valid, same as ever —
-    // this sidesteps that instead of working around it). No-ops if the
-    // points don't carry a `bands` array at all (e.g. before the first
-    // run that computed one, or a `compute_fan=False` run).
+    // Render the total's published prediction bands when available.
     series.push(...toForecastFanSeries(actualCpi, projected, HEADLINE_COLOR[mode]));
   }
 
