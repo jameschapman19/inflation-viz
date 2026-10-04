@@ -12,6 +12,28 @@ code, model choices, features, calibration, and backtest reports stay in the
 private repository. `src/inflation_viz/forecast.py` validates the public JSON
 contract and discards fields outside it before producing frontend data.
 
+Energy and road-fuel observations are also published under
+`data/drivers/vintages/<retrieval timestamp>/`. Each snapshot contains
+`observations.parquet` and a schema-versioned `manifest.json`. The archive
+includes ONS gas/electricity/motor-fuel price indices and basket weights,
+DESNZ weekly petrol/diesel pump prices, and Ofgem average Direct Debit unit
+rates and standing charges for Great Britain.
+
+Rows retain their observation/effective date, effective end date where
+applicable, value, unit, source, reuse terms, publication timestamp where
+the source supplies one, and retrieval timestamp. Publication dates are
+not reconstructed from a presumed release schedule. For revision-safe
+historical use, **both the containing snapshot and its retrieval time must
+precede the decision time**; an old publication date alone does not make a
+newly retrieved revision historically available.
+
+The daily refresh collects these observations after the main site export;
+a Tuesday 10:00 UTC collector follows the weekly fuel-price release.
+Individual source failures are logged in the new snapshot's manifest;
+failed sources are omitted rather than copied forward as fresh data. If all
+driver sources fail, the main CPI refresh still completes. Run this collector
+independently with `uv run python -m inflation_viz.drivers`.
+
 Two halves, split at a JSON boundary:
 
 - **Python data pipeline** (`src/inflation_viz/`) — fetches every series
@@ -24,8 +46,9 @@ Two halves, split at a JSON boundary:
 
 ## What's here
 
-- `sources.yaml` — the source registry. Every fetcher reads from this file;
-  no CDID or URL is hardcoded anywhere else. Headline rates, the 12 COICOP
+- `sources.yaml` — the registry for external references and selected non-CPI
+  context series. CPI CDIDs are discovered live from ONS's bulk dataset titles.
+  Headline rates, the 12 COICOP
   division contribution series, and the 12 division basket-weight series are
   all plain ONS CDIDs fetched the same way — no scraping.
 - `src/inflation_viz/fetch.py` — pulls each series from ONS's timeseries

@@ -91,7 +91,7 @@ external:
     source_url: "https://www.ofgem.gov.uk/energy-price-cap"
     license: "Check Ofgem terms of use"
     cadence: per_cap_period
-    notes: "Not ingested in v1. Reserved for inflation-forecast's housing/energy exogenous regressor."
+    notes: "Average Direct Debit unit rates and standing charges are archived in data/drivers with effective periods and retrieval timestamps."
 
   fuel_prices:
     name: "Weekly road fuel prices"
@@ -99,4 +99,4 @@ external:
     source_url: "https://www.gov.uk/government/statistics/weekly-road-fuel-prices"
     license: *ons_ogl
     cadence: weekly
-    notes: "Not ingested in v1. Reserved for inflation-forecast's transport exogenous regressor."
+    notes: "Official CSV petrol/diesel pump prices are archived in data/drivers. Publication timestamps are retained where a dated change note identifies the observation."
