@@ -5,7 +5,12 @@ into its 12 COICOP components, with every number one click from its ONS
 source. This is Phase 1 of Inflation Radar — the public, open layer. The
 reconciled forecasting product lives in the private `inflation-forecast`
 repository; this repo never contains forecasting code or weighting logic,
-only historical data and its visualization.
+only published observations, forecast outputs, and their visualization.
+
+Forecast outputs are currently visible alongside published data. Forecasting
+code, model choices, features, calibration, and backtest reports stay in the
+private repository. `src/inflation_viz/forecast.py` validates the public JSON
+contract and discards fields outside it before producing frontend data.
 
 Two halves, split at a JSON boundary:
 
@@ -32,6 +37,10 @@ Two halves, split at a JSON boundary:
 - `src/inflation_viz/export.py` — converts `data/latest` + `sources.yaml`
   into the JSON the Next.js app reads (`web/src/data/`). This is the one
   boundary between the pipeline and the frontend.
+- `data/forecast/` — published forecast runs and the latest output. Schema v2
+  exposes issue time, data vintage, observation cutoff, horizon, confidence
+  levels, division coverage, and forecast points. The site consumes results
+  through this contract; legacy v1 inputs are normalized when exporting.
 - `src/inflation_viz/refresh.py` — the one script that fetches everything
   and exports it: `uv run python -m inflation_viz.refresh`.
 - `src/inflation_viz/colors.py` / `web/src/lib/colors.ts` — the shared
