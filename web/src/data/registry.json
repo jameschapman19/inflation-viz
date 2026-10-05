@@ -698,7 +698,7 @@
     },
     {
       "unique_id": "GB.CP01.1.3.6",
-      "name": "Other preserved or processed fish and seafood - based preparations",
+      "name": "Other preserved processed fish and seafood-based prep",
       "cdid": "L7KE",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -707,7 +707,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Other preserved or processed fish and seafood - based preparations",
+      "division_name": "Other preserved processed fish and seafood-based prep",
       "coicop": "01.1.3.6",
       "parent_coicop": "01.1.3"
     },
@@ -1568,7 +1568,7 @@
     },
     {
       "unique_id": "GB.CP03.1.2.3",
-      "name": "Garments for infants and children (0 to 2 years) and children (3 to 13 years)",
+      "name": "Garments for infants (0-2 yrs) and children (3-13 yrs)",
       "cdid": "L7ME",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -1577,7 +1577,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Garments for infants and children (0 to 2 years) and children (3 to 13 years)",
+      "division_name": "Garments for infants (0-2 yrs) and children (3-13 yrs)",
       "coicop": "03.1.2.3",
       "parent_coicop": "03.1.2"
     },
@@ -1958,7 +1958,7 @@
     },
     {
       "unique_id": "GB.CP04.5.2.2",
-      "name": "Liquefied hydrocarbons (butane, propane, etc)",
+      "name": "Liquefied hydrocarbons (butane, propane etc)",
       "cdid": "L7N6",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -1967,7 +1967,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Liquefied hydrocarbons (butane, propane, etc)",
+      "division_name": "Liquefied hydrocarbons (butane, propane etc)",
       "coicop": "04.5.2.2",
       "parent_coicop": "04.5.2"
     },
@@ -2213,7 +2213,7 @@
     },
     {
       "unique_id": "GB.CP05.3.1.1",
-      "name": "Refrigerators, freezers and fridge-freezers",
+      "name": "Refrigerators, freezers and fridge freezers",
       "cdid": "L7Q8",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -2222,7 +2222,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Refrigerators, freezers and fridge-freezers",
+      "division_name": "Refrigerators, freezers and fridge freezers",
       "coicop": "05.3.1.1",
       "parent_coicop": "05.3.1"
     },
@@ -2693,7 +2693,7 @@
     },
     {
       "unique_id": "GB.CP06.2",
-      "name": "Out-patient services",
+      "name": "Out-patient services:",
       "cdid": "D7NR",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -2702,13 +2702,13 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Out-patient services",
+      "division_name": "Out-patient services:",
       "coicop": "06.2",
       "parent_coicop": "06"
     },
     {
       "unique_id": "GB.CP06.2.1/3",
-      "name": "Medical services and paramedical services",
+      "name": "Medical services and paramedical services:",
       "cdid": "D7NS",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -2717,13 +2717,13 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Medical services and paramedical services",
+      "division_name": "Medical services and paramedical services:",
       "coicop": "06.2.1/3",
       "parent_coicop": "06.2"
     },
     {
       "unique_id": "GB.CP06.2.2",
-      "name": "Dental services",
+      "name": "Dental services:",
       "cdid": "D7NT",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -2732,7 +2732,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Dental services",
+      "division_name": "Dental services:",
       "coicop": "06.2.2",
       "parent_coicop": "06.2"
     },
@@ -3068,7 +3068,7 @@
     },
     {
       "unique_id": "GB.CP07.3.2.2",
-      "name": "Passengar transport by taxi and hired car with driver",
+      "name": "Passenger transport by taxi and hired car with driver",
       "cdid": "L7RI",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -3077,7 +3077,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Passengar transport by taxi and hired car with driver",
+      "division_name": "Passenger transport by taxi and hired car with driver",
       "coicop": "07.3.2.2",
       "parent_coicop": "07.3.2"
     },
@@ -3503,7 +3503,7 @@
     },
     {
       "unique_id": "GB.CP09.2.1.1",
-      "name": "Camper vans",
+      "name": "Camper vans, caravans and trailers",
       "cdid": "L7SA",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -3512,7 +3512,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Camper vans",
+      "division_name": "Camper vans, caravans and trailers",
       "coicop": "09.2.1.1",
       "parent_coicop": "09.2.1"
     },
@@ -3638,7 +3638,7 @@
     },
     {
       "unique_id": "GB.CP09.3.2",
-      "name": "Equipment for sport and open-air recreation",
+      "name": "Equipment for sport camping and open-air recreation",
       "cdid": "D7NY",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -3647,7 +3647,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Equipment for sport and open-air recreation",
+      "division_name": "Equipment for sport camping and open-air recreation",
       "coicop": "09.3.2",
       "parent_coicop": "09.3"
     },
@@ -4073,7 +4073,7 @@
     },
     {
       "unique_id": "GB.CP09.5.3/4",
-      "name": "Misc. printed matter, stationery, drawing materials",
+      "name": "Misc. printed matter stationery and drawing materials",
       "cdid": "D7O6",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -4082,7 +4082,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Misc. printed matter, stationery, drawing materials",
+      "division_name": "Misc. printed matter stationery and drawing materials",
       "coicop": "09.5.3/4",
       "parent_coicop": "09.5"
     },
@@ -4253,7 +4253,7 @@
     },
     {
       "unique_id": "GB.CP11.2.0.1",
-      "name": "Hotels, motel, inns and similar accommodation services",
+      "name": "Hotels, motels and similar accommodation services",
       "cdid": "L7TF",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -4262,7 +4262,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Hotels, motel, inns and similar accommodation services",
+      "division_name": "Hotels, motels and similar accommodation services",
       "coicop": "11.2.0.1",
       "parent_coicop": "11.2.0"
     },
@@ -4763,7 +4763,7 @@
     },
     {
       "unique_id": "GB.CP12.6.2.2",
-      "name": "Fees and service charges of brokers,investment counsellor",
+      "name": "Fees and service charges of brokers, investment counsellors",
       "cdid": "L7U6",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -4772,7 +4772,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "percent",
-      "division_name": "Fees and service charges of brokers,investment counsellor",
+      "division_name": "Fees and service charges of brokers, investment counsellors",
       "coicop": "12.6.2.2",
       "parent_coicop": "12.6.2"
     },
@@ -5155,7 +5155,7 @@
     },
     {
       "unique_id": "GB.SW01.1.3.6",
-      "name": "Other preserved or processed fish and seafood - based preparations",
+      "name": "Other preserved processed fish and seafood-based prep",
       "cdid": "L84H",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -5164,7 +5164,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Other preserved or processed fish and seafood - based preparations",
+      "division_name": "Other preserved processed fish and seafood-based prep",
       "coicop": "01.1.3.6",
       "parent_coicop": "01.1.3"
     },
@@ -6040,7 +6040,7 @@
     },
     {
       "unique_id": "GB.SW03.1.2.3",
-      "name": "Garments for infants and children (0 to 2 years) and children (3 to 13 years)",
+      "name": "Garments for infants (0-2 yrs) and children (3-13 yrs)",
       "cdid": "L86A",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -6049,7 +6049,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Garments for infants and children (0 to 2 years) and children (3 to 13 years)",
+      "division_name": "Garments for infants (0-2 yrs) and children (3-13 yrs)",
       "coicop": "03.1.2.3",
       "parent_coicop": "03.1.2"
     },
@@ -6430,7 +6430,7 @@
     },
     {
       "unique_id": "GB.SW04.5.2.2",
-      "name": "Liquefied hydrocarbons (butane, propane, etc)",
+      "name": "Liquefied hydrocarbons (butane, propane etc)",
       "cdid": "L89Y",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -6439,7 +6439,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Liquefied hydrocarbons (butane, propane, etc)",
+      "division_name": "Liquefied hydrocarbons (butane, propane etc)",
       "coicop": "04.5.2.2",
       "parent_coicop": "04.5.2"
     },
@@ -6685,7 +6685,7 @@
     },
     {
       "unique_id": "GB.SW05.3.1.1",
-      "name": "Refrigerators, freezers and fridge-freezers",
+      "name": "Refrigerators, freezers and fridge freezers",
       "cdid": "L8AG",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -6694,7 +6694,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Refrigerators, freezers and fridge-freezers",
+      "division_name": "Refrigerators, freezers and fridge freezers",
       "coicop": "05.3.1.1",
       "parent_coicop": "05.3.1"
     },
@@ -7165,7 +7165,7 @@
     },
     {
       "unique_id": "GB.SW06.2",
-      "name": "Out-patient services",
+      "name": "Out-patient services:",
       "cdid": "ICVJ",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -7174,13 +7174,13 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Out-patient services",
+      "division_name": "Out-patient services:",
       "coicop": "06.2",
       "parent_coicop": "06"
     },
     {
       "unique_id": "GB.SW06.2.1/3",
-      "name": "Medical services and paramedical services",
+      "name": "Medical services and paramedical services:",
       "cdid": "ICVK",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -7189,13 +7189,13 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Medical services and paramedical services",
+      "division_name": "Medical services and paramedical services:",
       "coicop": "06.2.1/3",
       "parent_coicop": "06.2"
     },
     {
       "unique_id": "GB.SW06.2.2",
-      "name": "Dental services",
+      "name": "Dental services:",
       "cdid": "ICVL",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -7204,7 +7204,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Dental services",
+      "division_name": "Dental services:",
       "coicop": "06.2.2",
       "parent_coicop": "06.2"
     },
@@ -7480,7 +7480,7 @@
     },
     {
       "unique_id": "GB.SW07.2.4.3",
-      "name": "Driving lessons, test licences and road worthiness tests",
+      "name": "Driving lessons, test licences and road worthiness test",
       "cdid": "L8BQ",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -7489,7 +7489,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Driving lessons, test licences and road worthiness tests",
+      "division_name": "Driving lessons, test licences and road worthiness test",
       "coicop": "07.2.4.3",
       "parent_coicop": "07.2.4"
     },
@@ -7570,7 +7570,7 @@
     },
     {
       "unique_id": "GB.SW07.3.2.2",
-      "name": "Passengar transport by taxi and hired car with driver",
+      "name": "Passenger transport by taxi and hired car with driver",
       "cdid": "L8BW",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -7579,7 +7579,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Passengar transport by taxi and hired car with driver",
+      "division_name": "Passenger transport by taxi and hired car with driver",
       "coicop": "07.3.2.2",
       "parent_coicop": "07.3.2"
     },
@@ -8020,7 +8020,7 @@
     },
     {
       "unique_id": "GB.SW09.2.1.1",
-      "name": "Camper vans",
+      "name": "Camper vans, caravans and trailers",
       "cdid": "L8CO",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -8029,7 +8029,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Camper vans",
+      "division_name": "Camper vans, caravans and trailers",
       "coicop": "09.2.1.1",
       "parent_coicop": "09.2.1"
     },
@@ -8170,7 +8170,7 @@
     },
     {
       "unique_id": "GB.SW09.3.2",
-      "name": "Equipment for sport and open-air recreation",
+      "name": "Equipment for sport camping and open-air recreation",
       "cdid": "ICVQ",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -8179,7 +8179,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Equipment for sport and open-air recreation",
+      "division_name": "Equipment for sport camping and open-air recreation",
       "coicop": "09.3.2",
       "parent_coicop": "09.3"
     },
@@ -8605,7 +8605,7 @@
     },
     {
       "unique_id": "GB.SW09.5.3/4",
-      "name": "Misc. printed matter, stationery, drawing materials",
+      "name": "Misc. printed matter stationery and drawing materials",
       "cdid": "ICVW",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -8614,7 +8614,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Misc. printed matter, stationery, drawing materials",
+      "division_name": "Misc. printed matter stationery and drawing materials",
       "coicop": "09.5.3/4",
       "parent_coicop": "09.5"
     },
@@ -8785,7 +8785,7 @@
     },
     {
       "unique_id": "GB.SW11.2.0.1",
-      "name": "Hotels, motel, inns and similar accommodation services",
+      "name": "Hotels, motels and similar accommodation services",
       "cdid": "L8U9",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -8794,7 +8794,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Hotels, motel, inns and similar accommodation services",
+      "division_name": "Hotels, motels and similar accommodation services",
       "coicop": "11.2.0.1",
       "parent_coicop": "11.2.0"
     },
@@ -9295,7 +9295,7 @@
     },
     {
       "unique_id": "GB.SW12.6.2.2",
-      "name": "Fees and service charges of brokers,investment counsellor",
+      "name": "Fees and service charges of brokers, investment counsellors",
       "cdid": "L8UZ",
       "dataset": "mm23",
       "source_name": "Office for National Statistics",
@@ -9304,7 +9304,7 @@
       "license": "Open Government Licence v3.0",
       "cadence": "monthly",
       "unit": "per_mille",
-      "division_name": "Fees and service charges of brokers,investment counsellor",
+      "division_name": "Fees and service charges of brokers, investment counsellors",
       "coicop": "12.6.2.2",
       "parent_coicop": "12.6.2"
     },
@@ -9392,7 +9392,7 @@
       "source_url": "https://www.ofgem.gov.uk/energy-price-cap",
       "license": "Check Ofgem terms of use",
       "cadence": "per_cap_period",
-      "notes": "Not ingested in v1. Reserved for inflation-forecast's housing/energy exogenous regressor."
+      "notes": "Average Direct Debit unit rates and standing charges are archived in data/drivers with effective periods and retrieval timestamps."
     },
     {
       "key": "fuel_prices",
@@ -9401,7 +9401,7 @@
       "source_url": "https://www.gov.uk/government/statistics/weekly-road-fuel-prices",
       "license": "Open Government Licence v3.0",
       "cadence": "weekly",
-      "notes": "Not ingested in v1. Reserved for inflation-forecast's transport exogenous regressor."
+      "notes": "Official CSV petrol/diesel pump prices are archived in data/drivers. Publication timestamps are retained where a dated change note identifies the observation."
     }
   ],
   "context": [
