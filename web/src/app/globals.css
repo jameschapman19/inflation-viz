@@ -1,14 +1,14 @@
 :root {
   color-scheme: dark;
-  --page: #0d0d0d;
-  --surface: #1a1a19;
-  --surface-raised: #202020;
-  --text-primary: #ffffff;
-  --text-secondary: #c3c2b7;
-  --muted: #898781;
+  --page: var(--radar-page);
+  --surface: var(--radar-surface);
+  --surface-raised: var(--radar-raised);
+  --text-primary: var(--radar-text);
+  --text-secondary: var(--radar-secondary);
+  --muted: var(--radar-muted);
   --gridline: #2c2c2a;
   --border: rgba(255, 255, 255, 0.1);
-  --accent: #3987e5;
+  --accent: var(--radar-accent);
   --shadow: 0 1px 2px rgba(0, 0, 0, 0.4), 0 8px 24px rgba(0, 0, 0, 0.28);
   --header-bg: rgba(26, 26, 25, 0.72);
   --nav-track-bg: rgba(0, 0, 0, 0.25);
@@ -400,15 +400,15 @@ h2 {
 @media (prefers-color-scheme: light) {
   :root:not([data-theme="dark"]) {
     color-scheme: light;
-    --page: #f9f9f7;
-    --surface: #fcfcfb;
-    --surface-raised: #ffffff;
-    --text-primary: #0b0b0b;
-    --text-secondary: #52514e;
+    --page: var(--radar-page);
+    --surface: var(--radar-surface);
+    --surface-raised: var(--radar-raised);
+    --text-primary: var(--radar-text);
+    --text-secondary: var(--radar-secondary);
     /* Same gray as dark mode's --muted fails WCAG AA against this
        near-white page (~3.5:1) — darkened here to ~5.1:1. */
-    --muted: #6b6a63;
-    --gridline: #e1e0d9;
+    --muted: var(--radar-muted);
+    --gridline: var(--radar-grid);
     --border: rgba(11, 11, 11, 0.1);
     --header-bg: rgba(255, 255, 255, 0.72);
     --nav-track-bg: rgba(11, 11, 11, 0.05);

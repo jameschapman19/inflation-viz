@@ -1,0 +1,17 @@
+{
+  "packages": [
+    {
+      "name": "radar-contracts",
+      "version": "0.1.0",
+      "file": "radar_contracts-0.1.0-py3-none-any.whl",
+      "sha256": "df0d9d3e6b678a6c8c69e1aceb2b90018bfa95b063628e82b894656e7c625311",
+      "sourceDirectory": "packages/radar-contracts/src",
+      "assets": {
+        "web/src/app/radar.css": "radar_contracts/assets/radar.css",
+        "web/src/lib/radarForecast.ts": "radar_contracts/assets/forecast.ts",
+        "docs/contracts/forecast-v2.schema.json": "radar_contracts/assets/forecast-v2.schema.json",
+        "web/src/app/icon.svg": "radar_contracts/assets/icon.svg"
+      }
+    }
+  ]
+}

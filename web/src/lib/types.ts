@@ -63,33 +63,7 @@ export interface Meta {
   latestVintage: string | null;
 }
 
-export interface ForecastBand {
-  level: number;
-  lo: number;
-  hi: number;
-}
-
-export interface ForecastPoint {
-  unique_id: string;
-  ds: string;
-  yhat: number;
-  lo: number | null;
-  hi: number | null;
-  /** Prediction bands for the total's fan chart; null when unavailable. */
-  bands: ForecastBand[] | null;
-}
-
-export interface ForecastExport {
-  schemaVersion: number;
-  generatedAt: string | null;
-  dataVintage: string | null;
-  forecastOrigin: string | null;
-  horizonMonths: number;
-  level: number | null;
-  coverage: {
-    included: string[];
-    missing: string[];
-  };
+export type { ForecastBand, ForecastPoint } from "./radarForecast";
+export type ForecastExport = Omit<import("./radarForecast").ForecastExport, "totalUniqueId"> & {
   totalUniqueId: string;
-  points: ForecastPoint[];
-}
+};

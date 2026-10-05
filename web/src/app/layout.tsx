@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
+import "./radar.css";
 import { Nav } from "@/components/Nav";
 import { meta } from "@/lib/data";
 

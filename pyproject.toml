@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.12"
 license = { text = "MIT" }
 dependencies = [
+    "radar-contracts==0.1.0",
     "polars>=1.9",
     "requests>=2.32",
     "urllib3>=2.0",
@@ -39,7 +40,10 @@ select = ["E", "F", "I", "UP", "B", "SIM", "N"]
 [tool.mypy]
 strict = true
 python_version = "3.12"
-files = ["src", "tests"]
+files = ["src", "tests", "packages/radar-contracts/src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+
+[tool.uv.sources]
+radar-contracts = { path = "vendor/radar_contracts-0.1.0-py3-none-any.whl" }
