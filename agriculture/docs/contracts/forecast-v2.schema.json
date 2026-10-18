@@ -1,0 +1,195 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Radar public monthly forecast v2",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "generatedAt",
+    "dataVintage",
+    "forecastOrigin",
+    "horizonMonths",
+    "level",
+    "coverage",
+    "totalUniqueId",
+    "points"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 2
+    },
+    "generatedAt": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "dataVintage": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "forecastOrigin": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "horizonMonths": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "level": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 99
+        }
+      ]
+    },
+    "coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "included",
+        "missing"
+      ],
+      "properties": {
+        "included": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "missing": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "totalUniqueId": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "unique_id",
+          "ds",
+          "yhat",
+          "lo",
+          "hi",
+          "bands"
+        ],
+        "properties": {
+          "unique_id": {
+            "type": "string"
+          },
+          "ds": {
+            "type": "string",
+            "format": "date"
+          },
+          "yhat": {
+            "type": "number"
+          },
+          "lo": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "hi": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "bands": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "level",
+                    "lo",
+                    "hi"
+                  ],
+                  "properties": {
+                    "level": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "maximum": 99
+                    },
+                    "lo": {
+                      "type": "number"
+                    },
+                    "hi": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "runId": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "experimental",
+        "validated"
+      ]
+    },
+    "evaluationBasis": {
+      "enum": [
+        "revised_history",
+        "release_vintages"
+      ]
+    },
+    "series": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "unit",
+          "intervalStatus"
+        ],
+        "properties": {
+          "unit": {
+            "type": "string"
+          },
+          "intervalStatus": {
+            "enum": [
+              "experimental",
+              "undercovered_in_recent_evaluation"
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$comment": "Validate cross-field temporal coverage, band nesting and domain coherence with radar_contracts.forecast.public_forecast. No fitted models, selection scores or private metadata may appear."
+}

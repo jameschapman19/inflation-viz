@@ -1,0 +1,24 @@
+
+.satellite .sat-card { margin-top: 20px; padding: 20px; }
+.satellite .sat-select { min-width: 220px; }
+.sat-chart { width: 100%; display: block; margin-top: 14px; overflow: visible; }
+.sat-key { display: inline-flex; align-items: center; gap: 6px; margin-right: 14px; }
+.sat-key i { width: 18px; height: 2px; background: var(--muted); opacity: 0.6; }
+.sat-key i.current { height: 3px; background: var(--teal); opacity: 1; }
+.satellite .notice { margin: 20px 0; }
+.sat-controls { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin: 12px 0; }
+.sat-slider { flex: 1; min-width: 160px; accent-color: var(--teal); }
+.sat-map { width: 100%; max-height: 520px; display: block; }
+.sat-scope { margin-top: 10px; display: inline-flex; }
+.sat-rank { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 24px; margin-top: 8px; }
+.sat-rank h3 { font-size: 0.85rem; color: var(--muted); margin-bottom: 6px; }
+.sat-rank ol { list-style: none; margin: 0; padding: 0; }
+.sat-rank button { display: flex; justify-content: space-between; width: 100%; padding: 8px 10px; border: 0; background: none; border-radius: 8px; text-align: left; }
+.sat-rank button:hover, .sat-rank button.selected { background: var(--radar-hover); }
+.sat-headlines { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 10px; }
+.sat-headlines li { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; }
+.sat-headlines a { font-weight: 600; }
+.sat-headlines span { color: var(--muted); }
+.insight-figures { margin: 12px 0; color: var(--muted); }
+.sat-fresh { color: var(--muted); font-size: .9rem; margin: 14px 0 0; }
+.sat-fresh.stale { color: var(--text); }

@@ -1,0 +1,46 @@
+name: Refresh data
+
+on:
+  schedule:
+    # Match inflation-viz's daily provider refresh (08:00 UTC).
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-observations
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: '3.12'
+      - run: uv sync --locked --dev
+      - name: Fetch and export actual provider data
+        run: uv run python -m agriculture_viz.pipeline
+      - name: Verify the refreshed snapshot
+        run: uv run pytest
+      - name: Retain source files for audit
+        uses: actions/upload-artifact@v4
+        with:
+          name: agriculture-raw-${{ github.run_id }}
+          path: data/raw/
+          retention-days: 90
+      - name: Commit fresh observations for Vercel
+        run: |
+          git config user.name agriculture-viz-bot
+          git config user.email actions@users.noreply.github.com
+          git add data/latest.json data/vintages/ web/public/data/
+          if ! git diff --cached --quiet; then
+            git commit -m "data: refresh crop observations"
+            git push
+          fi

@@ -1,0 +1,58 @@
+schema_version: 1
+providers:
+  faostat:
+    name: Food and Agriculture Organization of the United Nations
+    catalogue_url: https://fenixservices.fao.org/faostat/static/bulkdownloads/datasets_E.json
+    dataset_code: QCL
+    source_url: https://www.fao.org/faostat/en/#data/QCL
+    license: CC BY 4.0 (FAO data terms; attribution required)
+    license_url: https://www.fao.org/contact-us/terms/en/
+    cadence: annual
+  worldbank:
+    name: World Bank Commodity Price Data (Pink Sheet)
+    source_url: https://www.worldbank.org/en/research/commodity-markets
+    download_match: CMO-Historical-Data-Monthly.xlsx
+    license: World Bank dataset terms; consult commodity-specific third-party attribution
+    license_url: https://datacatalog.worldbank.org/public-licenses
+    cadence: monthly
+  geography:
+    name: Natural Earth
+    source_url: https://www.naturalearthdata.com/about/terms-of-use/
+    download_url: https://raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/ne_110m_admin_0_countries.geojson
+    license: Public domain
+    cadence: per_release
+commodities:
+  wheat:
+    name: Wheat
+    faostat_item_code: '15'
+    production_basis: Dry grain
+    benchmark_column: Wheat, US HRW
+    benchmark_name: Wheat, US hard red winter
+    benchmark_unit: USD / tonne
+  maize:
+    name: Maize
+    faostat_item_code: '56'
+    production_basis: Dry grain
+    benchmark_column: Maize
+    benchmark_name: Maize, US No. 2 yellow
+    benchmark_unit: USD / tonne
+  rice:
+    name: Rice
+    faostat_item_code: '27'
+    production_basis: Paddy rice (unmilled)
+    benchmark_column: Rice, Thai 5%
+    benchmark_name: Rice, Thai white milled, 5% broken
+    benchmark_unit: USD / tonne
+metrics:
+  '5510': {key: production, unit: tonne, provider_units: [t]}
+  '5312': {key: area, unit: hectare, provider_units: [ha]}
+  '5419': {key: yield, unit: tonne / hectare, provider_units: [hg/ha, kg/ha, t/ha]}
+  '5412': {key: yield, unit: tonne / hectare, provider_units: [kg/ha]}
+flags:
+  A: Official figure
+  E: Estimated value
+  I: Imputed value
+  X: Figure from international organizations
+  M: Missing value
+geography_exclusions:
+  - '5000' # World; other aggregates excluded by M49 country crosswalk too
