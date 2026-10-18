@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ECElementEvent, ECharts, EChartsOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT } from "@/lib/colors";
 import type { ReplayData, ReplayNode } from "@/lib/replay";
+import { Stripes } from "./Stripes";
 
 const ReactECharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
@@ -434,17 +435,18 @@ export function Replay({ data }: { data: ReplayData }) {
           <button type="button" className="range-btn active replay-play" onClick={togglePlay} aria-label={isPlaying ? "Pause" : "Play"}>
             {isPlaying ? "Pause" : ti >= node.to ? "Replay" : "Play"}
           </button>
-          <input
-            type="range"
-            min={node.from}
-            max={node.to}
-            value={ti}
-            aria-label="Month"
-            aria-valuetext={monthLabel(dates[ti])}
-            onChange={(event) => {
+          <Stripes
+            values={nodes[rootId].total}
+            projectedFrom={projectedFrom}
+            from={node.from}
+            to={node.to}
+            index={ti}
+            describe={(i) => `${monthLabel(dates[i])} · ${nodes[rootId].total[i].toFixed(1)}%`}
+            onSeek={(i) => {
               setPlaying(false);
-              select(Number(event.target.value));
+              setT(i);
             }}
+            onCommit={(i) => commit(path, i)}
           />
         </div>
       </section>

@@ -445,10 +445,6 @@ h2 {
   gap: 12px;
   padding: 8px 4px 0;
 }
-.replay-controls input[type="range"] {
-  flex: 1;
-  accent-color: var(--accent);
-}
 .replay-play {
   min-width: 72px;
 }
@@ -470,4 +466,127 @@ h2 {
 }
 .replay-crumb-sep {
   color: var(--muted);
+}
+
+/* --- inflation stripes --- */
+.stripe-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.stripes-figure {
+  padding: 16px 16px 24px;
+}
+.stripes-figure .stripe-svg {
+  height: 320px;
+  border-radius: 8px;
+}
+.stripe-years,
+.stripe-key {
+  position: relative;
+  height: 22px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.stripe-years span {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+}
+.stripe-key {
+  margin-top: 18px;
+}
+.stripe-key-bar {
+  height: 10px;
+  border-radius: 5px;
+}
+.stripe-key span {
+  position: absolute;
+  top: 14px;
+  white-space: nowrap;
+}
+.stripe-key span:nth-of-type(2) {
+  transform: translateX(-50%);
+}
+
+/* The stripes as a scrubber track (replay). */
+.stripes {
+  position: relative;
+  flex: 1;
+  height: 40px;
+  border-radius: 6px;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.stripes:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.stripes .stripe-svg {
+  border-radius: 6px;
+}
+.stripe-dim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  pointer-events: none;
+}
+.stripe-cursor {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--text-primary);
+  border: 1px solid var(--surface);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.stripe-hover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  font-size: 0.76rem;
+  white-space: nowrap;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* --- embed mode (?embed=1): no site chrome, just the visualisation --- */
+.embed-credit {
+  display: none;
+}
+html[data-embed] .site-header,
+html[data-embed] .site-footer,
+html[data-embed] .page-header,
+html[data-embed] .embed-code {
+  display: none;
+}
+html[data-embed] .embed-credit {
+  display: block;
+  padding: 4px 20px 12px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.embed-code {
+  margin: 12px 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.embed-code textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  font: 0.78rem ui-monospace, monospace;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
 }
