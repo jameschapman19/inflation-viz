@@ -1,80 +1,197 @@
 import type { DivisionColor } from "./colors";
-import { divisionColor } from "./colors";
+import { childColor, divisionColor } from "./colors";
 import type { InflationBand } from "./data";
-import {
-  bandForRate,
-  divisionsSorted,
-  forecast,
-  forecastFor,
-  hasForecast,
-  seriesFor,
-} from "./data";
+import { bandForRate, forecast, forecastFor, hasForecast, registry, series } from "./data";
 
-export interface ReplayDivision {
-  coicop: string;
+export const ROOT_ID = "root";
+
+export interface ReplayChild {
+  id: string;
   name: string;
   color: DivisionColor;
+  /** Whether this child has a replay node of its own to drill into. */
+  drillable: boolean;
 }
 
-/** Everything the replay scrubber needs, as plain arrays indexed by month —
- * built on the server so the client never imports the full series file. */
+/** One level of the basket: a parent's total and how its children split it,
+ * month by month over the span where every child has data. */
+export interface ReplayNode {
+  id: string;
+  name: string;
+  parent: string | null;
+  children: ReplayChild[];
+  /** Inclusive range of indices into `ReplayData.dates` this node covers. */
+  from: number;
+  to: number;
+  /** Parent total (ppt, or the headline % at the root) for months `from..to`. */
+  total: number[];
+  /** `[month - from][child]` ppt contribution, in `children` order. */
+  values: number[][];
+  /** `total - sum(values)` per month: chain-linking and rounding. Null at the root. */
+  residual: number[] | null;
+  /** Whether `total` is an ONS-published figure or derived as weight x rate. */
+  totalPublished: boolean;
+}
+
 export interface ReplayData {
-  divisions: ReplayDivision[];
+  rootId: string;
   /** First of each month, ISO date strings, actuals followed by projections. */
   dates: string[];
-  /** Headline 12-month CPI rate (ONS actual, or the projected total). */
-  headline: number[];
-  /** `[month][division]` ppt contribution to the headline, in `divisions` order. */
-  contributions: number[][];
-  bands: InflationBand[];
   /** Index of the first projected month, or null when no forecast is published. */
   projectedFrom: number | null;
+  /** Index of the last month with ONS data. */
+  lastActual: number;
+  /** Banding of the root headline rate against the 2% target, per month. */
+  bands: InflationBand[];
+  nodes: Record<string, ReplayNode>;
 }
 
-function valueAt(byDate: Map<string, number>, ds: string, what: string): number {
-  const value = byDate.get(ds);
-  if (value === undefined) throw new Error(`${what} has no value for ${ds}`);
-  return value;
+const round3 = (v: number) => Math.round(v * 1000) / 1000;
+
+function indexByDate(uniqueId: string, rows: Map<string, Map<string, number>>): Map<string, number> {
+  const found = rows.get(uniqueId);
+  if (!found) throw new Error(`series.json has no rows for ${uniqueId}`);
+  return found;
+}
+
+function groupSeries(): Map<string, Map<string, number>> {
+  const grouped = new Map<string, Map<string, number>>();
+  for (const row of series) {
+    let byDate = grouped.get(row.unique_id);
+    if (!byDate) grouped.set(row.unique_id, (byDate = new Map()));
+    byDate.set(row.ds, row.y);
+  }
+  return grouped;
 }
 
 export function buildReplayData(): ReplayData {
-  const divisions = divisionsSorted().map((d) => {
-    if (!d.coicop || !d.division_name) throw new Error(`${d.unique_id} is missing coicop or name`);
-    return {
-      uniqueId: d.unique_id,
-      info: { coicop: d.coicop, name: d.division_name, color: { light: divisionColor(d.coicop, "light"), dark: divisionColor(d.coicop, "dark") } },
+  const grouped = groupSeries();
+
+  const divisions = [...registry.divisions].sort((a, b) => (a.coicop ?? "").localeCompare(b.coicop ?? ""));
+  const divisionSeries = divisions.map((d) => indexByDate(d.unique_id, grouped));
+  const headlineActual = indexByDate("GB.CPI", grouped);
+
+  // Contributions start later than the headline, and every division must be
+  // present for a month to be drawable.
+  const dates = [...headlineActual.keys()].filter((ds) => divisionSeries.every((m) => m.has(ds))).sort();
+  const lastActual = dates.length - 1;
+
+  // Sub-division rates and weights, keyed by coicop.
+  const rateOf = new Map(registry.subdivisions.map((s) => [s.coicop as string, indexByDate(s.unique_id, grouped)]));
+  const weightOf = new Map(registry.subdivisionWeights.map((w) => [w.coicop as string, indexByDate(w.unique_id, grouped)]));
+  const divisionContribution = new Map(divisions.map((d, i) => [d.coicop as string, divisionSeries[i]]));
+
+  /** A sub-division's ppt contribution: last year's basket weight (per mille
+   * of all spending) times its 12-month rate. ONS publishes no contributions
+   * below division level; `null` when either input is missing that month. */
+  function derived(coicop: string, ds: string): number | null {
+    const rate = rateOf.get(coicop)?.get(ds);
+    const weight = weightOf.get(coicop)?.get(`${Number(ds.slice(0, 4)) - 1}-01-01`);
+    return rate === undefined || weight === undefined ? null : (weight * rate) / 1000;
+  }
+
+  const childrenOf = new Map<string, string[]>();
+  for (const s of registry.subdivisions) {
+    const parent = s.parent_coicop as string;
+    childrenOf.set(parent, [...(childrenOf.get(parent) ?? []), s.coicop as string]);
+  }
+  const nameOf = new Map<string, string>([
+    ...divisions.map((d) => [d.coicop as string, d.division_name as string] as const),
+    ...registry.subdivisions.map((s) => [s.coicop as string, s.division_name ?? s.name] as const),
+  ]);
+  const parentOf = new Map(registry.subdivisions.map((s) => [s.coicop as string, s.parent_coicop as string]));
+  for (const d of divisions) parentOf.set(d.coicop as string, ROOT_ID);
+
+  const nodes: Record<string, ReplayNode> = {};
+
+  function build(id: string, name: string, childIds: string[], totalAt: (ds: string) => number | null, published: boolean) {
+    const childValue = (c: string, ds: string) =>
+      divisionContribution.get(c)?.get(ds) ?? derived(c, ds);
+
+    // Longest run of consecutive months, ending at the last actual month,
+    // where the total and every child have a value.
+    let from = lastActual + 1;
+    while (from > 0) {
+      const ds = dates[from - 1];
+      if (totalAt(ds) === null || childIds.some((c) => childValue(c, ds) === null)) break;
+      from--;
+    }
+    if (from > lastActual) return;
+
+    const months = dates.slice(from, lastActual + 1);
+    const total = months.map((ds) => totalAt(ds) as number);
+    const values = months.map((ds) => childIds.map((c) => childValue(c, ds) as number));
+    nodes[id] = {
+      id,
+      name,
+      parent: id === ROOT_ID ? null : parentOf.get(id) ?? ROOT_ID,
+      children: [],
+      from,
+      to: lastActual,
+      total: total.map(round3),
+      values: values.map((row) => row.map(round3)),
+      residual: id === ROOT_ID ? null : total.map((t, i) => round3(t - values[i].reduce((a, b) => a + b, 0))),
+      totalPublished: published,
     };
-  });
+  }
 
-  const contributionByDivision = divisions.map((d) => new Map(seriesFor(d.uniqueId).map((p) => [p.ds, p.y])));
-  const headlineActual = new Map(seriesFor("GB.CPI").map((p) => [p.ds, p.y]));
+  build(
+    ROOT_ID,
+    "All items",
+    divisions.map((d) => d.coicop as string),
+    (ds) => headlineActual.get(ds) ?? null,
+    true,
+  );
+  for (const d of divisions) {
+    const kids = childrenOf.get(d.coicop as string) ?? [];
+    if (kids.length > 0) {
+      build(d.coicop as string, d.division_name as string, kids, (ds) => divisionContribution.get(d.coicop as string)?.get(ds) ?? null, true);
+    }
+  }
+  for (const [parent, kids] of childrenOf) {
+    if (nodes[parent] || divisionContribution.has(parent)) continue;
+    build(parent, nameOf.get(parent) ?? parent, kids, (ds) => derived(parent, ds), false);
+  }
 
-  // Contributions are published from a later start than the headline, and
-  // every division must be present for a month to be drawable.
-  const dates = [...headlineActual.keys()]
-    .filter((ds) => contributionByDivision.every((m) => m.has(ds)))
-    .sort();
-  const headline = dates.map((ds) => valueAt(headlineActual, ds, "GB.CPI"));
-  const contributions = dates.map((ds) => contributionByDivision.map((m, i) => valueAt(m, ds, divisions[i].uniqueId)));
+  // Wire up children now that every node's existence (drillability) is known.
+  for (const node of Object.values(nodes)) {
+    const ids = node.id === ROOT_ID ? divisions.map((d) => d.coicop as string) : (childrenOf.get(node.id) as string[]);
+    node.children = ids.map((c, i) => ({
+      id: c,
+      name: nameOf.get(c) ?? c,
+      color:
+        node.id === ROOT_ID
+          ? { light: divisionColor(c, "light"), dark: divisionColor(c, "dark") }
+          : { light: childColor(c, i, ids.length, "light"), dark: childColor(c, i, ids.length, "dark") },
+      drillable: c in nodes,
+    }));
+  }
 
+  const root = nodes[ROOT_ID];
   let projectedFrom: number | null = null;
   if (hasForecast() && forecast.coverage.missing.length === 0) {
-    const total = new Map(forecastFor(forecast.totalUniqueId).map((p) => [p.ds, p.yhat]));
-    const perDivision = divisions.map((d) => new Map(forecastFor(d.uniqueId).map((p) => [p.ds, p.yhat])));
+    const total = new Map(forecastFor(forecast.totalUniqueId as string).map((p) => [p.ds, p.yhat]));
+    const perDivision = divisions.map((d) => new Map(forecastFor(d.unique_id).map((p) => [p.ds, p.yhat])));
     projectedFrom = dates.length;
     for (const ds of [...total.keys()].sort()) {
+      const at = (m: Map<string, number>, what: string) => {
+        const v = m.get(ds);
+        if (v === undefined) throw new Error(`${what} has no forecast for ${ds}`);
+        return v;
+      };
       dates.push(ds);
-      headline.push(valueAt(total, ds, forecast.totalUniqueId as string));
-      contributions.push(perDivision.map((m, i) => valueAt(m, ds, divisions[i].uniqueId)));
+      root.total.push(round3(at(total, forecast.totalUniqueId as string)));
+      root.values.push(perDivision.map((m, i) => round3(at(m, divisions[i].unique_id))));
     }
+    root.to = dates.length - 1;
   }
 
   return {
-    divisions: divisions.map((d) => d.info),
+    rootId: ROOT_ID,
     dates,
-    headline,
-    contributions,
-    bands: headline.map(bandForRate),
     projectedFrom,
+    lastActual,
+    bands: root.total.map(bandForRate),
+    nodes,
   };
 }

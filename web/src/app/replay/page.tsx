@@ -11,8 +11,9 @@ export default function ReplayPage() {
         <p className="lede">
           Press play, or drag through time: each bar is a division&apos;s percentage-point
           contribution to the headline 12-month CPI rate, as published by ONS, re-ranked every
-          month since November 2003. Past the last real month the bars fade — that&apos;s this
-          project&apos;s own projection, not ONS data.
+          month since November 2003. Click a bar to drill into that division&apos;s sub-categories
+          and keep scrubbing. Past the last real month the bars fade — that&apos;s this project&apos;s
+          own projection, not ONS data.
         </p>
       </section>
       <Replay data={buildReplayData()} />
