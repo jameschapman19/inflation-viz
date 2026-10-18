@@ -306,3 +306,14 @@
 .year-grid a:hover {
   border-color: var(--muted);
 }
+
+.price-link {
+  margin: 0;
+  padding: 10px 22px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.price-link a {
+  color: var(--teal);
+}

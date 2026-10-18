@@ -3,6 +3,7 @@ import { Database, Download, TrendingUp } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import Chart from '../Chart';
+import { productUrl } from '@/kit/products';
 import { number, period, releaseDate } from '@/lib/data';
 import type { Crop, Forecast, Manifest, Point } from '@/lib/types';
 
@@ -50,6 +51,11 @@ export default function PriceCard({ crop, manifest, prices, forecast, onSource }
         <span>Monthly · Nominal USD · Published {releaseDate(manifest.releases.worldbank.published_at)}</span>
         <a href={`/data/downloads/${crop}-prices.csv`} download><Download size={14} /> CSV</a>
       </div>
+      {(crop === 'wheat' || crop === 'rice') && (
+        <p className="price-link embed-hide">
+          How does this reach UK shelves? <a href={productUrl('inflation', '/food')}>See it against UK {crop === 'wheat' ? 'bread' : 'rice'} inflation →</a>
+        </p>
+      )}
       {forecast && future.length > 0 ? (
         <div className="forecast-strip">
           <label><input type="checkbox" checked={showForecast} onChange={e => setShowForecast(e.target.checked)} /><TrendingUp size={16} /><span>Show experimental {forecast.horizonMonths}-month forecast</span></label>

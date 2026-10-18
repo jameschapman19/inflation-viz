@@ -115,6 +115,31 @@ unrestricted internet, is what actually populates `data/` and
   at build time, which is generated from `data/latest` and `sources.yaml`;
   nothing is typed into a component or a fixture that ships as site content.
 
+## Pages built for sharing
+
+Both products are built around pages that can be linked to and embedded, each
+with a generated share image:
+
+- **Inflation Radar**: `/replay` (drill through the CPI basket month by month),
+  `/stripes`, `/lifetime/[year]`, `/pound` (where £100 goes) and `/food`
+  (UK food CPI against world crop prices, including how unstable the lag is).
+- **Agriculture Radar**: a page per crop and country (`/wheat/india`, 442
+  in all) with a replay through 1961–2024, harvest stripes and a race of the
+  leading producers, plus `/born/[crop]/[year]`.
+- Any page takes `?embed=1` to hide the site chrome for use in an iframe.
+
+### Shared code and data
+
+- `packages/web-kit/` is the single source for the front-end pieces both
+  products use (embed mode, stripe strip and scrubber, URL-hash state, the
+  share-card shell, the product bar). `node scripts/sync-web-kit.mjs` copies it
+  into each app's `src/kit/`; CI runs it with `--check`. Edit the package, never
+  the copies. Each Vercel project still builds from its own root.
+- `web/src/data/commodity-prices.json` is Agriculture Radar's benchmark prices,
+  exported by `node scripts/export-commodity-prices.mjs` so Inflation Radar can
+  compare them with food CPI without importing across build roots. The
+  agriculture refresh workflow regenerates it; CI checks it is current.
+
 ## License
 
 MIT for the code. Data is Crown copyright, contains public sector

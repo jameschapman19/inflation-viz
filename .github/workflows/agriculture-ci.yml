@@ -38,6 +38,9 @@ jobs:
           cache: npm
           cache-dependency-path: agriculture/web/package-lock.json
       - run: npm ci
+      - name: Shared web-kit is in sync
+        working-directory: .
+        run: node scripts/sync-web-kit.mjs --check
       - run: npm run lint
       - run: npm test
       - run: npm run build

@@ -588,3 +588,23 @@ h2 {
 .page-header + .replay-moments {
   margin-top: 16px;
 }
+
+/* --- wheat to bread --- */
+.lag-label {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.replay-controls #lag {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.lag-readout {
+  margin: 4px 8px 4px;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+}
+.lag-caption {
+  margin: 2px 8px 6px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
