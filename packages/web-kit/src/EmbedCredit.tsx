@@ -3,15 +3,16 @@
 import { usePathname } from "next/navigation";
 
 /** Attribution line shown only in embed mode (see `html[data-embed]` in
- * globals.css), where the site header and footer are hidden. */
-export function EmbedCredit() {
+ * kit.css), where the header and footer are hidden. `product` names the
+ * product the embedded page belongs to. */
+export function EmbedCredit({ product, source }: { product: string; source: string }) {
   const pathname = usePathname();
   return (
     <p className="embed-credit">
       <a href={pathname} target="_blank" rel="noopener">
-        Inflation Radar UK
+        {product}
       </a>{" "}
-      · Data: ONS, Open Government Licence v3.0
+      · Data: {source}
     </p>
   );
 }

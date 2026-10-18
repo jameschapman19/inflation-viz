@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { EmbedCode } from "@/components/EmbedCode";
+import { EmbedCode } from "@/kit/EmbedCode";
 import { RibbonLegend, RibbonStrip } from "@/components/RibbonStrip";
-import { StripeStrip } from "@/components/StripeStrip";
-import { StripeYears } from "@/components/StripeYears";
+import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { registry } from "@/lib/data";
 import { STRIPE_HIGH, STRIPE_LOW, STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
+import { yearTicks } from "@/lib/ticks";
 import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
 import { cpiStripes } from "@/lib/stripesData";
 import { formatPercent } from "@/lib/format";
@@ -41,8 +41,8 @@ export default function StripesPage() {
       </section>
 
       <section className="chart-section stripes-figure">
-        <StripeStrip values={values} label={`UK CPI 12-month rate by month from ${first.slice(0, 4)}, coloured against the ${STRIPE_TARGET}% target`} />
-        <StripeYears dates={dates} every={5} />
+        <StripeStrip values={values} fill={stripeFill} label={`UK CPI 12-month rate by month from ${first.slice(0, 4)}, coloured against the ${STRIPE_TARGET}% target`} />
+        <StripeTicks labels={yearTicks(dates, 5)} />
         <div className="stripe-key" aria-hidden="true">
           <div className="stripe-key-bar" style={{ background: `linear-gradient(to right, ${gradient})` }} />
           <span style={{ left: 0 }}>{STRIPE_LOW}% or less</span>

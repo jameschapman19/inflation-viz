@@ -1,4 +1,4 @@
-import { EmbedCode } from "@/components/EmbedCode";
+import { EmbedCode } from "@/kit/EmbedCode";
 import { Replay } from "@/components/Replay";
 import { buildReplayData } from "@/lib/replay";
 

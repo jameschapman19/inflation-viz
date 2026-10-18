@@ -2,11 +2,16 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import "./radar.css";
-import { EmbedCredit } from "@/components/EmbedCredit";
+import { EMBED_SCRIPT } from "@/kit/embed";
+import { EmbedCredit } from "@/kit/EmbedCredit";
+import { ProductSwitcher } from "@/kit/ProductSwitcher";
+import "@/kit/kit.css";
 import { Nav } from "@/components/Nav";
 import { meta } from "@/lib/data";
 
 export const metadata: Metadata = {
+  // Share-image URLs must be absolute; Vercel provides the production host.
+  metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
   title: "Inflation Radar (UK)",
   description: "UK inflation, traced to its source.",
   twitter: { card: "summary_large_image" },
@@ -19,9 +24,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" suppressHydrationWarning>
       <head>
         {/* Embed mode (?embed=1) hides the site chrome; set before first paint so it never flashes. */}
-        <script dangerouslySetInnerHTML={{ __html: `if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.dataset.embed="1"` }} />
+        <script dangerouslySetInnerHTML={{ __html: EMBED_SCRIPT }} />
       </head>
       <body>
+        <ProductSwitcher current="inflation" />
         <header className="site-header">
           <Link className="brand" href="/">
             <span className="brand-mark" />
@@ -43,7 +49,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             . Site generated {generatedAt}.
           </p>
         </footer>
-        <EmbedCredit />
+        <EmbedCredit product="Inflation Radar UK" source="ONS, Open Government Licence v3.0" />
       </body>
     </html>
   );

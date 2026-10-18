@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { OgCard } from "@/kit/og";
 import { formatDelta, headlineStats, seriesFor } from "@/lib/data";
 import { formatMonth } from "@/lib/format";
 import { stripeColor } from "@/lib/stripeColor";
@@ -17,24 +18,23 @@ export default function Image() {
   const recent = seriesFor("GB.CPI").slice(-STRIPE_MONTHS);
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", background: "#1a1a19", color: "#f0efec", padding: 56 }}>
-        <div style={{ display: "flex", fontSize: 34, color: "#c3c2b7" }}>UK inflation · {formatMonth(cpi.period)}</div>
-        <div style={{ display: "flex", alignItems: "baseline", marginTop: 6 }}>
-          <span style={{ fontSize: 190, fontWeight: 700, lineHeight: 1 }}>{cpi.value.toFixed(1)}%</span>
-          {cpi.deltaFromPreviousMonth !== null && (
-            <span style={{ fontSize: 38, marginLeft: 28, color: "#c3c2b7" }}>{formatDelta(cpi.deltaFromPreviousMonth)} on last month</span>
-          )}
-        </div>
-        <div style={{ display: "flex", flex: 1, marginTop: 30 }}>
-          {recent.map((p) => (
-            <div key={p.ds} style={{ flex: 1, background: stripeColor(p.y).dark }} />
-          ))}
-        </div>
-        <div style={{ display: "flex", justifyContent: "space-between", fontSize: 24, color: "#898781", marginTop: 18 }}>
-          <span>Last 3 years, one stripe per month · blue below the 2% target, red above</span>
-          <span>Inflation Radar UK</span>
-        </div>
-      </div>
+      <OgCard
+        eyebrow={`UK inflation · ${formatMonth(cpi.period)}`}
+        hero={
+          <>
+            <span style={{ fontSize: 190, fontWeight: 700, lineHeight: 1 }}>{cpi.value.toFixed(1)}%</span>
+            {cpi.deltaFromPreviousMonth !== null && (
+              <span style={{ fontSize: 38, marginLeft: 28, color: "#c3c2b7" }}>{formatDelta(cpi.deltaFromPreviousMonth)} on last month</span>
+            )}
+          </>
+        }
+        footerLeft="Last 3 years, one stripe per month · blue below the 2% target, red above"
+        footerRight="Inflation Radar UK"
+      >
+        {recent.map((p) => (
+          <div key={p.ds} style={{ flex: 1, background: stripeColor(p.y).dark }} />
+        ))}
+      </OgCard>
     ),
     size,
   );

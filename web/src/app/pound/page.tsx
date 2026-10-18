@@ -1,4 +1,4 @@
-import { EmbedCode } from "@/components/EmbedCode";
+import { EmbedCode } from "@/kit/EmbedCode";
 import { Waffle } from "@/components/Waffle";
 import { buildWaffleData } from "@/lib/waffle";
 
