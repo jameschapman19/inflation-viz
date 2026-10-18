@@ -6,14 +6,14 @@ Build a public, source-transparent map of agricultural production and food-syste
 
 ## What transfers from the existing projects
 
-Reviewed the default branches of [inflation-viz](https://github.com/jameschapman19/inflation-viz) and [inflation-forecast](https://github.com/jameschapman19/inflation-forecast), including their source registry, storage schema, frontend types, model registry, reconciliation, and backtesting code. Reference heads were `13e44dd59250fa5e62b3b48bf4100e8db99d2578` and `c8d51b499e490ed30964b52605101f267eed5eb3` respectively.
+Reviewed the default branches of the inflation product in [radar-open](https://github.com/jameschapman19/radar-open) and its private counterpart, including their source registry, storage schema, frontend types, model registry, reconciliation, and backtesting code. Reference heads were `13e44dd59250fa5e62b3b48bf4100e8db99d2578` and `c8d51b499e490ed30964b52605101f267eed5eb3` respectively.
 
 | Existing pattern | Agriculture adaptation |
 | --- | --- |
 | Registry-driven ingestion, including live ONS discovery | Provider adapters plus country, commodity, metric, and unit registries |
 | Immutable Parquet vintages with provenance | Preserve provider releases, retrieved raw files, checksums, and revision flags |
 | Python pipeline → JSON → Next.js frontend | Same boundary; add geographic features and export only the selected crop/metric views |
-| Public historical data; private forecasting methods | `agriculture-viz` publishes observations; `agriculture-forecast` consumes them and publishes selected forecast outputs |
+| Public historical data; private forecasting methods | `radar-open/agriculture` publishes observations; `radar/agriculture` consumes them and publishes selected forecast outputs |
 | One-click source links and methodology | Sources on every map value and chart, with observation period and publication date visible |
 | Model registry, forecast store, intervals, coverage metadata | Reuse the structure; choose new targets, frequencies, baselines, and aggregation rules |
 

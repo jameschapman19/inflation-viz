@@ -1,6 +1,6 @@
-# Radar sister-project architecture
+# Radar architecture
 
-Agriculture Radar and Inflation Radar remain separate products, repositories and Vercel projects. Their public visualization repos consume published observations and forecast outputs. Their private forecast repos own modeling policy, fitted models, candidates, evaluation and feature engineering.
+Agriculture Radar and Inflation Radar remain separate products with separate Vercel projects, but live in two repositories: `radar-open` (public) and `radar` (private). Each holds the inflation product at its root and the agriculture product in `agriculture/`. The public repository publishes observations and forecast outputs and runs the websites. The private repository owns modeling policy, fitted models, candidates, evaluation and feature engineering.
 
 ```mermaid
 flowchart LR
@@ -18,13 +18,13 @@ flowchart LR
 
 ## Shared packages and release ownership
 
-`radar-forecast` is a private Python package. Its initial source home is `inflation-forecast/packages/radar-forecast`; both forecast projects consume the identical versioned wheel. It provides Nixtla StatsForecast panel execution, finite monthly-panel eligibility, embargoed evaluation stages, point scoring, horizon-specific empirical bands and an availability gate for future drivers. Candidate registries, transforms, model selection policy and reconciliation remain domain adapters. The main inflation model and its shadow pilot both use the shared panel runner.
+`radar-forecast` is a private Python package. Its initial source home is `radar/packages/radar-forecast`; both forecast projects consume the identical versioned wheel. It provides Nixtla StatsForecast panel execution, finite monthly-panel eligibility, embargoed evaluation stages, point scoring, horizon-specific empirical bands and an availability gate for future drivers. Candidate registries, transforms, model selection policy and reconciliation remain domain adapters. The main inflation model and its shadow pilot both use the shared panel runner.
 
-`radar-contracts` is public and has no forecasting-library dependencies. Its source home is `inflation-viz/packages/radar-contracts`. All four repos consume the same versioned wheel. It validates and allowlists public output at every nesting level, and carries the Radar brand CSS and mark. Public repos contain only this public package; the private engine is never copied into them.
+`radar-contracts` is public and has no forecasting-library dependencies. Its source home is `radar-open/packages/radar-contracts`. All four projects (the two repository roots and their `agriculture/` subprojects) consume the same versioned wheel. It validates and allowlists public output at every nesting level, and carries the Radar brand CSS and mark. The public repository contains only this public package; the private engine is never copied into them.
 
-Versioned wheels are committed under `vendor/`, with SHA-256 pins in both `uv.lock` and `vendor/radar-packages.json`. CI checks wheel integrity, source-to-release agreement in the owning repo and generated brand-asset agreement in each visualization. A fresh CI runner needs no cross-private-repository token to install the shared engine. This is a deliberate initial distribution choice; moving the source to a dedicated private `radar-forecast` repo or private package registry does not require changing domain APIs.
+Versioned wheels are committed under `vendor/`, with SHA-256 pins in both `uv.lock` and `vendor/radar-packages.json`. CI checks wheel integrity, source-to-release agreement in the owning project and generated brand-asset agreement in each visualization. A fresh CI runner needs no cross-private-repository token to install the shared engine. This is a deliberate initial distribution choice; moving the source to a dedicated private `radar-forecast` repo or private package registry does not require changing domain APIs.
 
-The coordinated release tool lives in the private engine's source repository. Build once, update all consumers together, run all four CI suites, and publish coordinated commits. Change the package version before changing an already-published artifact. Each product's data release remains independent.
+The coordinated release tool lives in the private engine's source repository. Build once, update all consumers together, run all four CI suites (inflation at each repository root, agriculture in `agriculture/`), and publish coordinated commits. Change the package version before changing an already-published artifact. Each product's data release remains independent.
 
 ## Common contracts
 

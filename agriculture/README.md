@@ -56,27 +56,27 @@ cd ..
 node scripts/build.mjs
 ```
 
-The build uses native Next.js output in `web/.next/`, matching `inflation-viz`. Vercel serves the generated routes and public data files. Browser checks during implementation covered all three crop selectors, China/provider value agreement, missing UK maize observations, year/layer selection, source dialog Escape behavior, CSV contents, the forecast toggle, methodology, and a 390px viewport.
+The build uses native Next.js output in `web/.next/`, matching the inflation product in this repository. Vercel serves the generated routes and public data files. Browser checks during implementation covered all three crop selectors, China/provider value agreement, missing UK maize observations, year/layer selection, source dialog Escape behavior, CSV contents, the forecast toggle, methodology, and a 390px viewport.
 
 ## Deploy on Vercel
 
-Agriculture Radar follows the sister project's deployment design: public `agriculture-viz`, private `agriculture-forecast`, and Vercel's native GitHub integration for the visualization's `main` branch. See [deployment comparison and setup status](docs/DEPLOYMENT.md).
+Agriculture Radar follows the inflation product's deployment design: this public repository (`radar-open`, `agriculture/`), its private counterpart (`radar`, `agriculture/`), and Vercel's native GitHub integration for the visualization's `main` branch. See [deployment comparison and setup status](docs/DEPLOYMENT.md).
 
 The Vercel project is `agriculture-radar` in `jameschapman19s-projects`, the same team as Inflation Radar. It is connected to the public GitHub repository: pushes to `main` release production, and other branches receive previews.
 
-The repositories are [agriculture-viz](https://github.com/jameschapman19/agriculture-viz) (public) and [agriculture-forecast](https://github.com/jameschapman19/agriculture-forecast) (private). The existing Vercel project uses these settings:
+The repositories are [radar-open](https://github.com/jameschapman19/radar-open) (public, this directory is `agriculture/`) and `radar` (private, `agriculture/`). The existing Vercel project uses these settings:
 
 | Setting | Value |
 | --- | --- |
 | Framework | Next.js |
-| Root Directory | `web` |
+| Root Directory | `agriculture/web` |
 | Install Command | Automatic (package lockfile) |
 | Build Command | Automatic (`package.json` build script) |
 | Output Directory | Next.js default (leave unset) |
 | Node.js | 24.x on Vercel; 22 in CI, matching Inflation Radar |
 | Production Branch | `main` |
 
-The Vercel build uses committed observations and needs no provider credentials or Python runtime. `agriculture-forecast` is a private data pipeline and is not a separate Vercel frontend. Keep the two GitHub repositories separate so forecast methods and evaluation details never enter the frontend build.
+The Vercel build uses committed observations and needs no provider credentials or Python runtime. The private `radar` repository holds a data pipeline and is not a Vercel frontend. Keep the public and private repositories separate so forecast methods and evaluation details never enter the frontend build.
 
 For an authenticated CLI:
 
@@ -89,9 +89,9 @@ Project linking selects the owning Vercel team/project. The `.vercel` identity f
 
 ## Refreshing and forecasts
 
-The site reads a reproducible data snapshot. Vercel rebuilds it whenever `main` receives a commit and creates previews for other branches. The observation workflow runs daily at 08:00 UTC, matching `inflation-viz`, and can also be triggered manually. Both workflows are registered on GitHub's default branch.
+The site reads a reproducible data snapshot. Vercel rebuilds it whenever `main` receives a commit and creates previews for other branches. The observation workflow runs daily at 08:00 UTC, matching the inflation refresh, and can also be triggered manually. Both workflows are registered on GitHub's default branch.
 
-Forecasts use the private project's manual **Publish forecast** workflow, matching `inflation-forecast`. It stores full run details privately and opens an output-only PR against this repository. Merging that PR releases the forecast through Vercel. Configure `AGRICULTURE_VIZ_PUSH_TOKEN` in the private repository's Actions secrets with contents and pull-request write access to the visualization repository. No forecast schedule or Vercel deploy token is needed.
+Forecasts use the private project's manual **Agriculture publish forecast** workflow, matching the inflation one. It stores full run details privately and opens an output-only PR against this repository. Merging that PR releases the forecast through Vercel. Configure `RADAR_OPEN_PUSH_TOKEN` in the private repository's Actions secrets with contents and pull-request write access to the visualization repository. No forecast schedule or Vercel deploy token is needed.
 
 The forecasting project reads normalized observations; it does not import this project's code. Public exports omit coefficients, model-selection scores, candidate forecasts, and calibration details. The private source is not bundled into the Vercel deployment.
 
@@ -116,4 +116,4 @@ Code: MIT, see `LICENSE`. Data rights remain with the providers and are recorded
 
 ## Shared Radar foundations
 
-The sister projects share pinned `radar-contracts` releases and brand assets; both private forecast projects use the same Nixtla `radar-forecast` package. Domain adapters preserve their own targets, transforms and hierarchy rules. See the [shared architecture](https://github.com/jameschapman19/agriculture-viz/blob/main/docs/SHARED_ARCHITECTURE.md) and [satellite extension roadmap](https://github.com/jameschapman19/agriculture-viz/blob/main/docs/SATELLITE_ROADMAP.md).
+The two products share pinned `radar-contracts` releases and brand assets; both private forecast projects use the same Nixtla `radar-forecast` package. Domain adapters preserve their own targets, transforms and hierarchy rules. See the [shared architecture](https://github.com/jameschapman19/radar-open/blob/main/docs/SHARED_ARCHITECTURE.md) and [satellite extension roadmap](https://github.com/jameschapman19/radar-open/blob/main/docs/SATELLITE_ROADMAP.md).

@@ -1,4 +1,4 @@
-name: CI
+name: Agriculture CI
 
 on:
   push:
@@ -10,11 +10,15 @@ permissions:
 jobs:
   pipeline:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: agriculture
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           enable-cache: true
+          cache-dependency-glob: agriculture/uv.lock
           python-version: '3.12'
       - run: uv sync --locked --dev
       - run: uv run ruff check .
@@ -25,14 +29,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: web
+        working-directory: agriculture/web
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: npm
-          cache-dependency-path: web/package-lock.json
+          cache-dependency-path: agriculture/web/package-lock.json
       - run: npm ci
       - run: npm run lint
       - run: npm test

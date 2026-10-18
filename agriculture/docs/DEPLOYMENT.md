@@ -1,15 +1,15 @@
 # Deployment setup
 
-Agriculture Radar uses the same release architecture as Inflation Radar: a public visualization repository, a private forecasting repository, and Vercel's native GitHub integration for the visualization.
+Agriculture Radar uses the same release architecture as Inflation Radar: a public repository (`radar-open`), a private repository (`radar`), and Vercel's native GitHub integration for the visualization.
 
-## Sister-project comparison
+## Product comparison
 
 | Setting or process | Inflation Radar | Agriculture Radar |
 | --- | --- | --- |
-| Visualization repository | Public `jameschapman19/inflation-viz` | Public `jameschapman19/agriculture-viz` |
-| Forecasting repository | Private `jameschapman19/inflation-forecast` | Private `jameschapman19/agriculture-forecast` |
+| Visualization repository | Public `jameschapman19/radar-open` (repository root) | Same repository, `agriculture/` |
+| Forecasting repository | Private `jameschapman19/radar` (repository root) | Same repository, `agriculture/` |
 | Vercel team | `jameschapman19s-projects` | Same |
-| Framework and build root | Native Next.js, `web` | Same |
+| Framework and build root | Native Next.js, `web` | Native Next.js, `agriculture/web` |
 | Install, build, output settings | Vercel's automatic Next.js defaults | Same |
 | Production Node.js / web CI | 24.x / 22 | Same |
 | Python baseline | 3.12 | Same |
@@ -27,19 +27,19 @@ Provider adapters, units, commodity forecasts, and public data paths remain spec
 - Project: `agriculture-radar`
 - Team: `jameschapman19s-projects`
 - Project ID: `prj_EpgQ9jHBSlfLxVAti7ZdIdGvKNTs`
-- Root Directory: `web`
+- Root Directory: `agriculture/web`
 - Node.js: 24.x
 - Framework: Next.js
 - Install, Build, and Output Directory: automatic; leave overrides unset
 - Production Branch: `main`
 
-Both repositories are published with the visibility shown above. The Vercel project is connected to `jameschapman19/agriculture-viz`, with `main` as its production branch. Observation commits and merged forecast PRs use Vercel's Git integration, matching Inflation Radar. CLI deployment is available for manual recovery.
+Both repositories are published with the visibility shown above. The Vercel project is connected to `jameschapman19/radar-open`, with `main` as its production branch. Observation commits and merged forecast PRs use Vercel's Git integration, matching Inflation Radar. CLI deployment is available for manual recovery.
 
-For CLI releases, link and deploy from the repository root, as shown in the README. Local `.vercel/project.json` files are ignored by git, and authentication stays outside the source repository. Do not deploy the `web` subdirectory on its own after the project root has been set to `web`.
+For CLI releases, link and deploy from the `agriculture/` directory, as shown in the README. Local `.vercel/project.json` files are ignored by git, and authentication stays outside the source repository. Do not deploy the `web` subdirectory on its own after the project root has been set to `agriculture/web`.
 
 ## Forecast publishing access
 
-The private repository's manual **Publish forecast** workflow needs the Actions secret `AGRICULTURE_VIZ_PUSH_TOKEN`. It must grant contents and pull-request write access to `jameschapman19/agriculture-viz`. Store it only as an Actions secret; it is not required by the frontend or Vercel. No scheduled forecast publication or separate Vercel CLI deployment workflow is configured.
+The private repository's manual **Agriculture publish forecast** workflow needs the Actions secret `RADAR_OPEN_PUSH_TOKEN`, shared with the inflation workflow. It must grant contents and pull-request write access to `jameschapman19/radar-open`. Store it only as an Actions secret; it is not required by the frontend or Vercel. No scheduled forecast publication or separate Vercel CLI deployment workflow is configured.
 
 ## Verification
 
