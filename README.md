@@ -1,9 +1,11 @@
-# inflation-viz
+# radar-open
+
+The public half of the Radar family: **Inflation Radar** (this directory's root: `src/inflation_viz`, `web/`, `data/`) and **Agriculture Radar** (`agriculture/`), plus the shared public `radar-contracts` package in `packages/`. Each product has its own pipeline, data vintages and Vercel project. The private forecasting counterpart is the `radar` repository.
 
 An open, radically source-transparent view of UK inflation: CPI/CPIH broken
 into its 12 COICOP components, with every number one click from its ONS
 source. This is Phase 1 of Inflation Radar — the public, open layer. The
-reconciled forecasting product lives in the private `inflation-forecast`
+reconciled forecasting product lives in the private `radar`
 repository; this repo never contains forecasting code or weighting logic,
 only published observations, forecast outputs, and their visualization.
 
@@ -70,7 +72,7 @@ Two halves, split at a JSON boundary:
   division-color mapping every chart uses, validated for colorblind-safe
   adjacency with the data-viz skill's palette validator. Kept in sync by
   hand across the Python/TypeScript boundary (same pattern
-  `inflation-forecast` uses for its own cross-repo duplication).
+  `radar` uses for its own cross-repo duplication).
 
 ## Running it
 
@@ -105,7 +107,7 @@ unrestricted internet, is what actually populates `data/` and
 
 - **Point-in-time by construction.** `data/vintages/<timestamp>/` is
   write-once; `data/latest/` is a pointer to the newest vintage. This gives
-  `inflation-forecast`'s backtesting a real point-in-time store to build on
+  `radar`'s inflation backtesting a real point-in-time store to build on
   without a schema rewrite.
 - **Country-namespaced `unique_id`s** (`GB.CP04`, not `CP04`) so adding a
   second country (Eurostat HICP, same COICOP classification) is additive.
@@ -123,4 +125,4 @@ every individual series.
 
 ## Shared Radar foundations
 
-The sister projects share pinned `radar-contracts` releases and brand assets; both private forecast projects use the same Nixtla `radar-forecast` package. Domain adapters preserve their own targets, transforms and hierarchy rules. See the [shared architecture](https://github.com/jameschapman19/agriculture-viz/blob/main/docs/SHARED_ARCHITECTURE.md) and [satellite extension roadmap](https://github.com/jameschapman19/agriculture-viz/blob/main/docs/SATELLITE_ROADMAP.md).
+The two products share pinned `radar-contracts` releases and brand assets; both private forecast projects use the same Nixtla `radar-forecast` package. Domain adapters preserve their own targets, transforms and hierarchy rules. See the [shared architecture](https://github.com/jameschapman19/radar-open/blob/main/docs/SHARED_ARCHITECTURE.md) and [satellite extension roadmap](https://github.com/jameschapman19/radar-open/blob/main/docs/SATELLITE_ROADMAP.md).
