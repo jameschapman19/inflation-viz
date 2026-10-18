@@ -421,3 +421,34 @@ h2 {
     --band-high: #e34948;
   }
 }
+
+/* --- replay scrubber --- */
+.replay-readout {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0;
+}
+.replay-readout .stat-tile {
+  flex: 0 1 340px;
+}
+.replay-moments {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+}
+.replay-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px 0;
+}
+.replay-controls input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+.replay-play {
+  min-width: 72px;
+}
