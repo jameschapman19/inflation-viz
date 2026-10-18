@@ -111,3 +111,24 @@ test('colorFor assigns by order and folds the rest into Other', () => {
   assert.notEqual(colorFor(order, 'a'), colorFor(order, 'b'));
   assert.equal(colorFor(order, 'i'), colorFor(order, 'zzz'));
 });
+
+test('bornFacts compares a birth year with the latest year', async () => {
+  const { bornFacts } = await import('./born.ts');
+  const facts = bornFacts(data, 2019);
+  assert.equal(facts.then.production, 110 + 290);
+  assert.equal(facts.now.production, 510);
+  assert.ok(Math.abs(facts.productionMultiple - 510 / 400) < 1e-9);
+  assert.equal(facts.yieldMultiple, 1);
+  assert.deepEqual(facts.topThen.map(r => r.id), ['BBB', 'AAA']);
+  assert.deepEqual(facts.topNow.map(r => r.id), ['BBB', 'AAA', 'CCC']);
+  assert.deepEqual(facts.stripeYears, [2019, 2020, 2021, 2022, 2023, 2024]);
+  assert.equal(facts.priceThen, null);
+  assert.equal(facts.priceMultiple, null);
+  assert.equal(facts.priceNow, (100 + 200 + 400) / 3);
+});
+
+test('bornFacts rejects years without a comparison', async () => {
+  const { bornFacts } = await import('./born.ts');
+  assert.throws(() => bornFacts(data, 2024), RangeError);
+  assert.throws(() => bornFacts(data, 1950), RangeError);
+});

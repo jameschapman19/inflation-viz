@@ -196,3 +196,113 @@
     align-items: stretch;
   }
 }
+
+/* --- birth-year pages --- */
+.born-lede {
+  max-width: 70ch;
+  margin: 4px 0 22px;
+  font-size: 1.05rem;
+  color: var(--radar-secondary);
+}
+.birth-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.fact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.fact {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radar-radius);
+  background: var(--surface);
+  box-shadow: var(--radar-shadow);
+}
+.fact span {
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 600;
+}
+.fact strong {
+  font-size: 2.4rem;
+  line-height: 1.1;
+  color: var(--amber);
+  letter-spacing: -0.02em;
+}
+.fact small {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.born-stripes {
+  padding: 22px 24px 18px;
+  margin-bottom: 22px;
+}
+.born-stripes .stripe-svg {
+  height: 150px;
+  border-radius: 8px;
+  background: var(--surface-raised);
+}
+.born-stripes .section-heading {
+  margin-bottom: 14px;
+}
+.born-lists {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+.born-lists .map-card {
+  padding: 20px 24px;
+}
+.born-lists h2 {
+  margin: 2px 0 10px;
+  font-size: 1.1rem;
+}
+.born-lists ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.born-lists li {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 0.92rem;
+}
+.born-note {
+  max-width: 80ch;
+}
+.born-crop {
+  margin-top: 30px;
+}
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+  gap: 8px;
+  margin: 16px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.year-grid a {
+  display: block;
+  padding: 8px 0;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.year-grid a:hover {
+  border-color: var(--muted);
+}
