@@ -1,11 +1,12 @@
 import { notFound } from "next/navigation";
 import { EmbedCode } from "@/kit/EmbedCode";
-import { RibbonLegend, RibbonStrip } from "@/components/RibbonStrip";
+import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
 import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { YearPicker } from "@/components/YearPicker";
 import { formatMonth, formatPercent } from "@/lib/format";
 import { FIRST_BIRTH_YEAR, lastBirthYear, lifetimeFor } from "@/lib/lifetime";
 import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
+import { toKitCells, toKitLegend } from "@/lib/ribbonCells";
 import { STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
 import { yearTicks } from "@/lib/ticks";
 
@@ -82,8 +83,8 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
         {hasDivisions && (
           <>
             <h2 className="ribbon-title">What led it</h2>
-            <RibbonStrip cells={cells} dates={life.dates} />
-            <RibbonLegend entries={ribbonLegend(cells)} />
+            <CellRibbon cells={toKitCells(cells, life.dates)} label="The division contributing most to inflation each month" />
+            <RibbonLegend entries={toKitLegend(ribbonLegend(cells))} />
             <p className="muted">The division contributing most to inflation each month; ONS publishes divisions from November 2003.</p>
           </>
         )}

@@ -36,9 +36,8 @@ export default function SatelliteView({ scope }: { scope: 'regional' | 'global' 
   useEffect(() => {
     if (scope === 'global') fetch('/data/geography.geojson').then(r => r.json()).then(setGeography).catch(() => setGeography(null));
   }, [scope]);
-  const header = <header className="site-header"><Link href="/" className="brand"><span className="brand-mark" aria-hidden="true"/><span>Agriculture <strong>Radar</strong></span></Link><nav aria-label="Main navigation"><Link href="/">Explore</Link><Link href="/satellite/" className="active">Satellite</Link><Link href="/methodology/">Methodology</Link></nav><span className="header-note">Satellite · experimental</span></header>;
-  if (data === null) return <>{header}<main className="state-page" aria-busy="true"><Satellite size={32}/><h1>Loading satellite observations</h1></main></>;
-  if (data === 'missing') return <>{header}<main className="state-page"><Satellite size={32}/><h1>No satellite data published yet</h1><p>Satellite vegetation summaries appear here once a validated extraction has been published. Nothing is shown in the meantime rather than placeholder values.</p></main></>;
+  if (data === null) return <><main className="state-page" aria-busy="true"><Satellite size={32}/><h1>Loading satellite observations</h1></main></>;
+  if (data === 'missing') return <><main className="state-page"><Satellite size={32}/><h1>No satellite data published yet</h1><p>Satellite vegetation summaries appear here once a validated extraction has been published. Nothing is shown in the meantime rather than placeholder values.</p></main></>;
 
   const keys = windowKeys(data);
   const allYears = [...new Set(data.observations.map(o => Number(o.windowStart.slice(0, 4))))].sort((a, b) => b - a);
@@ -68,7 +67,7 @@ export default function SatelliteView({ scope }: { scope: 'regional' | 'global' 
   const latest = seasons.get(current)!.at(-1)!;
   const cell = (WIDTH - LEFT - RIGHT) / windows.length;
 
-  return <>{header}<main className="dashboard satellite">
+  return <><main className="dashboard satellite">
     <div className="explorer-heading"><div><span className="eyebrow">Satellite observations · experimental</span><h1>{world ? 'Vegetation worldwide' : 'Vegetation through the season'}</h1><div className="crop-tabs sat-scope" aria-label="Scope"><Link href="/satellite/" className={world ? 'crop-tab' : 'crop-tab selected'}>Regional pilot</Link><Link href="/satellite/global/" className={world ? 'crop-tab selected' : 'crop-tab'}>Global</Link></div></div>
       <div className="select-wrap sat-select"><select aria-label={noun} value={region} onChange={e => { setRegion(e.target.value); setHover(null); }}>{[...data.regions].sort((a, b) => a.name.localeCompare(b.name)).map(r => <option key={r.id} value={r.id}>{r.name}</option>)}</select><ChevronDown size={14}/></div></div>
     {asOf && <div className={stale ? 'notice sat-fresh stale' : 'sat-fresh'} role={stale ? 'status' : undefined}>Data as of {releaseDate(asOf)}{ageDays != null ? ` (${ageDays} day${ageDays === 1 ? '' : 's'} ago)` : ''}. {stale ? 'Updates have paused, so these values may be out of date. ' : ''}The newest window is provisional until it completes and reads slightly low, because it is built from fewer days.</div>}

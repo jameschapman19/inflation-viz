@@ -22,7 +22,7 @@ export function StripeScrubber({
   onSeek,
   onCommit,
 }: {
-  values: number[];
+  values: (number | null)[];
   fill: (value: number) => string;
   projectedFrom?: number | null;
   from: number;

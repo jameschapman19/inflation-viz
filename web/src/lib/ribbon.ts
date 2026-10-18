@@ -10,7 +10,7 @@ export interface RibbonCell {
   ppt: number;
 }
 
-export interface RibbonLegendEntry extends Omit<RibbonCell, "ppt"> {
+export interface RibbonTally extends Omit<RibbonCell, "ppt"> {
   months: number;
 }
 
@@ -37,8 +37,8 @@ export function leadingDivisions(dates: string[]): (RibbonCell | null)[] {
 }
 
 /** The divisions that led at least one month, most months first. */
-export function ribbonLegend(cells: (RibbonCell | null)[]): RibbonLegendEntry[] {
-  const tally = new Map<string, RibbonLegendEntry>();
+export function ribbonLegend(cells: (RibbonCell | null)[]): RibbonTally[] {
+  const tally = new Map<string, RibbonTally>();
   for (const cell of cells) {
     if (!cell) continue;
     const entry = tally.get(cell.coicop);

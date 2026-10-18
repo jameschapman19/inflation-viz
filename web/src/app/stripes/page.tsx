@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { EmbedCode } from "@/kit/EmbedCode";
-import { RibbonLegend, RibbonStrip } from "@/components/RibbonStrip";
+import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
 import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { registry } from "@/lib/data";
 import { STRIPE_HIGH, STRIPE_LOW, STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
 import { yearTicks } from "@/lib/ticks";
 import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
+import { toKitCells, toKitLegend } from "@/lib/ribbonCells";
 import { cpiStripes } from "@/lib/stripesData";
 import { formatPercent } from "@/lib/format";
 
@@ -51,8 +52,8 @@ export default function StripesPage() {
         </div>
 
         <h2 className="ribbon-title">What led it</h2>
-        <RibbonStrip cells={cells} dates={dates} />
-        <RibbonLegend entries={ribbonLegend(cells)} />
+        <CellRibbon cells={toKitCells(cells, dates)} label="The division contributing most to inflation each month" />
+        <RibbonLegend entries={toKitLegend(ribbonLegend(cells))} />
         <p className="muted">
           Underneath, the division contributing most to the rate each month. ONS publishes divisions from November 2003, so
           earlier months are blank.
