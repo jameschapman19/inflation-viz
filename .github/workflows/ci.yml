@@ -1,4 +1,4 @@
-name: CI
+name: Inflation CI
 
 on:
   push:

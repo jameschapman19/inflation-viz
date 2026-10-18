@@ -1,0 +1,30 @@
+{
+  "name": "agriculture-radar-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "check": "tsc --noEmit",
+    "lint": "eslint",
+    "start": "next start",
+    "test": "node --test \"src/**/*.test.ts\""
+  },
+  "dependencies": {
+    "d3-geo": "^3.1.1",
+    "lucide-react": "^0.468.0",
+    "next": "16.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@types/d3-geo": "^3.1.0",
+    "@types/geojson": "^7946.0.16",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "16.3.8",
+    "typescript": "^5.8.0"
+  }
+}

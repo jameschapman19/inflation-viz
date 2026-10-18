@@ -230,7 +230,7 @@ export default function MethodologyPage() {
           Every fetch writes an immutable, timestamped vintage snapshot rather than overwriting the
           last one — see <code>data/vintages/</code>. The site is always built from the newest
           vintage; older vintages are kept for future point-in-time backtesting (see the{" "}
-          <code>inflation-forecast</code> repository).
+          <code>radar</code> repository).
         </p>
         <p className="muted">Latest vintage: {meta.latestVintage ?? "none — run the fetcher first"}</p>
       </section>
