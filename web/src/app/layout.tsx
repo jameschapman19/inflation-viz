@@ -9,6 +9,7 @@ import { meta } from "@/lib/data";
 export const metadata: Metadata = {
   title: "Inflation Radar (UK)",
   description: "UK inflation, traced to its source.",
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

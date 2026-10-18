@@ -590,3 +590,113 @@ html[data-embed] .embed-credit {
   border: 1px solid var(--border);
   border-radius: 8px;
 }
+
+/* --- driver ribbon --- */
+.ribbon-title {
+  margin: 28px 0 10px;
+  font-size: 1rem;
+}
+.ribbon-svg {
+  display: block;
+  width: 100%;
+  height: 44px;
+  border-radius: 6px;
+  background: var(--surface-raised);
+}
+.ribbon-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 12px 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* --- lifetime --- */
+.year-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 8px;
+  color: var(--text-secondary);
+}
+.year-picker select {
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+.year-grid a {
+  display: block;
+  padding: 8px 0;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.age-rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 8px 0 16px;
+  color: var(--text-secondary);
+}
+
+/* --- £100 waffle --- */
+.waffle-section {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 20px;
+}
+.waffle {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 3px;
+  aspect-ratio: 1;
+}
+.waffle-cell {
+  border-radius: 3px;
+  transition: background 0.25s ease;
+}
+.waffle-table {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.waffle-table caption {
+  text-align: left;
+  padding-bottom: 6px;
+  color: var(--text-secondary);
+}
+.waffle-table th,
+.waffle-table td {
+  padding: 6px 10px;
+}
+.waffle-controls {
+  grid-column: 1 / -1;
+}
+.waffle-controls input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+@media (max-width: 720px) {
+  .waffle-section {
+    grid-template-columns: 1fr;
+  }
+}
+.page-header + .replay-moments {
+  margin-top: 16px;
+}

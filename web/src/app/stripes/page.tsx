@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { EmbedCode } from "@/components/EmbedCode";
+import { RibbonLegend, RibbonStrip } from "@/components/RibbonStrip";
 import { StripeStrip } from "@/components/StripeStrip";
+import { StripeYears } from "@/components/StripeYears";
 import { registry } from "@/lib/data";
 import { STRIPE_HIGH, STRIPE_LOW, STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
+import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
 import { cpiStripes } from "@/lib/stripesData";
 import { formatPercent } from "@/lib/format";
 
@@ -18,9 +21,7 @@ export default function StripesPage() {
   const first = dates[0];
   const last = dates[dates.length - 1];
   const peak = values.indexOf(Math.max(...values));
-  const years = dates
-    .map((ds, i) => ({ ds, i }))
-    .filter(({ ds }) => ds.slice(5, 7) === "01" && Number(ds.slice(0, 4)) % 5 === 0);
+  const cells = leadingDivisions(dates);
 
   const gradient = Array.from({ length: KEY_STEPS + 1 }, (_, i) => {
     const rate = STRIPE_LOW + ((STRIPE_HIGH - STRIPE_LOW) * i) / KEY_STEPS;
@@ -41,19 +42,21 @@ export default function StripesPage() {
 
       <section className="chart-section stripes-figure">
         <StripeStrip values={values} label={`UK CPI 12-month rate by month from ${first.slice(0, 4)}, coloured against the ${STRIPE_TARGET}% target`} />
-        <div className="stripe-years" aria-hidden="true">
-          {years.map(({ ds, i }) => (
-            <span key={ds} style={{ left: `${((i + 0.5) / dates.length) * 100}%` }}>
-              {ds.slice(0, 4)}
-            </span>
-          ))}
-        </div>
+        <StripeYears dates={dates} every={5} />
         <div className="stripe-key" aria-hidden="true">
           <div className="stripe-key-bar" style={{ background: `linear-gradient(to right, ${gradient})` }} />
           <span style={{ left: 0 }}>{STRIPE_LOW}% or less</span>
           <span style={{ left: `${targetPosition}%` }}>{STRIPE_TARGET}% target</span>
           <span style={{ right: 0 }}>{STRIPE_HIGH}% or more</span>
         </div>
+
+        <h2 className="ribbon-title">What led it</h2>
+        <RibbonStrip cells={cells} dates={dates} />
+        <RibbonLegend entries={ribbonLegend(cells)} />
+        <p className="muted">
+          Underneath, the division contributing most to the rate each month. ONS publishes divisions from November 2003, so
+          earlier months are blank.
+        </p>
       </section>
 
       <p className="muted">

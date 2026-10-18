@@ -30,3 +30,8 @@ export function formatWeight(value: number, decimals = 1): string {
 export function formatDecimal(value: number, decimals = 1): string {
   return value.toFixed(decimals);
 }
+
+/** "Aug 2026" for an ISO first-of-month date. */
+export function formatMonth(ds: string, style: "short" | "long" = "short"): string {
+  return new Date(`${ds}T00:00:00Z`).toLocaleDateString("en-GB", { month: style, year: "numeric", timeZone: "UTC" });
+}
