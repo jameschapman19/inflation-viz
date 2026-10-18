@@ -2,12 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import BirthPicker from '@/components/BirthPicker';
+import CropTabs from '@/components/CropTabs';
 import { EmbedCode } from '@/kit/EmbedCode';
 import { StripeStrip, StripeTicks } from '@/kit/StripeStrip';
 import { bornFacts } from '@/lib/born';
 import { CROPS, isCrop } from '@/lib/crops';
 import { compact, number } from '@/lib/data';
 import { HARVEST_LIMIT, harvestColor } from '@/lib/harvest';
+import type { Crop } from '@/lib/types';
 import { loadCrop, loadManifest } from '@/lib/server/load';
 
 export const dynamicParams = false;
@@ -50,11 +52,12 @@ export default async function BornPage(props: Params) {
         </div>
       </div>
       <section className="control-bar" aria-label="Choose crop and year">
-        <div className="crop-tabs" aria-label="Crop">
-          {CROPS.map(c => (
-            <Link key={c} href={`/born/${c}/${facts.year}`} className={crop === c ? 'crop-tab selected' : 'crop-tab'} aria-current={crop === c ? 'page' : undefined}>{manifest.commodities[c].name}</Link>
-          ))}
-        </div>
+        <CropTabs
+          current={crop}
+          icons={false}
+          hrefs={Object.fromEntries(CROPS.map(c => [c, `/born/${c}/${facts.year}`])) as Record<Crop, string>}
+          names={Object.fromEntries(CROPS.map(c => [c, manifest.commodities[c].name])) as Record<Crop, string>}
+        />
         <BirthPicker crop={crop} years={data.years.slice(0, -1)} current={facts.year} />
       </section>
 

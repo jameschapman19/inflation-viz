@@ -43,10 +43,15 @@ export function ranked(data: CropData, year: number): Ranked[] {
     .sort((a, b) => b.production - a.production);
 }
 
-/** Countries with production in the crop's latest year, which is what the site's pages exist for. */
+/**
+ * Countries with production in the crop's latest year, which is what the
+ * site's pages exist for. Countries that stopped reporting keep their history
+ * on the map, but a page of facts about them would have no current figure.
+ */
 export function producers(data: CropData): string[] {
+  const latest = String(data.years[data.years.length - 1]);
   return Object.entries(data.countries)
-    .filter(([, history]) => Object.values(history).some(o => o.production != null))
+    .filter(([, history]) => history[latest]?.production != null)
     .map(([id]) => id);
 }
 

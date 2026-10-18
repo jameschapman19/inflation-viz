@@ -1,14 +1,15 @@
 'use client';
 import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { ChevronDown, Database, Download, Leaf, RotateCcw, Sprout, Wheat } from 'lucide-react';
+import { ChevronDown, Database, Download, RotateCcw } from 'lucide-react';
 import { EmbedCode } from '@/kit/EmbedCode';
 import { setHash, useHash } from '@/kit/hash';
-import { CROPS, countryStripes, profileFor } from '@/lib/crops';
+import { countryStripes, profileFor } from '@/lib/crops';
 import { coverage, releaseDate } from '@/lib/data';
 import type { ExplorerProps } from '@/lib/server/page-data';
-import type { Crop, CropData, Metric } from '@/lib/types';
+import type { CropData, Metric } from '@/lib/types';
 import { parseView, viewHash, type View } from '@/lib/view';
+import CropTabs from './CropTabs';
 import CountryCard from './explorer/CountryCard';
 import MapCard from './explorer/MapCard';
 import PriceCard from './explorer/PriceCard';
@@ -17,7 +18,6 @@ import TimeBar from './explorer/TimeBar';
 import SourceDialog from './SourceDialog';
 import type { Geography } from './WorldMap';
 
-const CROP_ICONS = { wheat: Wheat, maize: Sprout, rice: Leaf };
 const STEP_MS = 450;
 
 /**
@@ -64,7 +64,10 @@ export default function Explorer({ crop, country: entryCountry, manifest, countr
 
   useEffect(() => {
     if (!isPlaying) return;
-    const id = setTimeout(() => commit({ layer: view.layer, year: years[index + 1] }), STEP_MS);
+    const id = setTimeout(() => {
+      commit({ layer: view.layer, year: years[index + 1] });
+      if (index + 1 >= years.length - 1) setPlaying(false);
+    }, STEP_MS);
     return () => clearTimeout(id);
   }, [isPlaying, index, view.layer, years, commit]);
 
@@ -121,16 +124,11 @@ export default function Explorer({ crop, country: entryCountry, manifest, countr
         </div>
 
         <section className="control-bar" aria-label="Map controls">
-          <div className="crop-tabs" aria-label="Crop">
-            {CROPS.map((c: Crop) => {
-              const Icon = CROP_ICONS[c];
-              return (
-                <Link key={c} href={`/${c}`} className={crop === c ? 'crop-tab selected' : 'crop-tab'} aria-current={crop === c ? 'page' : undefined}>
-                  <Icon size={18} />{manifest.commodities[c].name}
-                </Link>
-              );
-            })}
-          </div>
+          <CropTabs
+            current={crop}
+            hrefs={{ wheat: '/wheat', maize: '/maize', rice: '/rice' }}
+            names={{ wheat: manifest.commodities.wheat.name, maize: manifest.commodities.maize.name, rice: manifest.commodities.rice.name }}
+          />
           <div className="map-selectors">
             <label>Map layer
               <div className="select-wrap">

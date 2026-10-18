@@ -47,8 +47,10 @@ test('ranked orders by production and skips countries without a report', () => {
   assert.deepEqual(ranked(data, 2018).map(r => r.id), ['BBB', 'AAA']);
 });
 
-test('producers lists countries with any production', () => {
+test('producers lists countries that report in the latest year', () => {
   assert.deepEqual(producers(data).sort(), ['AAA', 'BBB', 'CCC']);
+  const former = { ...data, countries: { ...data.countries, DDD: { '2018': { production: 5, flags: {} } } } };
+  assert.deepEqual(producers(former).sort(), ['AAA', 'BBB', 'CCC']);
 });
 
 test('profileFor gives rank, share, change and history', () => {

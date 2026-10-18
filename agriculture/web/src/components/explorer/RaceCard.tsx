@@ -42,7 +42,12 @@ export default function RaceCard({ data, initialTop, initialYear, initialTotal, 
         <div><span className="eyebrow">{cropName} · {year}</span><h2>Leading producers</h2></div>
         <span className="ranking-unit">Production, tonnes</span>
       </div>
-      <ol className="race-list" style={{ height: SHOWN * ROW }}>
+      {/* Rows are positioned by rank with transforms, so their DOM order is not the visible order:
+          the animated list is hidden from assistive tech, which gets the ranking as text instead. */}
+      <p className="sr-only">
+        Leading {cropName.toLowerCase()} producers in {year}: {top.map((r, i) => `${i + 1}. ${manifest.countries[r.id]?.name ?? r.id}, ${compact(r.production)}`).join('; ')}.
+      </p>
+      <ol className="race-list" style={{ height: SHOWN * ROW }} aria-hidden="true">
         {ids.map(id => {
           const place = rankOf.get(id);
           const visible = place !== undefined;
@@ -52,9 +57,8 @@ export default function RaceCard({ data, initialTop, initialYear, initialTotal, 
               key={id}
               className="race-row"
               style={{ transform: `translateY(${(visible ? place : SHOWN) * ROW}px)`, opacity: visible ? 1 : 0, pointerEvents: visible ? 'auto' : 'none' }}
-              aria-hidden={!visible}
             >
-              <button type="button" tabIndex={visible ? 0 : -1} className={selected === id ? 'selected' : ''} onClick={() => onSelect(id)}>
+              <button type="button" tabIndex={-1} className={selected === id ? 'selected' : ''} onClick={() => onSelect(id)}>
                 <span className="producer-rank">{String((place ?? SHOWN) + 1).padStart(2, '0')}</span>
                 <span className="producer-name">
                   {manifest.countries[id]?.name ?? id}

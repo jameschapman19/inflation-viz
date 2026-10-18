@@ -117,7 +117,7 @@ export function FoodLink({ data }: { data: FoodData }) {
         textStyle: { color: text },
         formatter: (raw: unknown) => {
           const params = (Array.isArray(raw) ? raw : [raw]) as { axisValue?: string; marker?: string; seriesName?: string; value?: number | null }[];
-          return `<b>Wheat leading by ${params[0]?.axisValue} months</b>${params.filter((p) => typeof p.value === "number").map((p) => `<div>${p.marker}${p.seriesName}: r = <b>${(p.value as number).toFixed(2)}</b></div>`).join("")}`;
+          return `<b>${pair.commodityName} leading by ${params[0]?.axisValue} months</b>${params.filter((p) => typeof p.value === "number").map((p) => `<div>${p.marker}${p.seriesName}: r = <b>${(p.value as number).toFixed(2)}</b></div>`).join("")}`;
         },
       },
       xAxis: { type: "category", name: "months the price leads", nameLocation: "middle", nameGap: 28, nameTextStyle: { color: muted }, data: Array.from({ length: MAX_LAG + 1 }, (_, i) => String(i)), axisLine: { lineStyle: { color: muted } }, axisTick: { show: false }, axisLabel: { color: muted, interval: 2 } },
@@ -161,7 +161,7 @@ export function FoodLink({ data }: { data: FoodData }) {
       </section>
 
       <section className="chart-section">
-        <p className="lag-caption">Correlation (r) between the wheat price change and UK inflation, by how many months the price leads.</p>
+        <p className="lag-caption">Correlation (r) between the {pair.commodityName.toLowerCase()} price change and UK inflation, by how many months the price leads.</p>
         <ReactECharts option={lagOption} notMerge style={{ width: "100%", height: "280px" }} />
         <p className="lag-readout">
           At a {lag}-month lead:{" "}

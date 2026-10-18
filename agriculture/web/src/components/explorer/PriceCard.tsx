@@ -53,7 +53,7 @@ export default function PriceCard({ crop, manifest, prices, forecast, onSource }
       </div>
       {(crop === 'wheat' || crop === 'rice') && (
         <p className="price-link embed-hide">
-          How does this reach UK shelves? <a href={productUrl('inflation', '/food')}>See it against UK {crop === 'wheat' ? 'bread' : 'rice'} inflation →</a>
+          How does this reach UK shelves? <a href={productUrl('inflation', crop === 'wheat' ? '/food#bread' : '/food#rice')}>See it against UK {crop === 'wheat' ? 'bread' : 'rice'} inflation →</a>
         </p>
       )}
       {forecast && future.length > 0 ? (

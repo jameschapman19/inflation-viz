@@ -48,6 +48,14 @@ export function StripeScrubber({
     return clamp(Math.floor(((clientX - box.left) / box.width) * n), 0, n - 1);
   };
 
+  // A gesture can end without a pointerup (a touch cancelled by the browser, lost capture), so all three finish it.
+  const finish = () => {
+    if (dragging.current === null) return;
+    const settled = dragging.current;
+    dragging.current = null;
+    onCommit(settled);
+  };
+
   return (
     <div
       ref={ref}
@@ -67,15 +75,15 @@ export function StripeScrubber({
       onPointerMove={(event) => {
         const i = indexAt(event.clientX);
         setHover(i);
-        if (dragging.current !== null) {
+        // Only report a change: a held pointer fires many moves within one stripe.
+        if (dragging.current !== null && i !== dragging.current) {
           dragging.current = i;
           onSeek(i);
         }
       }}
-      onPointerUp={() => {
-        if (dragging.current !== null) onCommit(dragging.current);
-        dragging.current = null;
-      }}
+      onPointerUp={finish}
+      onPointerCancel={finish}
+      onLostPointerCapture={finish}
       onPointerLeave={() => setHover(null)}
       onKeyDown={(event) => {
         const step = event.shiftKey ? bigStep : 1;

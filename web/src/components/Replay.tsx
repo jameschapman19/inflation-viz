@@ -88,9 +88,12 @@ export function Replay({ data }: { data: ReplayData }) {
 
   useEffect(() => {
     if (!isPlaying) return;
-    const id = setInterval(() => setT((current) => Math.min(Math.max(current, node.from) + 1, node.to)), FRAME_MS);
-    return () => clearInterval(id);
-  }, [isPlaying, node.from, node.to]);
+    const id = setTimeout(() => {
+      setT(ti + 1);
+      if (ti + 1 >= node.to) setPlaying(false);
+    }, FRAME_MS);
+    return () => clearTimeout(id);
+  }, [isPlaying, ti, node.to]);
 
   const commit = useCallback(
     (nextPath: string[], rawT: number) => {

@@ -27,9 +27,12 @@ export function Waffle({ data }: { data: WaffleData }) {
 
   useEffect(() => {
     if (!isPlaying) return;
-    const id = setTimeout(() => setHash(String(years[index + 1])), STEP_MS);
+    const id = setTimeout(() => {
+      setHash(String(years[index + 1]));
+      if (index + 1 >= last) setPlaying(false);
+    }, STEP_MS);
     return () => clearTimeout(id);
-  }, [isPlaying, index, years]);
+  }, [isPlaying, index, years, last]);
 
   const then = weights[index];
   const now = weights[last];
