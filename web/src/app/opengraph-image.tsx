@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 import { OgCard } from "@/kit/og";
 import { formatDelta, headlineStats, seriesFor } from "@/lib/data";
 import { formatMonth } from "@/lib/format";
+import { notableFacts } from "@/lib/notable";
 import { stripeColor } from "@/lib/stripeColor";
 
 export const alt = "UK CPI inflation: the latest rate and the last three years, month by month";
@@ -15,7 +16,9 @@ const STRIPE_MONTHS = 36;
 // the fallback preview for every page without its own image.
 export default function Image() {
   const cpi = headlineStats()[0];
-  const recent = seriesFor("GB.CPI").slice(-STRIPE_MONTHS);
+  const all = seriesFor("GB.CPI");
+  const recent = all.slice(-STRIPE_MONTHS);
+  const notable = notableFacts(all)[0];
   return new ImageResponse(
     (
       <OgCard
@@ -28,6 +31,7 @@ export default function Image() {
             )}
           </>
         }
+        subtitle={notable?.short}
         footerLeft="Last 3 years, one stripe per month · blue below the 2% target, red above"
         footerRight="Inflation Radar UK"
       >

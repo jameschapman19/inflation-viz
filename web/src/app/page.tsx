@@ -1,4 +1,5 @@
 import { Chart } from "@/components/Chart";
+import { Notable } from "@/kit/Notable";
 import {
   bankRate,
   formatDelta,
@@ -7,8 +8,10 @@ import {
   headlineStats,
   realWageGrowth,
   rpiStat,
+  seriesFor,
 } from "@/lib/data";
 import { formatPercent } from "@/lib/format";
+import { notableFacts } from "@/lib/notable";
 
 export default function HomePage() {
   const rpi = rpiStat();
@@ -16,6 +19,7 @@ export default function HomePage() {
   const wageGrowth = realWageGrowth();
   const rate = bankRate();
   const breakeven = giltBreakevenInflation();
+  const notable = notableFacts(seriesFor("GB.CPI"));
 
   return (
     <>
@@ -23,6 +27,7 @@ export default function HomePage() {
         <span className="pill">Live data</span>
         <h1>UK inflation, traced to its source</h1>
         <p className="lede">Every number on this site is one click from the official series that produced it.</p>
+        <Notable items={notable.map((n) => n.text)} />
 
         <div className="stat-row">
           {stats.map((stat) => (

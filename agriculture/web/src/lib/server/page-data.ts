@@ -2,7 +2,8 @@ import 'server-only';
 import type { Metadata } from 'next';
 import { countryRefs, countryStripes, producers, profileFor, ranked, type CountryProfile, type CountryRef, type Ranked } from '../crops.ts';
 import { compact, coverage, number } from '../data.ts';
-import type { Crop, Forecast, Manifest, Point } from '../types.ts';
+import { leaderChange, overtakeText } from '../notable.ts';
+import type { Crop, CropData, Forecast, Manifest, Point } from '../types.ts';
 import { loadCrop, loadForecast, loadManifest } from './load.ts';
 
 export type ExplorerInitial = {
@@ -24,6 +25,8 @@ export type ExplorerProps = {
   /** Countries that have a page for this crop: the ones that report production. */
   countries: CountryRef[];
   forecast: Forecast | null;
+  /** A statement about the crop that a strict rule found to be true, or null. */
+  notable: string | null;
   initial: ExplorerInitial;
 };
 
@@ -48,6 +51,13 @@ export async function resolveSlug(crop: Crop, slug: string): Promise<string | nu
   return (await pagePaths(crop)).find(p => p.slug === slug)?.id ?? null;
 }
 
+/** The crop's headline, if the data supports one: currently a recent change of the world's largest producer. */
+export function notableFor(manifest: Manifest, crop: Crop, data: CropData) {
+  const change = leaderChange(data);
+  if (!change) return null;
+  return overtakeText(change, manifest.commodities[crop].name, id => manifest.countries[id]?.name ?? id, t => compact(t)).text;
+}
+
 export async function explorerProps(crop: Crop, country: string): Promise<ExplorerProps> {
   const [manifest, data, forecast] = await Promise.all([loadManifest(), loadCrop(crop), loadForecast()]);
   const year = data.years[data.years.length - 1];
@@ -58,6 +68,7 @@ export async function explorerProps(crop: Crop, country: string): Promise<Explor
     manifest,
     countries: countryRefs(manifest).filter(c => withPages.has(c.id)),
     forecast,
+    notable: notableFor(manifest, crop, data),
     initial: {
       year,
       years: data.years,
