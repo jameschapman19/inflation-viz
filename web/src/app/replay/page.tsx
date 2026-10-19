@@ -1,7 +1,7 @@
 import { EmbedCode } from "@/kit/EmbedCode";
 import { ShareBar } from "@/kit/ShareBar";
 import { Replay } from "@/components/Replay";
-import { buildReplayData } from "@/lib/replay";
+import { buildReplayData, splitReplay } from "@/lib/replay";
 
 export const metadata = { title: "Replay — Inflation Radar (UK)" };
 
@@ -18,7 +18,7 @@ export default function ReplayPage() {
           own projection, not ONS data.
         </p>
       </section>
-      <Replay data={buildReplayData()} />
+      <Replay data={splitReplay(buildReplayData()).initial} />
       <ShareBar title="Replay UK inflation" filename="uk-inflation-replay" />
       <EmbedCode path="/replay" height={980} title="Replay UK inflation" />
     </>
