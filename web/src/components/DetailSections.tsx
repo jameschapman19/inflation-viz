@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import type { ChartKind } from "@/components/Chart";
 import { Chart } from "@/components/Chart";
+import { coicopSlug } from "@/lib/coicopPath";
 import { childColor } from "@/lib/colors";
 import type { ChildSeries } from "@/lib/data";
 import type { SeriesPoint, SeriesSource } from "@/lib/types";
@@ -91,7 +92,7 @@ export function SubcategoryTable({
                     className="swatch"
                     style={{ background: s.coicop ? childColor(s.coicop, i, rows.length, "dark") : "#898781" }}
                   />
-                  <Link href={`/subdivision/${s.coicop}`}>{s.division_name}</Link>
+                  <Link href={`/subdivision/${coicopSlug(s.coicop as string)}`}>{s.division_name}</Link>
                 </td>
                 {showCoicopColumn && <td>{s.coicop}</td>}
                 <td>

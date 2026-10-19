@@ -8,10 +8,11 @@ import { ProductSwitcher } from "@/kit/ProductSwitcher";
 import "@/kit/kit.css";
 import { Nav } from "@/components/Nav";
 import { meta } from "@/lib/data";
+import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   // Share-image URLs must be absolute; Vercel provides the production host.
-  metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000"),
+  metadataBase: new URL(SITE_URL),
   title: "Inflation Radar (UK)",
   description: "UK inflation, traced to its source.",
   twitter: { card: "summary_large_image" },

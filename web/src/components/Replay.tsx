@@ -6,6 +6,7 @@ import type { ECElementEvent, ECharts, EChartsOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT } from "@/lib/colors";
 import type { ReplayData, ReplayNode } from "@/lib/replay";
 import { StripeScrubber } from "@/kit/StripeScrubber";
+import { extremes } from "@/lib/moments";
 import { stripeFill } from "@/lib/stripeColor";
 
 const ReactECharts = dynamic(() => import("echarts-for-react"), { ssr: false });
@@ -16,22 +17,6 @@ const PROJECTED_OPACITY = 0.55;
 const RESIDUAL_LABEL = "Chain-linking residual";
 
 type Mode = "light" | "dark";
-
-interface Moment {
-  date: string;
-  label: string;
-}
-
-// Month starts the CPI 12-month rate peaked or troughed; kept to dates
-// where the headline itself marks the episode, so the chip needs no
-// further claim than "this is when it happened".
-const MOMENTS: Moment[] = [
-  { date: "2008-09-01", label: "2008 commodity spike" },
-  { date: "2009-09-01", label: "2009 recession dip" },
-  { date: "2011-09-01", label: "2011 VAT & energy" },
-  { date: "2017-11-01", label: "2017 sterling slump" },
-  { date: "2022-10-01", label: "2022 energy shock" },
-];
 
 function currentMode(): Mode {
   if (typeof window === "undefined") return "dark";
@@ -71,6 +56,12 @@ export function Replay({ data }: { data: ReplayData }) {
   const isPlaying = playing && ti < node.to;
   const projected = isRoot && projectedFrom !== null && ti >= projectedFrom;
   const unit = isRoot ? "%" : "ppt";
+  // Jump-to chips name the real extremes of whatever level is showing (projections excluded).
+  const moments = useMemo(() => {
+    const { peak, low } = extremes(node.total, node.from, isRoot ? lastActual : node.to);
+    const chip = (kind: string, index: number) => ({ index, label: `${kind} · ${monthLabel(dates[index])}` });
+    return peak === low ? [] : [chip("Peak", peak), chip("Low", low)];
+  }, [node, isRoot, lastActual, dates]);
 
   useEffect(() => {
     nodeRef.current = node;
@@ -383,17 +374,14 @@ export function Replay({ data }: { data: ReplayData }) {
           </div>
         )}
         <div className="replay-moments" role="group" aria-label="Jump to a moment">
-          {MOMENTS.filter((m) => {
-            const index = dates.indexOf(m.date);
-            return index >= node.from && index <= node.to;
-          }).map((m) => (
+          {moments.map((m) => (
             <button
-              key={m.date}
+              key={m.label}
               type="button"
-              className={dates[ti] === m.date ? "range-btn active" : "range-btn"}
+              className={ti === m.index ? "range-btn active" : "range-btn"}
               onClick={() => {
                 setPlaying(false);
-                select(dates.indexOf(m.date));
+                select(m.index);
               }}
             >
               {m.label}
