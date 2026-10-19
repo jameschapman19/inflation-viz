@@ -46,7 +46,7 @@ export default async function Image({ params }: { params: Promise<{ crop: string
           </>
         }
         subtitle={facts.join(' · ')}
-        footerLeft={`Production ${stripeYears[0]}–${year} · stripes: change vs prior five-year mean`}
+        footerLeft={`Production ${stripeYears[0]}–${year} · stripes: vs ten-year trend`}
         footerRight="Agriculture Radar · FAOSTAT"
       >
         <div style={{ display: 'flex', flexDirection: 'column', width: '100%', justifyContent: 'space-between' }}>

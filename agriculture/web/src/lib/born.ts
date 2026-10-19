@@ -1,4 +1,4 @@
-import { meanPrice, ranked, worldChange, worldTotals, type Ranked, type WorldTotals } from './crops.ts';
+import { meanPrice, ranked, worldTotals, worldTrendDeviation, type Ranked, type WorldTotals } from './crops.ts';
 import type { CropData } from './types.ts';
 
 export type BornFacts = {
@@ -16,7 +16,7 @@ export type BornFacts = {
   priceMultiple: number | null;
   topThen: Ranked[];
   topNow: Ranked[];
-  /** World harvest change per year from the birth year on, and the years they belong to. */
+  /** World production against its ten-year trend, per year from the birth year on, and the years they belong to. */
   stripes: (number | null)[];
   stripeYears: number[];
 };
@@ -49,7 +49,7 @@ export function bornFacts(data: CropData, year: number): BornFacts {
     priceMultiple: priceThen != null ? priceNow / priceThen : null,
     topThen: ranked(data, year).slice(0, 3),
     topNow: ranked(data, latest).slice(0, 3),
-    stripes: stripeYears.map(y => worldChange(data, y)),
+    stripes: stripeYears.map(y => worldTrendDeviation(data, y)),
     stripeYears,
   };
 }
