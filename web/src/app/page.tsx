@@ -66,8 +66,8 @@ export default function HomePage() {
           )}
         </div>
         <p className="muted">
-          Colour bands each 12-month rate against the Bank of England&apos;s 2% target, and pay
-          against zero real growth.
+          Colour bands each 12-month rate against the Bank of England&apos;s 2% target (blue below it,
+          neutral near it, red above, as in the stripes), and pay against zero real growth.
         </p>
       </section>
 

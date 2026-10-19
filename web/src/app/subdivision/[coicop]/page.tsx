@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChartSection, StatTile, SubcategoryTable } from "@/components/DetailSections";
+import { coicopFromSlug, coicopSlug } from "@/lib/coicopPath";
 import { subdivisionColor } from "@/lib/colors";
 import {
   childRateSeriesOf,
@@ -15,24 +16,28 @@ import {
 import { formatPercent, formatWeight } from "@/lib/format";
 
 export function generateStaticParams() {
-  return subdivisionsSorted().map((s) => ({ coicop: s.coicop as string }));
+  return subdivisionsSorted().map((s) => {
+    const coicop = s.coicop as string;
+    if (coicop.includes("_")) throw new Error(`COICOP code ${coicop} contains "_", which the URL form reserves for "/"`);
+    return { coicop: coicopSlug(coicop) };
+  });
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ coicop: string }> }) {
-  const { coicop } = await params;
+  const coicop = coicopFromSlug((await params).coicop);
   const subdivision = subdivisionByCoicop(coicop);
   return { title: `${subdivision?.division_name ?? coicop} — Inflation Radar (UK)` };
 }
 
 export default async function SubdivisionPage({ params }: { params: Promise<{ coicop: string }> }) {
-  const { coicop } = await params;
+  const coicop = coicopFromSlug((await params).coicop);
   const subdivision = subdivisionByCoicop(coicop);
   const weight = subdivisionWeightByCoicop(coicop);
   if (!subdivision) notFound();
 
   const parentCoicop = subdivision.parent_coicop ?? "";
   const isParentTopLevelDivision = !parentCoicop.includes(".");
-  const parentHref = isParentTopLevelDivision ? `/division/${parentCoicop}` : `/subdivision/${parentCoicop}`;
+  const parentHref = isParentTopLevelDivision ? `/division/${parentCoicop}` : `/subdivision/${coicopSlug(parentCoicop)}`;
 
   const color = subdivisionColor(coicop);
   const children = subdivisionsUnder(coicop);

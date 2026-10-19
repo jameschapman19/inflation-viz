@@ -5,12 +5,13 @@ import './satellite.css';
 import './explorer.css';
 import '@/kit/kit.css';
 import SiteHeader from '@/components/SiteHeader';
+import { SITE_URL } from '@/lib/site';
 import { EMBED_SCRIPT } from '@/kit/embed';
 import { EmbedCredit } from '@/kit/EmbedCredit';
 import { ProductSwitcher } from '@/kit/ProductSwitcher';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : 'http://localhost:3000'),
+  metadataBase: new URL(SITE_URL),
   title: 'Agriculture Radar',
   description: 'Explore global wheat, maize, and rice production, yield histories, and benchmark prices. Every number links to its source.',
   icons: { icon: '/icon.svg' },

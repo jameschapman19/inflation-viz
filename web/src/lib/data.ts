@@ -146,18 +146,8 @@ export function childWeightSeriesOf(parentCoicop: string): ChildSeries[] {
     .map(toChildSeries);
 }
 
-export type InflationBand = "near-target" | "elevated" | "high";
-
-/** Bands a 12-month rate against the Bank of England's 2% CPI inflation
- * target — the same near/elevated/high framing used in MPC commentary.
- * Applied to CPIH too since it moves on the same scale, even though the
- * formal remit target is CPI specifically.
- */
-export function bandForRate(value: number): InflationBand {
-  if (value <= 2.5) return "near-target";
-  if (value <= 5) return "elevated";
-  return "high";
-}
+export { bandForRate, type InflationBand } from "./bands";
+import { bandForRate, type InflationBand } from "./bands";
 
 export interface HeadlineStat {
   name: string;

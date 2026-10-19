@@ -17,6 +17,7 @@ import {
   subdivisionRateChart,
   subdivisionWeightChart,
 } from "@/lib/charts";
+import { coicopSlug } from "@/lib/coicopPath";
 import type { ChildSeries } from "@/lib/data";
 import { seriesFor, topLevelContributionChildren } from "@/lib/data";
 
@@ -196,7 +197,7 @@ export function Chart({
             const [dateMs, value] = point;
             if (value < 0) return;
             const target = coicopAtStackedPoint(stackEntries, dateMs, value);
-            if (target) router.push(`${basePath}/${target}`);
+            if (target) router.push(`${basePath}/${coicopSlug(target)}`);
           };
           zr.on("click", onZrClick);
           unbindZrClick.current = () => zr.off("click", onZrClick);
@@ -211,14 +212,14 @@ export function Chart({
                   const data = event.data as { coicop?: string; children?: unknown[] } | undefined;
                   if (!data?.coicop || (data.children && data.children.length > 0)) return;
                   const basePath = data.coicop.includes(".") ? "/subdivision" : "/division";
-                  router.push(`${basePath}/${data.coicop}`);
+                  router.push(`${basePath}/${coicopSlug(data.coicop)}`);
                 },
               }
             : chart === "multiline-rate" && drillBasePath
               ? {
                   click: (event: ECElementEvent) => {
                     const match = (entries ?? []).find((c) => c.name === event.seriesName);
-                    if (match) router.push(`${drillBasePath}/${match.coicop}`);
+                    if (match) router.push(`${drillBasePath}/${coicopSlug(match.coicop)}`);
                   },
                 }
               : undefined
