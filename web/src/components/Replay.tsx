@@ -5,7 +5,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ECElementEvent, ECharts, EChartsOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT } from "@/lib/colors";
 import type { ReplayData, ReplayNode } from "@/lib/replay";
-import { Stripes } from "./Stripes";
+import { StripeScrubber } from "@/kit/StripeScrubber";
+import { stripeFill } from "@/lib/stripeColor";
 
 const ReactECharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
@@ -87,9 +88,12 @@ export function Replay({ data }: { data: ReplayData }) {
 
   useEffect(() => {
     if (!isPlaying) return;
-    const id = setInterval(() => setT((current) => Math.min(Math.max(current, node.from) + 1, node.to)), FRAME_MS);
-    return () => clearInterval(id);
-  }, [isPlaying, node.from, node.to]);
+    const id = setTimeout(() => {
+      setT(ti + 1);
+      if (ti + 1 >= node.to) setPlaying(false);
+    }, FRAME_MS);
+    return () => clearTimeout(id);
+  }, [isPlaying, ti, node.to]);
 
   const commit = useCallback(
     (nextPath: string[], rawT: number) => {
@@ -435,7 +439,9 @@ export function Replay({ data }: { data: ReplayData }) {
           <button type="button" className="range-btn active replay-play" onClick={togglePlay} aria-label={isPlaying ? "Pause" : "Play"}>
             {isPlaying ? "Pause" : ti >= node.to ? "Replay" : "Play"}
           </button>
-          <Stripes
+          <StripeScrubber
+            label="Month"
+            fill={stripeFill}
             values={nodes[rootId].total}
             projectedFrom={projectedFrom}
             from={node.from}

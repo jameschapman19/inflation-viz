@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 
-/** Collapsible iframe snippet for the current page in embed mode. Built on
- * open, so the code carries the real origin and the current `#month/node`. */
+/** Collapsible iframe snippet for a page in embed mode. Built on open, so the
+ * code carries the real origin and the current URL hash. */
 export function EmbedCode({ path, height, title }: { path: string; height: number; title: string }) {
   const [code, setCode] = useState("");
   return (

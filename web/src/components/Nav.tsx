@@ -6,11 +6,12 @@ import { usePathname } from "next/navigation";
 const LINKS = [
   { href: "/", label: "Headline" },
   { href: "/contributors", label: "Contributors" },
-  { href: "/basket", label: "Basket explorer" },
+  { href: "/basket", label: "Basket" },
   { href: "/replay", label: "Replay" },
   { href: "/stripes", label: "Stripes" },
   { href: "/lifetime", label: "Lifetime" },
-  { href: "/pound", label: "Your £100" },
+  { href: "/pound", label: "£100" },
+  { href: "/food", label: "Food" },
   { href: "/methodology", label: "Methodology" },
 ];
 

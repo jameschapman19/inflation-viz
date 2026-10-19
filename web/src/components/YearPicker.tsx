@@ -1,15 +1,17 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useEmbedSearch } from "@/kit/embedSearch";
 
 export function YearPicker({ years, current }: { years: number[]; current?: number }) {
   const router = useRouter();
+  const embed = useEmbedSearch();
   return (
     <label className="year-picker">
       I was born in
       <select
         value={current ?? ""}
-        onChange={(event) => router.push(`/lifetime/${event.target.value}`)}
+        onChange={(event) => router.push(`/lifetime/${event.target.value}${embed}`)}
       >
         {current === undefined && (
           <option value="" disabled>

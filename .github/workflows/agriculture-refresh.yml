@@ -35,6 +35,8 @@ jobs:
       - name: Verify the refreshed snapshot
         working-directory: agriculture
         run: uv run pytest
+      - name: Refresh the crop prices Inflation Radar compares with food CPI
+        run: node scripts/export-commodity-prices.mjs
       - name: Retain source files for audit
         uses: actions/upload-artifact@v4
         with:
@@ -45,7 +47,7 @@ jobs:
         run: |
           git config user.name agriculture-viz-bot
           git config user.email actions@users.noreply.github.com
-          git add agriculture/data/latest.json agriculture/data/vintages/ agriculture/web/public/data/
+          git add agriculture/data/latest.json agriculture/data/vintages/ agriculture/web/public/data/ web/src/data/commodity-prices.json
           if ! git diff --cached --quiet; then
             git commit -m "data: refresh crop observations"
             git pull --rebase

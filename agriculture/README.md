@@ -14,9 +14,11 @@ Production: [agriculture-radar-omega.vercel.app](https://agriculture-radar-omega
 - `data/vintages/<timestamp>/`: immutable normalized Parquet, release metadata, and simplified geography, tracked in source.
 - `data/latest.json`: selected vintage pointer.
 - `data/forecast/`: public-safe forecast outputs only.
-- `web/`: Next.js frontend; browser reads generated `public/data/` files.
-- `.github/workflows/ci.yml`: Python lint, formatting, strict typing, tests, and web lint/build.
-- `.github/workflows/refresh.yml`: daily 08:00 UTC and manual provider-data refresh with audited raw-file artifacts.
+- `web/`: Next.js frontend. Pages are generated at build from `public/data/` (a page per crop and country, birth-year pages, share images); the browser loads the same crop file once for the map, replay and country switching.
+- `web/src/lib/` holds the pure logic (rankings, profiles, world change, leaders, birth-year facts, URL state) with tests: `npm test`.
+- `web/src/kit/` is generated from `packages/web-kit` at the repository root; do not edit it.
+- `.github/workflows/agriculture-ci.yml` (repository root): Python lint, formatting, strict typing, tests, and web lint/test/build.
+- `.github/workflows/agriculture-refresh.yml` (repository root): daily 08:00 UTC and manual provider-data refresh with audited raw-file artifacts; it also refreshes the price file Inflation Radar reads.
 
 ## Run
 

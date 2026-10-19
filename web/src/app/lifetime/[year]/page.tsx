@@ -1,13 +1,14 @@
 import { notFound } from "next/navigation";
-import { EmbedCode } from "@/components/EmbedCode";
-import { RibbonLegend, RibbonStrip } from "@/components/RibbonStrip";
-import { StripeStrip } from "@/components/StripeStrip";
-import { StripeYears } from "@/components/StripeYears";
+import { EmbedCode } from "@/kit/EmbedCode";
+import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
+import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { YearPicker } from "@/components/YearPicker";
 import { formatMonth, formatPercent } from "@/lib/format";
 import { FIRST_BIRTH_YEAR, lastBirthYear, lifetimeFor } from "@/lib/lifetime";
 import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
-import { STRIPE_TARGET } from "@/lib/stripeColor";
+import { toKitCells, toKitLegend } from "@/lib/ribbonCells";
+import { STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
+import { yearTicks } from "@/lib/ticks";
 
 export function generateStaticParams() {
   return Array.from({ length: lastBirthYear() - FIRST_BIRTH_YEAR + 1 }, (_, i) => ({ year: String(FIRST_BIRTH_YEAR + i) }));
@@ -77,13 +78,13 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
       </div>
 
       <section className="chart-section stripes-figure">
-        <StripeStrip values={life.values} label={`UK CPI 12-month rate for every month since ${year}, coloured against the ${STRIPE_TARGET}% target`} />
-        <StripeYears dates={life.dates} every={life.dates.length > 240 ? 5 : life.dates.length > 96 ? 2 : 1} />
+        <StripeStrip values={life.values} fill={stripeFill} label={`UK CPI 12-month rate for every month since ${year}, coloured against the ${STRIPE_TARGET}% target`} />
+        <StripeTicks labels={yearTicks(life.dates, life.dates.length > 240 ? 5 : life.dates.length > 96 ? 2 : 1)} />
         {hasDivisions && (
           <>
             <h2 className="ribbon-title">What led it</h2>
-            <RibbonStrip cells={cells} dates={life.dates} />
-            <RibbonLegend entries={ribbonLegend(cells)} />
+            <CellRibbon cells={toKitCells(cells, life.dates)} label="The division contributing most to inflation each month" />
+            <RibbonLegend entries={toKitLegend(ribbonLegend(cells))} />
             <p className="muted">The division contributing most to inflation each month; ONS publishes divisions from November 2003.</p>
           </>
         )}

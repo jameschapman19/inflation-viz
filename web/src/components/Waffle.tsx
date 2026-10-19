@@ -1,21 +1,12 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useEffect, useState } from "react";
+import { setHash, useHash } from "@/kit/hash";
 import { squaresFor } from "@/lib/waffleMath";
 import type { WaffleData } from "@/lib/waffle";
 
 const STEP_MS = 450;
 const MOMENT_YEARS = [1988, 2000, 2010];
-
-const subscribeToHash = (callback: () => void) => {
-  window.addEventListener("hashchange", callback);
-  return () => window.removeEventListener("hashchange", callback);
-};
-
-function setHashYear(year: number) {
-  window.history.replaceState(null, "", `#${year}`);
-  window.dispatchEvent(new HashChangeEvent("hashchange"));
-}
 
 const pound = (perMille: number) => `£${(perMille / 10).toFixed(1)}`;
 
@@ -26,19 +17,22 @@ export function Waffle({ data }: { data: WaffleData }) {
   // The selected year lives in the URL hash (`/pound#1995`), so every state
   // is a shareable link. The server snapshot is empty, so the first client
   // render matches the server's.
-  const hash = useSyncExternalStore(subscribeToHash, () => window.location.hash, () => "");
+  const hash = useHash();
   const linked = years.indexOf(Number(hash.slice(1)));
   const index = linked >= 0 ? linked : last;
   const [playing, setPlaying] = useState(false);
   const isPlaying = playing && index < last;
 
-  const select = (next: number) => setHashYear(years[next]);
+  const select = (next: number) => setHash(String(years[next]));
 
   useEffect(() => {
     if (!isPlaying) return;
-    const id = setTimeout(() => setHashYear(years[index + 1]), STEP_MS);
+    const id = setTimeout(() => {
+      setHash(String(years[index + 1]));
+      if (index + 1 >= last) setPlaying(false);
+    }, STEP_MS);
     return () => clearTimeout(id);
-  }, [isPlaying, index, years]);
+  }, [isPlaying, index, years, last]);
 
   const then = weights[index];
   const now = weights[last];
