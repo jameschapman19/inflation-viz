@@ -7,6 +7,10 @@ const LINKS = [
   { href: "/", label: "Headline" },
   { href: "/contributors", label: "Contributors" },
   { href: "/basket", label: "Basket explorer" },
+  { href: "/replay", label: "Replay" },
+  { href: "/stripes", label: "Stripes" },
+  { href: "/lifetime", label: "Lifetime" },
+  { href: "/pound", label: "Your £100" },
   { href: "/methodology", label: "Methodology" },
 ];
 

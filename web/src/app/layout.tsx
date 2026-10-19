@@ -2,19 +2,25 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
 import "./radar.css";
+import { EmbedCredit } from "@/components/EmbedCredit";
 import { Nav } from "@/components/Nav";
 import { meta } from "@/lib/data";
 
 export const metadata: Metadata = {
   title: "Inflation Radar (UK)",
   description: "UK inflation, traced to its source.",
+  twitter: { card: "summary_large_image" },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   const generatedAt = new Date(meta.generatedAt).toUTCString();
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Embed mode (?embed=1) hides the site chrome; set before first paint so it never flashes. */}
+        <script dangerouslySetInnerHTML={{ __html: `if(/[?&]embed=1(&|$)/.test(location.search))document.documentElement.dataset.embed="1"` }} />
+      </head>
       <body>
         <header className="site-header">
           <Link className="brand" href="/">
@@ -37,6 +43,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             . Site generated {generatedAt}.
           </p>
         </footer>
+        <EmbedCredit />
       </body>
     </html>
   );

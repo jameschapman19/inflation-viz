@@ -421,3 +421,282 @@ h2 {
     --band-high: #e34948;
   }
 }
+
+/* --- replay scrubber --- */
+.replay-readout {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin: 20px 0;
+}
+.replay-readout .stat-tile {
+  flex: 0 1 340px;
+}
+.replay-moments {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: 4px;
+}
+.replay-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 4px 0;
+}
+.replay-play {
+  min-width: 72px;
+}
+.replay-crumbs {
+  margin: 16px 0 -4px;
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+}
+.replay-crumb {
+  font: inherit;
+  color: var(--accent);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.replay-crumb:hover {
+  text-decoration: underline;
+}
+.replay-crumb-sep {
+  color: var(--muted);
+}
+
+/* --- inflation stripes --- */
+.stripe-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.stripes-figure {
+  padding: 16px 16px 24px;
+}
+.stripes-figure .stripe-svg {
+  height: 320px;
+  border-radius: 8px;
+}
+.stripe-years,
+.stripe-key {
+  position: relative;
+  height: 22px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.stripe-years span {
+  position: absolute;
+  top: 4px;
+  transform: translateX(-50%);
+}
+.stripe-key {
+  margin-top: 18px;
+}
+.stripe-key-bar {
+  height: 10px;
+  border-radius: 5px;
+}
+.stripe-key span {
+  position: absolute;
+  top: 14px;
+  white-space: nowrap;
+}
+.stripe-key span:nth-of-type(2) {
+  transform: translateX(-50%);
+}
+
+/* The stripes as a scrubber track (replay). */
+.stripes {
+  position: relative;
+  flex: 1;
+  height: 40px;
+  border-radius: 6px;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.stripes:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+.stripes .stripe-svg {
+  border-radius: 6px;
+}
+.stripe-dim {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  pointer-events: none;
+}
+.stripe-cursor {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 3px;
+  margin-left: -1.5px;
+  background: var(--text-primary);
+  border: 1px solid var(--surface);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.stripe-hover {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  transform: translateX(-50%);
+  padding: 3px 8px;
+  font-size: 0.76rem;
+  white-space: nowrap;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+/* --- embed mode (?embed=1): no site chrome, just the visualisation --- */
+.embed-credit {
+  display: none;
+}
+html[data-embed] .site-header,
+html[data-embed] .site-footer,
+html[data-embed] .page-header,
+html[data-embed] .embed-code {
+  display: none;
+}
+html[data-embed] .embed-credit {
+  display: block;
+  padding: 4px 20px 12px;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+.embed-code {
+  margin: 12px 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.embed-code textarea {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 8px;
+  font: 0.78rem ui-monospace, monospace;
+  color: var(--text-primary);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* --- driver ribbon --- */
+.ribbon-title {
+  margin: 28px 0 10px;
+  font-size: 1rem;
+}
+.ribbon-svg {
+  display: block;
+  width: 100%;
+  height: 44px;
+  border-radius: 6px;
+  background: var(--surface-raised);
+}
+.ribbon-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin: 12px 0 8px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+/* --- lifetime --- */
+.year-picker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 4px 0 8px;
+  color: var(--text-secondary);
+}
+.year-picker select {
+  font: inherit;
+  color: var(--text-primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 6px 10px;
+}
+.year-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 8px;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+.year-grid a {
+  display: block;
+  padding: 8px 0;
+  text-align: center;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.age-rates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin: 8px 0 16px;
+  color: var(--text-secondary);
+}
+
+/* --- £100 waffle --- */
+.waffle-section {
+  display: grid;
+  grid-template-columns: minmax(240px, 360px) 1fr;
+  gap: 28px;
+  align-items: start;
+  padding: 20px;
+}
+.waffle {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 3px;
+  aspect-ratio: 1;
+}
+.waffle-cell {
+  border-radius: 3px;
+  transition: background 0.25s ease;
+}
+.waffle-table {
+  margin: 0;
+  font-size: 0.88rem;
+}
+.waffle-table caption {
+  text-align: left;
+  padding-bottom: 6px;
+  color: var(--text-secondary);
+}
+.waffle-table th,
+.waffle-table td {
+  padding: 6px 10px;
+}
+.waffle-controls {
+  grid-column: 1 / -1;
+}
+.waffle-controls input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+}
+@media (max-width: 720px) {
+  .waffle-section {
+    grid-template-columns: 1fr;
+  }
+}
+.page-header + .replay-moments {
+  margin-top: 16px;
+}
