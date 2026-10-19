@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
+import { coicopSlug } from "@/lib/coicopPath";
 import { divisionColor, subdivisionColor } from "@/lib/colors";
 import {
   divisionsSorted,
@@ -180,7 +181,7 @@ export default function MethodologyPage() {
               header: "Category",
               render: (s) => (
                 <>
-                  {divisionName(s, (c) => subdivisionColor(c, "dark"), (c) => `/subdivision/${c}`)}{" "}
+                  {divisionName(s, (c) => subdivisionColor(c, "dark"), (c) => `/subdivision/${coicopSlug(c)}`)}{" "}
                   <span className="muted">({s.coicop})</span>
                 </>
               ),

@@ -15,9 +15,14 @@
   --nav-hover-bg: rgba(255, 255, 255, 0.06);
   /* Stat-tile bands (reusing the validated division palette's teal/amber/red
      hues rather than introducing new, unvalidated colors). */
-  --band-near: #199e70;
-  --band-elevated: #c98500;
+  /* Inflation tiles use the stripes' language: blue below the target, neutral near
+     it, light to strong red above it. (The stripe scale's own grey midpoint is
+     too dark to read as text, so near-target is plain text colour.) */
+  --band-below: #3987e5;
+  --band-near: var(--text-primary);
+  --band-elevated: #e8908d;
   --band-high: #e66767;
+  --band-rising: #199e70;
 }
 
 * {
@@ -245,9 +250,14 @@ main {
 /* A banded tile (see lib/data.ts's InflationBand) tints its label dot and
    value by --tile-accent — the same "colored dot next to a label" idiom
    as .pill, above, just per-tile instead of fixed to --accent. */
-.stat-tile.band-near-target,
-.stat-tile.band-rising {
+.stat-tile.band-below-target {
+  --tile-accent: var(--band-below);
+}
+.stat-tile.band-near-target {
   --tile-accent: var(--band-near);
+}
+.stat-tile.band-rising {
+  --tile-accent: var(--band-rising);
 }
 .stat-tile.band-elevated {
   --tile-accent: var(--band-elevated);
@@ -416,9 +426,10 @@ h2 {
     --shadow:
       0 1px 2px rgba(11, 11, 11, 0.06),
       0 8px 24px rgba(11, 11, 11, 0.06);
-    --band-near: #1baf7a;
-    --band-elevated: #eda100;
+    --band-below: #2a78d6;
+    --band-elevated: #d4605f;
     --band-high: #e34948;
+    --band-rising: #1baf7a;
   }
 }
 
