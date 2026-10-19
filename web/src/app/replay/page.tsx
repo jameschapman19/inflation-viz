@@ -1,4 +1,5 @@
 import { EmbedCode } from "@/kit/EmbedCode";
+import { ShareBar } from "@/kit/ShareBar";
 import { Replay } from "@/components/Replay";
 import { buildReplayData } from "@/lib/replay";
 
@@ -18,6 +19,7 @@ export default function ReplayPage() {
         </p>
       </section>
       <Replay data={buildReplayData()} />
+      <ShareBar title="Replay UK inflation" filename="uk-inflation-replay" />
       <EmbedCode path="/replay" height={980} title="Replay UK inflation" />
     </>
   );

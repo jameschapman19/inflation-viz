@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import BirthPicker from '@/components/BirthPicker';
 import CropTabs from '@/components/CropTabs';
 import { EmbedCode } from '@/kit/EmbedCode';
+import { ShareBar } from '@/kit/ShareBar';
 import { StripeStrip, StripeTicks } from '@/kit/StripeStrip';
 import { bornFacts } from '@/lib/born';
 import { CROPS, isCrop } from '@/lib/crops';
@@ -110,6 +111,7 @@ export default async function BornPage(props: Params) {
         Totals cover countries and territories that report production, which are more numerous now than in {facts.year}, so the multiple mixes real growth with wider coverage.
         Prices are the World Bank {manifest.commodities[crop].benchmark_name} benchmark in nominal US dollars. Source: FAOSTAT, World Bank. <Link href={`/${crop}`}>Explore the {name.toLowerCase()} map</Link>.
       </p>
+      <ShareBar title={`${name} since ${facts.year}`} filename={`${crop}-since-${facts.year}`} card />
       <EmbedCode path={`/born/${crop}/${facts.year}`} height={1000} title={`${name} since ${facts.year}`} />
     </main>
   );

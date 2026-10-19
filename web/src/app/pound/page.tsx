@@ -1,4 +1,5 @@
 import { EmbedCode } from "@/kit/EmbedCode";
+import { ShareBar } from "@/kit/ShareBar";
 import { Waffle } from "@/components/Waffle";
 import { buildWaffleData } from "@/lib/waffle";
 
@@ -23,6 +24,7 @@ export default function PoundPage() {
         Squares are rounded to whole pounds; the table shows the unrounded ONS weights (per mille of household spending, refreshed each
         January/February).
       </p>
+      <ShareBar title="Where your £100 goes" filename="where-your-100-goes" />
       <EmbedCode path="/pound" height={900} title="Where your £100 goes" />
     </>
   );

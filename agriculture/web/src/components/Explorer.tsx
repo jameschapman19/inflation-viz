@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChevronDown, Database, Download, RotateCcw } from 'lucide-react';
 import { EmbedCode } from '@/kit/EmbedCode';
+import { ShareBar } from '@/kit/ShareBar';
 import { Notable } from '@/kit/Notable';
 import { setHash, useHash } from '@/kit/hash';
 import { countryStripes, profileFor } from '@/lib/crops';
@@ -208,6 +209,7 @@ export default function Explorer({ crop, country: entryCountry, manifest, countr
           />
         </div>
 
+        <ShareBar title={`${nameOf(country)} ${commodity.name.toLowerCase()} production`} filename={pathFor(country).slice(1).replace('/', '-')} card />
         <EmbedCode path={pathFor(country)} height={1400} title={`${commodity.name} explorer`} />
         <footer className="site-footer">
           <span><Database size={14} /> Snapshot {releaseDate(manifest.generated_at)} · Each layer keeps its own reference period</span>
