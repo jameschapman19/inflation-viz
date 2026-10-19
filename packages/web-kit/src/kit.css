@@ -147,3 +147,33 @@ html[data-embed] .embed-credit {
   margin-right: 8px;
   border-radius: 3px;
 }
+
+/* --- what's notable --- */
+.notable {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin: 16px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--radar-border);
+  border-left: 3px solid var(--radar-accent);
+  border-radius: 10px;
+  background: var(--radar-surface);
+  color: var(--radar-text);
+}
+.notable-label {
+  flex: none;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--radar-muted);
+}
+.notable ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.notable li + li {
+  margin-top: 4px;
+}

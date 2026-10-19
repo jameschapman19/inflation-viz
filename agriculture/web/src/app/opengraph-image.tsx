@@ -2,6 +2,7 @@ import { ImageResponse } from 'next/og';
 import { Sparkline } from '@/components/og/Sparkline';
 import { OgCard } from '@/kit/og';
 import { CROPS, worldTotals } from '@/lib/crops';
+import { leaderChange, overtakeText } from '@/lib/notable';
 import { compact, number } from '@/lib/data';
 import { TEAL, TEAL_FILL, priceSummary, toSeries } from '@/lib/og';
 import { loadCrop, loadManifest } from '@/lib/server/load';
@@ -13,11 +14,17 @@ export const contentType = 'image/png';
 // The fallback preview for every page without its own image; rebuilt with the data.
 export default async function Image() {
   const [manifest, ...crops] = await Promise.all([loadManifest(), ...CROPS.map(loadCrop)]);
+  // The first crop whose largest producer has recently changed, if any.
+  const headline = crops
+    .map((data, i) => ({ change: leaderChange(data), crop: manifest.commodities[CROPS[i]].name }))
+    .find(c => c.change !== null);
+  const subtitle = headline?.change ? overtakeText(headline.change, headline.crop, id => manifest.countries[id]?.name ?? id, t => compact(t)).short : undefined;
   return new ImageResponse(
     (
       <OgCard
         eyebrow="Agriculture Radar"
         hero={<span style={{ fontSize: 60, fontWeight: 700, lineHeight: 1.05 }}>{"Where the world's food is grown"}</span>}
+        subtitle={subtitle}
         footerLeft="FAOSTAT production · World Bank benchmark prices"
         footerRight="Every number links to its source"
       >

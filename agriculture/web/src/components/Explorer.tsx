@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { ChevronDown, Database, Download, RotateCcw } from 'lucide-react';
 import { EmbedCode } from '@/kit/EmbedCode';
+import { Notable } from '@/kit/Notable';
 import { setHash, useHash } from '@/kit/hash';
 import { countryStripes, profileFor } from '@/lib/crops';
 import { coverage, releaseDate } from '@/lib/data';
@@ -27,7 +28,7 @@ const STEP_MS = 450;
  * the browser to power the map, the replay and instant country switching,
  * which updates the URL in place.
  */
-export default function Explorer({ crop, country: entryCountry, manifest, countries, forecast, initial }: ExplorerProps) {
+export default function Explorer({ crop, country: entryCountry, manifest, countries, forecast, notable, initial }: ExplorerProps) {
   const [country, setCountry] = useState(entryCountry);
   const [data, setData] = useState<CropData | null>(null);
   const [geography, setGeography] = useState<Geography | null>(null);
@@ -122,6 +123,8 @@ export default function Explorer({ crop, country: entryCountry, manifest, countr
           </div>
           <a className="button download-button embed-hide" href={`/data/downloads/${crop}-production.csv`} download><Download size={16} /> Download observations</a>
         </div>
+
+        <Notable items={notable ? [notable] : []} />
 
         <section className="control-bar" aria-label="Map controls">
           <CropTabs
