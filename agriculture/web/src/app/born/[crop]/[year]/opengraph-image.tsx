@@ -35,7 +35,7 @@ export default async function Image({ params }: { params: Promise<{ crop: string
           </>
         }
         subtitle={`${compact(facts.then.production)} in ${facts.year} → ${compact(facts.now.production)} in ${facts.latest}${facts.yieldMultiple != null ? ` · yield ${number(facts.yieldMultiple, 1)}×` : ''}`}
-        footerLeft="One stripe per harvest · orange: fall, teal: rise"
+        footerLeft="One stripe per harvest · orange: below trend, teal: above"
         footerRight="Agriculture Radar · FAOSTAT"
       >
         {facts.stripes.map((value, i) => (

@@ -1,9 +1,8 @@
 /**
- * Diverging colour for a production change against its five-year baseline:
- * orange for falls, teal for rises, grey at no change. The poles are the
- * "change" layer's own end colours on the map, so a stripe and a country
- * agree. Saturates at ±20% with a square-root ramp, so the ordinary swings
- * of a few percent stay visible.
+ * Diverging colour for a harvest against its ten-year trend: orange below
+ * it, teal above it, grey on it. The poles are the map "change" layer's own
+ * end colours, so the two read as a pair. Saturates at ±20% with a square-root
+ * ramp, so the ordinary swings of a few percent stay visible.
  */
 export const HARVEST_LIMIT = 20;
 const MID = [0x5a, 0x67, 0x70];

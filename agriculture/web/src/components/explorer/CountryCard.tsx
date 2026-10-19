@@ -69,12 +69,12 @@ export default function CountryCard({ manifest, cropName, isRice, countries, sel
       </div>
       {stripes && stripes.some(v => v !== null) && (
         <div className="country-stripes">
-          <h3>Harvest stripes <span>vs prior five-year mean</span></h3>
-          <StripeStrip values={stripes} fill={harvestColor} label={`${name} ${cropName} production against its five-year mean, one stripe per year`} />
+          <h3>Harvest stripes <span>vs prior ten-year trend</span></h3>
+          <StripeStrip values={stripes} fill={harvestColor} label={`${name} ${cropName} production against its ten-year trend, one stripe per year`} />
           <StripeTicks labels={years.map(y => (y % 10 === 0 ? String(y) : null))} />
           <div className="harvest-key" aria-hidden="true">
             <i style={{ background: keyGradient }} />
-            <span>−{HARVEST_LIMIT}% or less</span><span>no change</span><span>+{HARVEST_LIMIT}% or more</span>
+            <span>−{HARVEST_LIMIT}% or lower</span><span>on trend</span><span>+{HARVEST_LIMIT}% or higher</span>
           </div>
         </div>
       )}

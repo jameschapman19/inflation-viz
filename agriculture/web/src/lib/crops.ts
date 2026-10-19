@@ -90,29 +90,59 @@ export function profileFor(data: CropData, country: string, year: number): Count
   };
 }
 
-/**
- * World production change against the mean of the five preceding years,
- * measured only over countries that report all six years. Using one fixed
- * set of countries keeps coverage jumps (new countries entering the data)
- * from reading as harvest swings.
- */
-export function worldChange(data: CropData, year: number): number | null {
-  let current = 0;
-  let baseline = 0;
-  for (const history of Object.values(data.countries)) {
-    const now = history[String(year)]?.production;
-    const prior = Array.from({ length: 5 }, (_, i) => history[String(year - i - 1)]?.production);
-    if (now == null || prior.some(p => p == null)) continue;
-    current += now;
-    baseline += (prior as number[]).reduce((a, b) => a + b, 0) / 5;
-  }
-  return baseline > 0 ? (current / baseline - 1) * 100 : null;
+/** Years of history the trend is fitted to. */
+export const TREND_YEARS = 10;
+
+/** Least-squares line through `values` (x = 0, 1, …), evaluated one step past the end. */
+export function extrapolate(values: number[]): number {
+  const n = values.length;
+  const mx = (n - 1) / 2;
+  const my = values.reduce((a, b) => a + b, 0) / n;
+  let sxy = 0;
+  let sxx = 0;
+  values.forEach((v, x) => {
+    sxy += (x - mx) * (v - my);
+    sxx += (x - mx) ** 2;
+  });
+  return my + (sxy / sxx) * (n - mx);
 }
 
-/** One value per year of `data.years`: null where the change cannot be measured. */
-export const worldStripes = (data: CropData): (number | null)[] => data.years.map(y => worldChange(data, y));
+/**
+ * How far `actual` sits above (+) or below (−) the straight-line trend of the
+ * `prior` years, in percent. Null unless every prior year is present and the
+ * trend stays positive. Production grows over time, so a change against a
+ * plain average is positive in most years and shows the trend; against the
+ * trend, good and bad years balance and the real shocks stand out.
+ */
+export function trendDeviation(prior: (number | null | undefined)[], actual: number | null | undefined): number | null {
+  if (actual == null || prior.some(p => p == null)) return null;
+  const expected = extrapolate(prior as number[]);
+  return expected > 0 ? (actual / expected - 1) * 100 : null;
+}
+
+const window = (year: number) => Array.from({ length: TREND_YEARS }, (_, i) => year - TREND_YEARS + i);
+
+export function countryTrendDeviation(history: Record<string, Observation>, year: number): number | null {
+  return trendDeviation(window(year).map(y => history[String(y)]?.production), history[String(year)]?.production);
+}
+
+/**
+ * World production against its trend, measured over the countries that report
+ * every year of the window. Using one fixed set of countries keeps coverage
+ * jumps (new countries entering the data) from reading as harvest swings.
+ */
+export function worldTrendDeviation(data: CropData, year: number): number | null {
+  const years = window(year);
+  const histories = Object.values(data.countries).filter(h => [...years, year].every(y => h[String(y)]?.production != null));
+  if (histories.length === 0) return null;
+  const total = (y: number) => histories.reduce((sum, h) => sum + h[String(y)].production!, 0);
+  return trendDeviation(years.map(total), total(year));
+}
+
+/** One value per year of `data.years`: null where the deviation cannot be measured. */
+export const worldStripes = (data: CropData): (number | null)[] => data.years.map(y => worldTrendDeviation(data, y));
 export const countryStripes = (data: CropData, country: string): (number | null)[] =>
-  data.years.map(y => changeFromBaseline(data.countries[country] ?? {}, y));
+  data.years.map(y => countryTrendDeviation(data.countries[country] ?? {}, y));
 
 export type Leader = { id: string; production: number } | null;
 

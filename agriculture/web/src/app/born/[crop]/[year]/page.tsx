@@ -86,11 +86,11 @@ export default async function BornPage(props: Params) {
 
       <section className="map-card born-stripes">
         <div className="section-heading">
-          <div><span className="eyebrow">{facts.year}–{facts.latest}</span><h2>Every harvest since, against its five-year mean</h2></div>
+          <div><span className="eyebrow">{facts.year}–{facts.latest}</span><h2>Every harvest since, against its trend</h2></div>
         </div>
-        <StripeStrip values={facts.stripes} fill={harvestColor} label={`World ${name.toLowerCase()} production against its prior five-year mean, one stripe per year since ${facts.year}`} />
+        <StripeStrip values={facts.stripes} fill={harvestColor} label={`World ${name.toLowerCase()} production against its prior ten-year trend, one stripe per year since ${facts.year}`} />
         <StripeTicks labels={facts.stripeYears.map(y => (y % (facts.stripeYears.length > 30 ? 10 : 5) === 0 ? String(y) : null))} />
-        <p className="muted">Orange: a fall against the prior five years; teal: a rise (grey at no change, full colour at ±{HARVEST_LIMIT}%). The first five years of the series have no baseline.</p>
+        <p className="muted">Orange: below the prior ten-year trend; teal: above it (grey on trend, full colour at ±{HARVEST_LIMIT}%). The first ten years of the series have no trend to compare with.</p>
       </section>
 
       <section className="born-lists">

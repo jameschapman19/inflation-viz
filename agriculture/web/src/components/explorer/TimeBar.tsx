@@ -40,7 +40,7 @@ export default function TimeBar({ data, years, year, playing, manifest, cropName
           <span className="eyebrow">{cropName} · {years[0]}–{years[years.length - 1]}</span>
           <h2>Replay the harvests</h2>
         </div>
-        <p>World production against its prior five-year mean, one stripe per year: <span className="fall">orange</span> falls, <span className="rise">teal</span> rises. Drag to move the map through time.</p>
+        <p>World production against its prior ten-year trend, one stripe per year: <span className="fall">orange</span> below it, <span className="rise">teal</span> above. Drag to move the map through time.</p>
       </div>
       {stripes && lead ? (
         <>
@@ -58,7 +58,7 @@ export default function TimeBar({ data, years, year, playing, manifest, cropName
                 to={years.length - 1}
                 index={index}
                 bigStep={10}
-                describe={i => `${years[i]}${stripes[i] == null ? '' : ` · ${stripes[i]! > 0 ? '+' : ''}${number(stripes[i]!)}% vs prior five years`}`}
+                describe={i => `${years[i]}${stripes[i] == null ? '' : ` · ${stripes[i]! > 0 ? '+' : ''}${number(stripes[i]!)}% vs trend`}`}
                 onSeek={i => onYear(years[i])}
                 onCommit={i => onYear(years[i])}
               />

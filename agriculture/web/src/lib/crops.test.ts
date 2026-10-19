@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
-import { countryRefs, countryStripes, everInTop, leaders, leaderTally, meanPrice, producers, profileFor, ranked, slugify, worldChange, worldTotals } from './crops.ts';
+import { countryRefs, countryStripes, countryTrendDeviation, everInTop, extrapolate, leaders, leaderTally, meanPrice, producers, profileFor, ranked, slugify, trendDeviation, worldStripes, worldTrendDeviation, worldTotals } from './crops.ts';
 import { harvestColor } from './harvest.ts';
 import { colorFor } from './palette.ts';
 import type { CropData, Manifest } from './types.ts';
@@ -64,17 +64,53 @@ test('profileFor gives rank, share, change and history', () => {
   assert.equal(profileFor(data, 'ZZZ', 2024).observation, null);
 });
 
-test('worldChange uses only countries that report the full window', () => {
-  // CCC lacks a five-year baseline, so it must not inflate the 2024 change.
-  const baseline = 130 + (290 + 280 + 270 + 260 + 250) / 5; // AAA mean(110..150) + BBB mean(290..250)
-  assert.ok(Math.abs(worldChange(data, 2024)! - ((160 + 300) / baseline - 1) * 100) < 1e-9);
-  assert.equal(worldChange(data, 2019), null);
+// Fifteen years: AAA grows by exactly 10 a year; BBB follows the same line but has a bad 2014; CCC only reports the last three years.
+const longYears = Array.from({ length: 15 }, (_, i) => 2000 + i);
+const longData: CropData = {
+  commodity: 'wheat',
+  years: longYears,
+  countries: {
+    AAA: Object.fromEntries(longYears.map((y, i) => [String(y), { production: 100 + 10 * i, flags: {} }])),
+    BBB: Object.fromEntries(longYears.map((y, i) => [String(y), { production: y === 2014 ? 100 : 200 + 20 * i, flags: {} }])),
+    CCC: Object.fromEntries([2012, 2013, 2014].map(y => [String(y), { production: 1000, flags: {} }])),
+  },
+  prices: [],
+};
+
+test('extrapolate continues a straight line exactly', () => {
+  assert.ok(Math.abs(extrapolate([10, 20, 30, 40]) - 50) < 1e-9);
+  assert.ok(Math.abs(extrapolate([5, 5, 5]) - 5) < 1e-9);
 });
 
-test('countryStripes is null until five prior years exist', () => {
-  const stripes = countryStripes(data, 'AAA');
-  assert.deepEqual(stripes.slice(0, 5), [null, null, null, null, null]);
-  assert.ok(stripes[5] != null && stripes[6] != null);
+test('trendDeviation is zero on trend, signed off it, and null without a full window or a positive trend', () => {
+  assert.ok(Math.abs(trendDeviation([10, 20, 30], 40)!) < 1e-9);
+  assert.ok(Math.abs(trendDeviation([10, 20, 30], 36)! - (36 / 40 - 1) * 100) < 1e-9);
+  assert.ok(trendDeviation([10, 20, 30], 44)! > 0);
+  assert.equal(trendDeviation([10, null, 30], 40), null);
+  assert.equal(trendDeviation([10, 20, 30], null), null);
+  assert.equal(trendDeviation([30, 20, 10], 5), null); // the line has gone negative: no meaningful percentage
+});
+
+test('countryTrendDeviation needs ten prior years', () => {
+  assert.equal(countryTrendDeviation(longData.countries.AAA, 2009), null);
+  assert.ok(Math.abs(countryTrendDeviation(longData.countries.AAA, 2012)!) < 1e-9);
+  assert.ok(countryTrendDeviation(longData.countries.BBB, 2014)! < -50);
+});
+
+test('worldTrendDeviation uses only countries that report the full window', () => {
+  // CCC has no history before 2012, so it must not move the world figure.
+  const withoutC = worldTrendDeviation({ ...longData, countries: { AAA: longData.countries.AAA, BBB: longData.countries.BBB } }, 2014);
+  assert.equal(worldTrendDeviation(longData, 2014), withoutC);
+  assert.ok(withoutC! < 0);
+  assert.equal(worldTrendDeviation(longData, 2005), null);
+});
+
+test('stripes are aligned to the years and null where nothing can be measured', () => {
+  const world = worldStripes(longData);
+  assert.equal(world.length, longYears.length);
+  assert.deepEqual(world.slice(0, 10), Array(10).fill(null));
+  assert.ok(world[14]! < 0);
+  assert.equal(countryStripes(longData, 'CCC').every(v => v === null), true);
 });
 
 test('leaders and tally follow the largest producer each year', () => {
