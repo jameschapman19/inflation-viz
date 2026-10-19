@@ -1,16 +1,19 @@
 /** One stripe per value, contiguous, coloured by `fill` (a CSS colour for a
  * value — typically `light-dark(...)`). A null value leaves a gap: no data,
  * never a colour. Pure markup, so it renders on the server; `StripeScrubber`
- * adds interaction on top. Stripes from `projectedFrom` on are drawn faded. */
+ * adds interaction on top. Stripes from `projectedFrom` on, and the first
+ * `fadeBefore` ones, are drawn faded. */
 export function StripeStrip({
   values,
   fill,
   projectedFrom = null,
+  fadeBefore = 0,
   label,
 }: {
   values: (number | null)[];
   fill: (value: number) => string;
   projectedFrom?: number | null;
+  fadeBefore?: number;
   label: string;
 }) {
   return (
@@ -24,7 +27,7 @@ export function StripeStrip({
             height={1}
             shapeRendering="crispEdges"
             style={{ fill: fill(value) }}
-            opacity={projectedFrom !== null && i >= projectedFrom ? 0.55 : 1}
+            opacity={(projectedFrom !== null && i >= projectedFrom) || i < fadeBefore ? 0.55 : 1}
           />
         ),
       )}

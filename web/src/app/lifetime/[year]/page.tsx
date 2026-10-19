@@ -5,19 +5,19 @@ import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
 import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { YearPicker } from "@/components/YearPicker";
 import { formatMonth, formatPercent } from "@/lib/format";
-import { FIRST_BIRTH_YEAR, lastBirthYear, lifetimeFor } from "@/lib/lifetime";
+import { birthYears, lifetimeFor } from "@/lib/lifetime";
 import { leadingDivisions, ribbonLegend } from "@/lib/ribbon";
 import { toKitCells, toKitLegend } from "@/lib/ribbonCells";
 import { STRIPE_TARGET, stripeFill } from "@/lib/stripeColor";
 import { yearTicks } from "@/lib/ticks";
 
 export function generateStaticParams() {
-  return Array.from({ length: lastBirthYear() - FIRST_BIRTH_YEAR + 1 }, (_, i) => ({ year: String(FIRST_BIRTH_YEAR + i) }));
+  return birthYears().map((year) => ({ year: String(year) }));
 }
 
 function parseYear(raw: string): number | null {
   const year = Number(raw);
-  return Number.isInteger(year) && year >= FIRST_BIRTH_YEAR && year <= lastBirthYear() ? year : null;
+  return birthYears().includes(year) ? year : null;
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ year: string }> }) {
@@ -37,17 +37,18 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
   if (year === null) notFound();
 
   const life = lifetimeFor(year);
-  const years = Array.from({ length: lastBirthYear() - FIRST_BIRTH_YEAR + 1 }, (_, i) => FIRST_BIRTH_YEAR + i);
+  const years = birthYears();
   const cells = leadingDivisions(life.dates);
   const hasDivisions = cells.some((cell) => cell !== null);
-  const share = Math.round((life.monthsAboveTarget / life.values.length) * 100);
+  const share = Math.round((life.monthsAboveTarget / life.cpiMonths) * 100);
+  const usesRpi = life.rpiMonths > 0;
 
   return (
     <>
       <section className="page-header">
         <h1>Inflation since you were born in {year}</h1>
         <p className="lede">
-          £100 in {life.baseLabel} would cost <b>£{(100 * life.multiple).toFixed(0)}</b> in {life.latestLabel}: UK prices
+          £100 in {life.baseLabel} would cost <b>£{Math.round(100 * life.multiple).toLocaleString("en-GB")}</b> in {life.latestLabel}: UK prices
           are {life.multiple.toFixed(2)}× what they were.
         </p>
       </section>
@@ -60,27 +61,33 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
           <div className="stat-value-row">
             <span className="stat-value">{life.multiple.toFixed(2)}×</span>
           </div>
-          <div className="stat-meta">Chained from ONS&apos;s published 12-month rates</div>
+          <div className="stat-meta">Chained from ONS&apos;s published 12-month rates{usesRpi ? ", RPI before CPI began in 1989" : ""}</div>
         </div>
         <div className="stat-tile">
           <div className="stat-label">Worst month</div>
           <div className="stat-value-row">
             <span className="stat-value">{formatPercent(life.peak.rate)}</span>
           </div>
-          <div className="stat-meta">{formatMonth(life.peak.ds, "long")}</div>
+          <div className="stat-meta">{formatMonth(life.peak.ds, "long")}{life.peak.measure === "RPI" ? " (RPI)" : ""}</div>
         </div>
         <div className="stat-tile">
           <div className="stat-label">Above the {STRIPE_TARGET}% target</div>
           <div className="stat-value-row">
             <span className="stat-value">{share}%</span>
           </div>
-          <div className="stat-meta">of the {life.values.length} months since January {year}</div>
+          <div className="stat-meta">of the {life.cpiMonths} months since {usesRpi ? "CPI began in January 1989" : `January ${year}`}</div>
         </div>
       </div>
 
       <section className="chart-section stripes-figure">
-        <StripeStrip values={life.values} fill={stripeFill} label={`UK CPI 12-month rate for every month since ${year}, coloured against the ${STRIPE_TARGET}% target`} />
+        <StripeStrip values={life.values} fill={stripeFill} fadeBefore={life.rpiMonths} label={`UK 12-month inflation for every month since ${year}, coloured against the ${STRIPE_TARGET}% target`} />
         <StripeTicks labels={yearTicks(life.dates, life.dates.length > 240 ? 5 : life.dates.length > 96 ? 2 : 1)} />
+        {usesRpi && (
+          <p className="muted rpi-note">
+            Faded stripes are RPI, used before CPI&apos;s series begins in 1989.
+            {life.rpiPremium !== null && ` Since 1989 RPI has run ${life.rpiPremium.toFixed(1)} points above CPI on average, so the earlier years read a little hotter than CPI would.`}
+          </p>
+        )}
         {hasDivisions && (
           <>
             <h2 className="ribbon-title">What led it</h2>
@@ -95,7 +102,7 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
         <p className="age-rates">
           {life.ages.map((a) => (
             <span key={a.age}>
-              At {a.age} ({a.year}): <b>{formatPercent(a.rate)}</b>
+              At {a.age} ({a.year}): <b>{formatPercent(a.rate)}</b>{a.measure === "RPI" ? " RPI" : ""}
             </span>
           ))}
         </p>
