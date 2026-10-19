@@ -46,6 +46,11 @@ export function useHash(): string {
   return useSyncExternalStore(subscribe, () => pending ?? window.location.hash, () => "");
 }
 
+/** The hash as the page currently shows it, including a change still waiting to be written to the URL. */
+export function currentHash(): string {
+  return pending ?? window.location.hash;
+}
+
 /** Sets the hash without adding history entries. Subscribers update at once; the URL follows shortly after. */
 export function setHash(value: string): void {
   pending = value ? `#${value}` : "";

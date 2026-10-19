@@ -177,3 +177,36 @@ html[data-embed] .embed-credit {
 .notable li + li {
   margin-top: 4px;
 }
+
+/* --- share bar --- */
+.share-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+}
+.share-bar button,
+.share-bar a {
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--radar-text);
+  background: var(--radar-raised);
+  border: 1px solid var(--radar-border);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.share-bar button:hover,
+.share-bar a:hover {
+  border-color: var(--radar-muted);
+}
+.share-status {
+  font-size: 0.82rem;
+  color: var(--radar-muted);
+}
+html[data-embed] .share-bar {
+  display: none;
+}

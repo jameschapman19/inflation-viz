@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { EmbedCode } from "@/kit/EmbedCode";
+import { ShareBar } from "@/kit/ShareBar";
 import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
 import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { registry } from "@/lib/data";
@@ -64,6 +65,7 @@ export default function StripesPage() {
         Data: ONS CPI 12-month rate (<a href={registry.headline[0].source_url}>{registry.headline[0].cdid}</a>), monthly. See the{" "}
         <Link href="/replay">replay</Link> to watch what drove each month.
       </p>
+      <ShareBar title="UK inflation stripes" filename="uk-inflation-stripes" card />
       <EmbedCode path="/stripes" height={340} title="UK inflation stripes" />
     </>
   );

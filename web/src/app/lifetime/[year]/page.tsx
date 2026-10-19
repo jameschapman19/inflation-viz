@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { EmbedCode } from "@/kit/EmbedCode";
+import { ShareBar } from "@/kit/ShareBar";
 import { CellRibbon, RibbonLegend } from "@/kit/Ribbon";
 import { StripeStrip, StripeTicks } from "@/kit/StripeStrip";
 import { YearPicker } from "@/components/YearPicker";
@@ -104,6 +105,7 @@ export default async function LifetimeYearPage({ params }: { params: Promise<{ y
         Prices are compared from the same month each year, chained from the published CPI 12-month rate (one decimal place), so
         the multiple is approximate to within about 1%. Blue stripes are below the Bank of England&apos;s {STRIPE_TARGET}% target, red above.
       </p>
+      <ShareBar title={`Inflation since you were born in ${year}`} filename={`inflation-since-${year}`} card />
       <EmbedCode path={`/lifetime/${year}`} height={900} title={`Inflation since ${year}`} />
     </>
   );

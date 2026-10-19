@@ -1,5 +1,6 @@
 import { FoodLink } from "@/components/FoodLink";
 import { EmbedCode } from "@/kit/EmbedCode";
+import { ShareBar } from "@/kit/ShareBar";
 import { productUrl } from "@/kit/products";
 import { buildFoodData } from "@/lib/food";
 
@@ -72,6 +73,7 @@ export default function FoodPage() {
           crops themselves in <a href={productUrl("agriculture", "/wheat")}>Agriculture Radar</a>.
         </p>
       </section>
+      <ShareBar title="From wheat to bread" filename="wheat-to-bread" card />
       <EmbedCode path="/food" height={1100} title="From wheat to bread" />
     </>
   );
