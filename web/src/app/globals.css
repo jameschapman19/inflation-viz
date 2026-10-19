@@ -608,3 +608,7 @@ h2 {
   font-size: 0.85rem;
   color: var(--muted);
 }
+.rpi-note {
+  margin: 8px 0 0;
+  font-size: 0.85rem;
+}
