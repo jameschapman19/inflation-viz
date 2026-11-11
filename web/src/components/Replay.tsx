@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ECElementEvent, ECharts, EChartsOption } from "echarts";
 import { CHART_SURFACE, GRIDLINE, HEADLINE_COLOR, MUTED_TEXT } from "@/lib/colors";
+import { coicopSlug } from "@/lib/coicopPath";
 import type { ReplayData, ReplayNode } from "@/lib/replay";
 import { StripeScrubber } from "@/kit/StripeScrubber";
 import { extremes } from "@/lib/moments";
@@ -35,7 +36,12 @@ const toHash = (ds: string, nodeId: string, rootId: string) =>
 const HASH_PATTERN = /^#(\d{4}-\d{2})(?:\/(.+))?$/;
 
 export function Replay({ data }: { data: ReplayData }) {
-  const { dates, nodes, rootId, projectedFrom, lastActual, bands } = data;
+  const { dates, rootId, projectedFrom, lastActual, bands } = data;
+  const [nodes, setNodes] = useState(data.nodes);
+  const nodesRef = useRef(nodes);
+  // The charts load lazily and can become ready after the paint effect last ran.
+  const [barsReady, setBarsReady] = useState(false);
+  const [timelineReady, setTimelineReady] = useState(false);
 
   const [mode, setMode] = useState<Mode>(currentMode);
   const [path, setPath] = useState<string[]>([rootId]);
@@ -86,9 +92,25 @@ export function Replay({ data }: { data: ReplayData }) {
     return () => clearTimeout(id);
   }, [isPlaying, ti, node.to]);
 
+  /** Fetch a node (and, for a deep link, its ancestors) the page did not ship. */
+  const ensureLoaded = useCallback(async (id: string) => {
+    for (let wanted: string | null = id; wanted; ) {
+      let current: ReplayNode | undefined = nodesRef.current[wanted];
+      if (!current) {
+        const response = await fetch(`/replay/node/${coicopSlug(wanted)}`);
+        if (!response.ok) throw new Error(`Replay node ${wanted} returned ${response.status}`);
+        current = (await response.json()) as ReplayNode;
+        nodesRef.current = { ...nodesRef.current, [current.id]: current };
+        setNodes(nodesRef.current);
+      }
+      wanted = current.parent;
+    }
+    return nodesRef.current;
+  }, []);
+
   const commit = useCallback(
-    (nextPath: string[], rawT: number) => {
-      const target = nodes[nextPath[nextPath.length - 1]];
+    (nextPath: string[], rawT: number, known: Record<string, ReplayNode> = nodes) => {
+      const target = known[nextPath[nextPath.length - 1]];
       setPath(nextPath);
       setT(rawT);
       window.history.replaceState(null, "", toHash(dates[clamp(rawT, target.from, target.to)], target.id, rootId));
@@ -96,7 +118,7 @@ export function Replay({ data }: { data: ReplayData }) {
     [dates, nodes, rootId],
   );
 
-  const drill = (childId: string) => commit([...path, childId], t);
+  const drill = async (childId: string) => commit([...path, childId], t, await ensureLoaded(childId));
   const select = (index: number) => commit(path, index);
 
   function togglePlay() {
@@ -263,10 +285,11 @@ export function Replay({ data }: { data: ReplayData }) {
     timelineRef.current?.setOption({
       series: [{ id: "cursor", data: [[dates[ti], node.total[k]]], markLine: { data: [{ xAxis: dates[ti] }] } }],
     });
-  }, [k, ti, mode, projected, node, dates, residualColor, barsOption, timelineOption]);
+  }, [k, ti, mode, projected, node, dates, residualColor, barsOption, timelineOption, barsReady, timelineReady]);
 
   function onTimelineReady(instance: ECharts) {
     timelineRef.current = instance;
+    setTimelineReady(true);
     unbindTimeline.current?.();
 
     // Deep link: `/replay#2022-10/07.2` opens on that month and node. Read
@@ -275,13 +298,15 @@ export function Replay({ data }: { data: ReplayData }) {
     const linked = HASH_PATTERN.exec(window.location.hash);
     if (linked) {
       const index = dates.indexOf(`${linked[1]}-01`);
-      const chain: string[] = [];
-      for (let n: ReplayNode | undefined = nodes[decodeURIComponent(linked[2] ?? rootId)]; n; n = n.parent ? nodes[n.parent] : undefined) {
-        chain.unshift(n.id);
-      }
-      if (index >= 0 && chain[0] === rootId) {
-        setPath(chain);
-        setT(index);
+      const linkedId = decodeURIComponent(linked[2] ?? rootId);
+      if (index >= 0) {
+        void ensureLoaded(linkedId).then((known) => {
+          const chain: string[] = [];
+          for (let n: ReplayNode | undefined = known[linkedId]; n; n = n.parent ? known[n.parent] : undefined) chain.unshift(n.id);
+          if (chain[0] !== rootId) throw new Error(`Replay node ${linkedId} does not descend from ${rootId}`);
+          setPath(chain);
+          setT(index);
+        });
       }
     }
 
@@ -407,6 +432,7 @@ export function Replay({ data }: { data: ReplayData }) {
           style={{ width: "100%", height: "430px" }}
           onChartReady={(instance: ECharts) => {
             barsRef.current = instance;
+            setBarsReady(true);
           }}
           onEvents={barEvents}
         />

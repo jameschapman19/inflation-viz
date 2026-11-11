@@ -195,3 +195,10 @@ export function buildReplayData(): ReplayData {
     nodes,
   };
 }
+
+/** The page ships only the root level; every other node is fetched when a
+ * viewer drills into it, from `/replay/node/<slug>`. */
+export function splitReplay(data: ReplayData): { initial: ReplayData; rest: ReplayNode[] } {
+  const { [ROOT_ID]: root, ...others } = data.nodes;
+  return { initial: { ...data, nodes: { [ROOT_ID]: root } }, rest: Object.values(others) };
+}
