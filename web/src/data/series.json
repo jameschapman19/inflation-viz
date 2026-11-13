@@ -480260,6 +480260,11 @@
     "y": 4.0
   },
   {
+    "unique_id": "GB.BOE.RATE",
+    "ds": "2026-11-12",
+    "y": 4.0
+  },
+  {
     "unique_id": "GB.BOE.BREAKEVEN10Y",
     "ds": "1985-01-02",
     "y": 7.4428
@@ -533158,5 +533163,10 @@
     "unique_id": "GB.BOE.BREAKEVEN10Y",
     "ds": "2026-11-10",
     "y": 3.1374
+  },
+  {
+    "unique_id": "GB.BOE.BREAKEVEN10Y",
+    "ds": "2026-11-11",
+    "y": 3.1892
   }
 ]
