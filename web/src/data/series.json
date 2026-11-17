@@ -410005,6 +410005,11 @@
     "y": 0.6
   },
   {
+    "unique_id": "GB.WAGE.REAL",
+    "ds": "2026-09-01",
+    "y": 0.2
+  },
+  {
     "unique_id": "GB.RPI",
     "ds": "1948-06-01",
     "y": 9.7
@@ -480270,6 +480275,11 @@
     "y": 4.0
   },
   {
+    "unique_id": "GB.BOE.RATE",
+    "ds": "2026-11-16",
+    "y": 4.0
+  },
+  {
     "unique_id": "GB.BOE.BREAKEVEN10Y",
     "ds": "1985-01-02",
     "y": 7.4428
@@ -533178,5 +533188,10 @@
     "unique_id": "GB.BOE.BREAKEVEN10Y",
     "ds": "2026-11-12",
     "y": 3.2252
+  },
+  {
+    "unique_id": "GB.BOE.BREAKEVEN10Y",
+    "ds": "2026-11-13",
+    "y": 3.2091
   }
 ]
